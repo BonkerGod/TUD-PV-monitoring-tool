@@ -1,0 +1,8 @@
+{
+    "O001": {"bus": "a", "address": 0},
+    "O002": {"bus": "a", "address": 1},
+    "O003": {"bus": "a", "address": 2},
+    "O004": {"bus": "a", "address": 3},
+    "O005": {"bus": "a", "address": 4},
+    "O006": {"bus": "a", "address": 5}
+}
