@@ -1,5 +1,6 @@
 import psycopg2
 import datetime
+import time
 import json
 from pathlib import Path
 
@@ -29,10 +30,21 @@ except:
     
 cur = conn.cursor()
 
+print(datetime.datetime.now().hour)
+def dailyloop():
+     while(1):
+        if print(datetime.datetime.now().hour)==1: #When time is equal to 1 hour, upload the data from yesterday
+            adddata()
+        time.sleep(1*60*60) # wait for an hour and check again. This is done to reduce cpu load, so that it does not check unnecessarily quickly.
+             
+             
+             
+
 
 def adddata():
     today = datetime.date.today()
-    date = str(today-datetime.timedelta(days=1))
+    date = str(today-datetime.timedelta(days=1)) #upload the data of the day before
+    date = '2024-12-20' #test
     print(date)
     data_path = data_path_base / date / config['data_destination']
     data_file_path = (
@@ -43,9 +55,9 @@ def adddata():
         + '.csv'
         )
     )
-    #with open(data_file_path) as f:
-    with open("C:/Users/wesse/OneDrive/Documenten/Tu Delft/EE3P1/Database/SQL/pv.csv") as f:
-        cur.copy_expert("COPY pv(measurement_time, scheduled_time, module_id, v, i, g, t_ext, status_integer) FROM STDIN WITH DELIMITER';' HEADER CSV", f)
+    with open(data_file_path) as f:
+    #with open("C:/Users/wesse/OneDrive/Documenten/Tu Delft/EE3P1/Database/SQL/pv.csv") as f: #test
+        cur.copy_expert("COPY pv(measurement_time, scheduled_time, module_id, v, i, g, t_ext, status_integer) FROM STDIN WITH DELIMITER',' HEADER CSV", f)
 
     conn.commit()
 
@@ -64,7 +76,7 @@ def printtable():
         print(i)
     conn.commit()
 
-count_entries()
-adddata()
-count_entries()
+# count_entries()
+# adddata()
+# count_entries()
 conn.close()
