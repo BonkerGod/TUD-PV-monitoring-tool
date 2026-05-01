@@ -17,10 +17,22 @@ except:
     print("Database not connected succesfully")
     
 cur = conn.cursor()
-cur.execute("\copy pv(measurement_time, scheduled_time, module_id, v, i, g, t_ext, status_integer) FROM 'C:/Users/wesse/OneDrive/Documenten/Tu Delft/EE3P1/Database/SQL/pv.csv' DELIMITER ';' CSV HEADER")
+
+
+with open("C:/Users/wesse/OneDrive/Documenten/Tu Delft/EE3P1/Database/SQL/pv.csv") as f:
+    cur.copy_expert("COPY pv(measurement_time, scheduled_time, module_id, v, i, g, t_ext, status_integer) FROM STDIN WITH DELIMITER';' HEADER CSV", f)
+
+#cur.copy_from(file, 'pv', sep=';', columns=('measurement_time', 'scheduled_time', 'module_id', 'v', 'i', 'g', 't_ext', 'status_integer'))
 conn.commit()
-cur.execute("SELECT COUNT(*)")
+cur.execute("SELECT COUNT(*) FROM pv")
+count = cur.fetchall()
+for i in count:
+    print(i)
+
 conn.commit()
 cur.execute("SELECT * FROM pv")
+table_pv = cur.fetchall()
+for i in table_pv:
+    print(i)
 conn.commit()
 conn.close()
