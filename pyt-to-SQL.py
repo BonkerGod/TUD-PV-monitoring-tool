@@ -1,4 +1,15 @@
 import psycopg2
+import datetime
+import json
+from pathlib import Path
+
+with open('opet-supervisor-config.json') as f:
+    opet_supervisor_config = json.load(f)
+data_path_base = Path(opet_supervisor_config['data_path_base'])
+config_path = Path(opet_supervisor_config['config_path'])
+with open(config_path / 'measurement_config.json') as f:
+    config = json.load(f)
+
 
 DB_NAME = "postgres"
 DB_USER = "postgres"
@@ -18,7 +29,19 @@ except:
     
 cur = conn.cursor()
 
-
+today = datetime.date.today()
+date = str(today-datetime.timedelta(days=1))
+print(date)
+data_path = data_path_base / date / config['data_destination']
+data_file_path = (
+    data_path / (
+    'opet_results_'
+    + 'point'
+    + '_' + date
+    + '.csv'
+    )
+)
+#with open(data_file_path) as f:
 with open("C:/Users/wesse/OneDrive/Documenten/Tu Delft/EE3P1/Database/SQL/pv.csv") as f:
     cur.copy_expert("COPY pv(measurement_time, scheduled_time, module_id, v, i, g, t_ext, status_integer) FROM STDIN WITH DELIMITER';' HEADER CSV", f)
 
@@ -30,9 +53,9 @@ for i in count:
     print(i)
 
 conn.commit()
-cur.execute("SELECT * FROM pv")
-table_pv = cur.fetchall()
-for i in table_pv:
-    print(i)
+# cur.execute("SELECT * FROM pv")
+# table_pv = cur.fetchall()
+# for i in table_pv:
+#     print(i)
 conn.commit()
 conn.close()

@@ -1,5 +1,5 @@
 {
-    "config_path": "/Users/octapus/Documents/cheeta_b_config",
-    "data_path_base": "/Users/octapus/Documents/cheeta_b_data",
+    "config_path": "example-config",
+    "data_path_base": "example-data",
     "log_path_base": "/Users/octapus/Documents/cheeta_b_logs/opet-supervisor"
 }
