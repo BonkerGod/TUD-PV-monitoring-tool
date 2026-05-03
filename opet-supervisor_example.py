@@ -29,6 +29,7 @@ config_path = Path(opet_supervisor_config['config_path'])
 data_path_base = Path(opet_supervisor_config['data_path_base'])
 log_path_base = Path(opet_supervisor_config['log_path_base'])
 
+
 log_path_base.mkdir(parents=True, exist_ok=True)
 logger = logging.getLogger(__name__)
 logging.basicConfig(
@@ -37,7 +38,6 @@ logging.basicConfig(
     level=logging.DEBUG,
     format='%(asctime)s %(message)s'
 )
-
 
 # Set up a handler to log uncaught exceptions
 def exception_handler(exctype, value, tb):
@@ -53,6 +53,7 @@ TZ_LOCAL = datetime.timezone(datetime.timedelta(hours=-7))
 with open(config_path / 'opet_info.json') as f:
     load_info = json.load(f)
 
+print(load_info)
 with open(config_path / 'opet_bus_info.json') as f:
     bus_info = json.load(f)
 
@@ -65,9 +66,7 @@ def measurement_loop(bus, jobs, jobs_in_progress, results):
         # individual OPETs. Returns None if something goes wrong.
         # TODO: handle the hot-plugging and power failure cases
         try:
-            serial_port_name = device_name(
-                bus_info[bus]['adapter_serial_number']
-            )[0]
+            serial_port_name = "COM3"
             serial_port = Serial(serial_port_name, baudrate=200000, timeout=1)
             opet_bus = OPETBus(serial_port)
             this_bus_opet_addresses = [

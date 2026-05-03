@@ -1,5 +1,5 @@
 {
-    "config_path": "/Users/octapus/Documents/cheeta_b_config",
-    "data_path_base": "/Users/octapus/Documents/cheeta_b_data",
-    "log_path_base": "/Users/octapus/Documents/cheeta_b_logs/opet-supervisor"
+    "config_path": "/Users/Juste/Git_clones/TUD-PV-monitoring-tool/example-config-test",
+    "data_path_base": "/Users/Juste/Git_clones/TUD-PV-monitoring-tool/test_log/data",
+    "log_path_base": "/Users/Juste/Git_clones/TUD-PV-monitoring-tool/test_log/log"
 }
