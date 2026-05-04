@@ -1,0 +1,20 @@
+{
+  "modules":
+  [
+    {
+      "module_id": "P-0000-01",
+      "tracer": "O001",
+      "sensors":
+      [
+        "T006",
+        "ambient temperature",
+        "POAI east",
+        "POAI west",
+        "rack tilt"
+      ],
+      "interval_point": 10,
+      "interval_curve": 30
+    }
+  ],
+  "data_destination": "config_2026-04-30T15-00-00"
+}
