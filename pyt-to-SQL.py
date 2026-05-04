@@ -6,6 +6,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 import ast
+from dateutil import parser
 
 with open('opet-supervisor-config.json') as f:
     opet_supervisor_config = json.load(f)
@@ -167,14 +168,22 @@ def deletetable(type):
         print("Whoops something went wrong, could not delete")
         
     conn.commit()
-    
-def downloadtable(file, type,):
+
+
+#File: ADDRESS LOCATION AND TYPE.   type: mearuements type.     datetime: put in datetime in "2024-12-20 16:00:50-07:00" to filter the moments.     module_names (array): only get the name of the modules.
+def downloadtable(file, type, datetime1, datetime2, module_name):
         query = "COPY pv_"+type+" TO STDOUT WITH DELIMITER ',' CSV HEADER "
         with open(file, 'w') as f:
             cur.copy_expert(query, f)
-            
-            
-downloadtable("test.csv", "curve_test")
-
-
+        df = pd.read_csv(file)
+        df['scheduled_time'] = pd.to_datetime(df['scheduled_time'])
+        print(df['scheduled_time'])
+        print(df.dtypes)
+        result = df.loc[(df['scheduled_time'] >= datetime.datetime.fromisoformat(datetime1)) & (df["scheduled_time"]<= datetime.datetime.fromisoformat(datetime2))]
+        result = df.loc[(df['module_id'].isin(module_name))]
+        print(result)
+  
+  
+        
+downloadtable("test.csv", "curve_test", "2024-12-20 16:00:50-07:00", "2024-12-20 16:07:20-07:00", ["P-0002-01", "p-0234"])
 conn.close()
