@@ -3,6 +3,9 @@ import datetime
 import time
 import json
 from pathlib import Path
+import numpy as np
+import pandas as pd
+import ast
 
 with open('opet-supervisor-config.json') as f:
     opet_supervisor_config = json.load(f)
@@ -30,12 +33,13 @@ except:
     
 cur = conn.cursor()
 
-print(datetime.datetime.now().hour)
+#print(datetime.datetime.now().hour)
+
 def dailyloop():
      while(1):
         if print(datetime.datetime.now().hour)==1: #When time is equal to 1 hour, upload the data from yesterday
             adddata()
-        time.sleep(1*60*60) # wait for an hour and check again. This is done to reduce cpu load, so that it does not check unnecessarily quickly.
+        time.sleep(1*60*60) # Wait for an hour and check again. This is done to reduce cpu load, so that it does not check unnecessarily quickly.
              
              
              
@@ -47,6 +51,8 @@ def adddata():
     date = '2024-12-20' #test
     print(date)
     data_path = data_path_base / date / config['data_destination']
+    
+    #point data add
     data_file_path = (
         data_path / (
         'opet_results_'
@@ -55,28 +61,120 @@ def adddata():
         + '.csv'
         )
     )
+    #with open(data_file_path) as f:
+    #with open("C:/Users/wesse/OneDrive/Documenten/Tu Delft/EE3P1/Database/SQL/pv.csv") as f: #test
+        #cur.copy_expert("COPY pv_point(measurement_time, scheduled_time, module_id, v, i, g, t_ext, status_integer) FROM STDIN WITH DELIMITER',' HEADER CSV", f)
+    
+    #curve data add
+    data_file_path = (
+        data_path / (
+        'opet_results_'
+        + 'curve'
+        + '_' + date
+        + '.csv'
+        )
+    )
+    
+    # Could not get the string away, but this may be for the better, because postgres expects array in {} and not in [].
+    # df = pd.read_csv("example-data/2024-12-20/config_2024-12-20T15-16-00/opet_results_curve_2024-12-20.csv", delimiter=",")
+    # df["v"] = df["v"].apply(ast.literal_eval)
+    # print(df['v'])
+    # print(type(df["v"].iloc[0]))
+    # df.to_csv("example-data/2024-12-20/config_2024-12-20T15-16-00/opet_results_curve2_2024-12-20.csv", sep=',', index= False)
+    
     with open(data_file_path) as f:
     #with open("C:/Users/wesse/OneDrive/Documenten/Tu Delft/EE3P1/Database/SQL/pv.csv") as f: #test
-        cur.copy_expert("COPY pv(measurement_time, scheduled_time, module_id, v, i, g, t_ext, status_integer) FROM STDIN WITH DELIMITER',' HEADER CSV", f)
-
+        #cur.copy_expert("COPY pv_curve(measurement_time, scheduled_time, measurement_duration, module_name, mounted_on, v,i, azimuth, inclination, t_air, humidity, dewpoint, relative_pressure, wind_speed, wind_speed_spread, wind_direction, wind_direction_spread, irradiance) FROM STDIN WITH DELIMITER',' HEADER CSV", f)
+        cur.copy_expert("COPY pv_curve_test(measurement_time, scheduled_time, measurement_duration, module_id, v, i, g) FROM STDIN WITH DELIMITER',' HEADER CSV", f)
     conn.commit()
 
-def count_entries():
-    cur.execute("SELECT COUNT(*) FROM pv")
+def count_entries(type):
+    cur.execute("SELECT COUNT(*) FROM pv_"+type)
     count = cur.fetchall()
     for i in count:
         print(i)
     conn.commit()
 
 
-def printtable():
-    cur.execute("SELECT * FROM pv")
+def printtable(type):
+    cur.execute("SELECT * FROM pv_"+type)
     table_pv = cur.fetchall()
     for i in table_pv:
         print(i)
     conn.commit()
+    
+def createtable(type):
+    if type == "curve":
+        command = """CREATE TABLE pv_curve(
+            measurement_time VARCHAR(255),
+            scheduled_time VARCHAR(255),
+            measurement_duration VARCHAR(255),
+            module_name VARCHAR(255),
+            mounted_on VARCHAR(255),
+            v VARCHAR(),
+            i VARCHAR(),
+            azimuth float,
+            inclination float,
+            t_air float,
+            humidity float,
+            dewpoint float,
+            relative_pressure float,
+            wind_speed float,
+            wind_speed_spread float,
+            wind_direction float,
+            wind_direction_spread float,
+            irradiance float)"""
+    if type == "point":
+        command = """CREATE TABLE pv_point(
+            measurement_time VARCHAR(255),
+            scheduled_time VARCHAR(255),
+            module_name VARCHAR(255),
+            mounted_on VARCHAR(255),
+            v float,
+            i float,
+            status_integer INT,
+            azimuth float,
+            inclination float,
+            t_air float,
+            humidity float,
+            dewpoint float,
+            relative_pressure float,
+            wind_speed float,
+            wind_speed_spread float,
+            wind_direction float,
+            wind_direction_spread float,
+            irradiance float)"""
+    if type == "curve_test":
+        command = """CREATE TABLE pv_curve_test(
+            measurement_time VARCHAR(255),
+            scheduled_time VARCHAR(255),
+            measurement_duration VARCHAR(255),
+            module_id VARCHAR(255),
+            v VARCHAR(2000),
+            i VARCHAR(2000),
+            g float)"""
+    try:
+        cur.execute(command)
+    except:
+        print("Table already exists, could not be created")
+    conn.commit()
+    
+def deletetable(type):
+    try:
+        cur.execute("""DROP TABLE pv_"""+type)
+        print("Table pv_"+type+" succesfully deleted")
+    except:
+        print("Whoops something went wrong, could not delete")
+        
+    conn.commit()
+    
+def downloadtable(file, type,):
+        query = "COPY pv_"+type+" TO STDOUT WITH DELIMITER ',' CSV HEADER "
+        with open(file, 'w') as f:
+            cur.copy_expert(query, f)
+            
+            
+downloadtable("test.csv", "curve_test")
 
-# count_entries()
-# adddata()
-# count_entries()
+
 conn.close()
