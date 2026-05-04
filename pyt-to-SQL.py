@@ -185,5 +185,5 @@ def downloadtable(file, type, datetime1, datetime2, module_name):
   
   
         
-downloadtable("test.csv", "curve_test", "2024-12-20 16:00:50-07:00", "2024-12-20 16:07:20-07:00", ["P-0002-01", "p-0234"])
+downloadtable("test.csv", "curve_test", "2024-12-20 16:00:50-07:00", "2024-12-20 16:07:20-07:00", ["P-0000-01", "p-0234"])
 conn.close()
