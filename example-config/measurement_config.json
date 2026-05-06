@@ -2,33 +2,37 @@
   "modules":
   [
     {
-      "module_id": "P-0000-01",
-      "tracer": "O006",
-      "sensors":
-      [
-        "T006",
-        "ambient temperature",
-        "POAI east",
-        "POAI west",
-        "rack tilt"
-      ],
-      "interval_point": 1,
-      "interval_curve": 30
+      "module_name": "My_solar_panel",
+      "mounted_on": "Fixed-rack",
+      "azimuth": 180,
+      "inclination": 30,
+      "tracer": "O001",
+      "interval_point": 10,
+      "interval_curve": 30,
+      "disabled": false,
+      "load_mode": "pmp"
     },
     {
-      "module_id": "P-0000-02",
-      "tracer": "O005",
-      "sensors":
-      [
-        "T005",
-        "ambient temperature",
-        "POAI east",
-        "POAI west",
-        "rack tilt"
-      ],
-      "interval_point": 1,
+      "module_name": "My_other_solar_panel",
+      "mounted_on": "Fixed-rack",
+      "azimuth": 180,
+      "inclination": 30,
+      "tracer": "O002",
+      "interval_point": 10,
       "interval_curve": 30,
-      "disabled": false
+      "disabled": true,
+      "load_mode": "voc"
+    },
+    {
+      "module_name": "My_solar_panel_3",
+      "mounted_on": "Fixed-rack",
+      "azimuth": 180,
+      "inclination": 30,
+      "tracer": "O003",
+      "interval_point": 10,
+      "interval_curve": 30,
+      "disabled": true,
+      "load_mode": "isc"
     }
   ],
   "data_destination": "config_2024-12-20T15-16-00"
