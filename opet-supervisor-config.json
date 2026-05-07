@@ -1,5 +1,5 @@
 {
-    "config_path": "example-config-test",
-    "data_path_base": "test_log/data",
+    "config_path": "example-config",
+    "data_path_base": "example-data",
     "log_path_base": "test_log/log"
 }
