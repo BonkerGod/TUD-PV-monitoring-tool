@@ -107,9 +107,8 @@ def adddata():
     #     cur.copy_expert("COPY pv_curve_test(measurement_time, scheduled_time, measurement_duration, module_id, v, i, g) FROM STDIN WITH DELIMITER',' HEADER CSV", f)
     
     data = df.to_numpy()
-    print(data[0])
+    #data[0][4]
     for d in data:
-
         cur.execute("INSERT into pv_curve_test VALUES (%s, %s, %s, %s, %s, %s, %s)", d)
     conn.commit()
 
@@ -207,13 +206,26 @@ def downloadtable(file, type, datetime1, datetime2, module_name):
         result = df.loc[(df['module_id'].isin(module_name))]
         #print(result)
   
-  
-
-
+def printtabletype(type):
+    cur.execute(f"SELECT column_name, data_type FROM information_schema.columns WHERE table_name = 'pv_{type}'")
+    columns = cur.fetchall()
+    for i in columns:
+        print(i)
+    conn.commit()
+    
+def retrievevector():
+    cur.execute("SELECT v FROM pv_curve_test")
+    vector = cur.fetchall()
+    for i in vector:
+        print(i)
+    conn.commit()
+    
+deletetable("curve_test")
 createtable("curve_test")
 adddata()
 #printtable("curve_test")
-downloadtable("test.json", "curve_test", "2024-12-20 00:00:00-07:00", "2024-12-21 00:00:00-07:00", ["P-0000-01", "module_2"])
-
+#downloadtable("test.csv", "curve_test", "2024-12-20 00:00:00-07:00", "2024-12-21 00:00:00-07:00", ["P-0000-01", "module_2"])
+#printtabletype("curve_test")
+#retrievevector()
 
 conn.close()
