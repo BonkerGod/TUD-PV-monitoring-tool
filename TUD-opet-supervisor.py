@@ -137,7 +137,19 @@ if __name__ == '__main__':
                     x for x in config['modules']
                     if x['tracer'].startswith('O')
                 ]
+                
+                #Only schedule modules which are enabled
+                modules = [
+                    x for x in modules
+                    if not x.get('disabled', False)
+                ]
 
+                #Only schedule modules which are not due
+                modules = [
+                    x for x in modules
+                    if x["stopdate"] == "None" or 
+                    datetime.datetime.strptime(x["stopdate"], "%Y-%m-%d").date() >= datetime.datetime.now().date()
+                ]           
 
                 # Add set_load_mode jobs
                 for module in modules:
@@ -160,10 +172,7 @@ if __name__ == '__main__':
                         print(f'manager: {job_id} (set_load_mode: {module["load_mode"]}) scheduled for {scheduled_time.astimezone(TZ_LOCAL)}')
                         job_id += 1
 
-                modules = [
-                    x for x in modules
-                    if not x.get('disabled', False)
-                ]
+
 
                 # Time to update the jobs list
                 if jobs:
