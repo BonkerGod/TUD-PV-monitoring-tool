@@ -12,53 +12,10 @@ import logging
 import sys
 import traceback
 
-# Measurements more than this far into the future will be handled on a
-# subsequent loop
-maximum_wait = 0.1  # s
-# Infinite loops with nothing to do will delay this much before checking again
-minimum_wait = 0.01  # s
-# Measurements are scheduled only this far into the future
-schedule_horizon = 11  # s
-# The schedule is updated this often
-schedule_interval = 10  # s
-
-with open('opet-supervisor-config.json') as f:
-    opet_supervisor_config = json.load(f)
-
-config_path = Path(opet_supervisor_config['config_path'])
-data_path_base = Path(opet_supervisor_config['data_path_base'])
-log_path_base = Path(opet_supervisor_config['log_path_base'])
 
 
-log_path_base.mkdir(parents=True, exist_ok=True)
-logger = logging.getLogger(__name__)
-logging.basicConfig(
-    filename=(log_path_base / 'opet-supervisor.log'),
-    encoding='utf-8',
-    level=logging.DEBUG,
-    format='%(asctime)s %(message)s'
-)
 
-# Set up a handler to log uncaught exceptions
-def exception_handler(exctype, value, tb):
-    logger.exception(''.join(traceback.format_exception(exctype, value, tb)))
-
-
-sys.excepthook = exception_handler
-
-logger.debug('opet-supervisor started')
-
-TZ_LOCAL = datetime.timezone(datetime.timedelta(hours=-7))
-
-with open(config_path / 'opet_info.json') as f:
-    load_info = json.load(f)
-
-print(load_info)
-with open(config_path / 'opet_bus_info.json') as f:
-    bus_info = json.load(f)
-
-
-def measurement_loop(bus, jobs, jobs_in_progress, results):
+def measurement_loop(bus, jobs, jobs_in_progress, results, bus_info, load_info, logger, maximum_wait, minimum_wait):
     '''In an infinite loop, do the jobs in `dict` that are assigned to `bus`
     and store the `results`.'''
     def initialize_bus():
@@ -66,9 +23,7 @@ def measurement_loop(bus, jobs, jobs_in_progress, results):
         # individual OPETs. Returns None if something goes wrong.
         # TODO: handle the hot-plugging and power failure cases
         try:
-            serial_port_name = device_name(
-                bus_info[bus]['adapter_serial_number']
-            )[0]
+            serial_port_name = device_name(bus_info[bus]['adapter_serial_number'])[0]
             serial_port = Serial(serial_port_name, baudrate=200000, timeout=1)
             opet_bus = OPETBus(serial_port)
             this_bus_opet_addresses = [
@@ -89,6 +44,7 @@ def measurement_loop(bus, jobs, jobs_in_progress, results):
 
     # Attempt to set up the bus
     opets = initialize_bus()
+    print(opets)
 
     # Do jobs as they are scheduled and become due
     while True:
@@ -157,12 +113,32 @@ def measurement_loop(bus, jobs, jobs_in_progress, results):
                 continue
 
             # Handle the job types differently
+            #Set load mode, also enable output if disable is false
             if job['job_type'] == 'set_load_mode':
-                logger.debug(f'bus {bus}: job {job_id}: setting load mode on {job["opet_name"]} to {job["load_mode"]}')
+                #mppt
                 if job["load_mode"] == 'pmp':
                     opets[job['opet_address']].mode = 'mppt'
+                    if job["disabled"] == True:
+                        opets[job['opet_address']].output_enabled = False
+                        logger.debug(f'bus {bus}: job {job_id}: setting load mode on {job["opet_name"]} to {job["load_mode"]}')
+                    else:
+                        opets[job['opet_address']].output_enabled = True
+                #voc
                 elif job["load_mode"] == 'voc':
                     opets[job['opet_address']].mode = 'voc'
+                    if job["disabled"] == True:
+                        opets[job['opet_address']].output_enabled = False
+                    else:
+                        opets[job['opet_address']].output_enabled = True    
+                #isc
+                elif job["load_mode"] == 'isc':
+                    opets[job['opet_address']].mode = 'isc'
+                    if job["disabled"] == True:
+                        opets[job['opet_address']].output_enabled = False
+                    else:
+                        opets[job['opet_address']].output_enabled = True
+
+            #Do point measurement
             elif job['job_type'] == 'point':
                 # Point measurements are requested and recorded in immediate
                 # succession
@@ -178,7 +154,7 @@ def measurement_loop(bus, jobs, jobs_in_progress, results):
                         'measurement_type': job['job_type'],
                         'v': result['voltage'],
                         'i': result['current'],
-                        'module_id': job['module_id'],
+                        'module_name': job['module_name'],
                         'status_integer': result['status_integer'],
                         'data_destination': job['data_destination']
                     }
@@ -235,7 +211,7 @@ def measurement_loop(bus, jobs, jobs_in_progress, results):
                         'measurement_time': job['measurement_time'],
                         'measurement_duration': job['measurement_duration'],
                         'measurement_type': job['job_type'],
-                        'module_id': job['module_id'],
+                        'module_name': job['module_name'],
                         'v': result['voltage'],
                         'i': result['current'],
                         'data_destination': job['data_destination']
@@ -255,26 +231,46 @@ def measurement_loop(bus, jobs, jobs_in_progress, results):
         sleep(minimum_wait)
 
 
-def writer_loop(results):
+def writer_loop(results, data_path_base, TZ_LOCAL, minimum_wait,weather_data):
     headers = {
         'point': [
-            'measurement_time',
-            'scheduled_time',
-            'module_id',
-            'v',
-            'i',
-            'g',
-            't_ext',
-            'status_integer'
+            'measurement_time',  
+            'scheduled_time',    
+            'module_name',       
+            'mounted_on',
+            'v',                 
+            'i',                 
+            'status_integer',    
+            'azimuth',  
+            'inclination',
+            't_air',             
+            'humidity',          
+            'dewpoint',          
+            'relative_pressure',    
+            'wind_speed',        
+            'wind_speed_spread',     
+            'wind_direction',        
+            'wind_direction_spread',     
+            'irradiance'         
         ],
         'curve': [
             'measurement_time',
             'scheduled_time',
             'measurement_duration',
-            'module_id',
+            'module_name',
             'v',
             'i',
-            'g'
+            'azimuth',
+            'inclination',
+            't_air',
+            'humidity',
+            'dewpoint',
+            'relative_pressure',
+            'wind_speed',
+            'wind_speed_spread',
+            'wind_direction',
+            'wind_direction_spread',
+            'irradiance'
         ]
     }
     while True:
@@ -294,6 +290,17 @@ def writer_loop(results):
             # Convert datetimes to ISO 8601 strings
             result['measurement_time'] = result['measurement_time'].astimezone(TZ_LOCAL).isoformat()
             result['scheduled_time'] = result['scheduled_time'].astimezone(TZ_LOCAL).isoformat()
+            
+            #Add latest weather data to results
+            result['t_air'] = weather_data['t_air']
+            result['humidity'] = weather_data['humidity']
+            result['dewpoint'] = weather_data['dewpoint']
+            result['relative_pressure'] = weather_data['relative_pressure']
+            result['wind_speed'] = weather_data['wind_speed']
+            result['wind_speed_spread'] = weather_data['wind_speed_spread']
+            result['wind_direction'] = weather_data['wind_direction']
+            result['wind_direction_spread'] = weather_data['wind_direction_spread']
+            result['irradiance'] = weather_data['irradiance']
 
             # Create the log file directory, if necessary
             data_file_path.parent.mkdir(parents=True, exist_ok=True)
@@ -311,177 +318,3 @@ def writer_loop(results):
                     writer.writeheader()
                 writer.writerow(result)
         sleep(minimum_wait)
-
-
-if __name__ == '__main__':
-    with multiprocessing.Manager() as manager:
-        # Job definitions will be values in this shared dictionary.
-        # Keys are unique job IDs so they can be removed from the dictionary
-        # even if the dictionary gets updated while a job is underway. The
-        # Manager doesn't handle updates to *nested* dictionaries for other
-        # processes, so this code tends to pop things out of dictionaries,
-        # work with them, then reinsert them if needed
-        jobs = manager.dict({})
-        results = manager.dict({})
-        jobs_in_progress = manager.dict({})
-        job_id = 0
-
-        # All possible buses. Each bus will get a process
-        buses_all = set([
-            load_info_datum['bus']
-            for load_name, load_info_datum
-            in load_info.items()
-        ])
-        # Create a process for each bus
-        processes = [
-            multiprocessing.Process(
-                target=measurement_loop,
-                args=(bus, jobs, jobs_in_progress, results)
-            )
-            for bus
-            in buses_all
-        ]
-
-        # Add one to do the logging
-        processes.append(
-            multiprocessing.Process(
-                target=writer_loop,
-                args=(results, )
-            )
-        )
-        
-        for process in processes:
-            process.start()
-
-        schedule_update_time = next_occurrence(
-            present(),
-            datetime.timedelta(seconds=schedule_interval)
-        )
-        schedule_never_updated = True
-        while True:
-            if schedule_never_updated:
-                schedule_never_updated = False
-            else:
-                while present() < schedule_update_time:
-                    sleep(minimum_wait)
-                schedule_update_time += datetime.timedelta(seconds=schedule_interval)
-
-            # Reload the configuration
-            with open(config_path / 'measurement_config.json') as f:
-                config = json.load(f)
-
-            # OPETs are tracers that start with 'O'; these are the modules for
-            # OPETs only, ignoring other tracers
-            modules = [
-                x for x in config['modules']
-                if x['tracer'].startswith('O')
-            ]
-
-            # Add set_load_mode jobs
-            for module in modules:
-                if module.get('load_mode'):
-                    scheduled_time = present()
-                    jobs[job_id] = {
-                        'scheduled_time': scheduled_time,
-                        'expiration_time': schedule_update_time,
-                        'opet_name': module['tracer'],
-                        'opet_bus': load_info[module['tracer']]['bus'],
-                        'opet_address': load_info[module['tracer']]['address'],
-                        'module_id': module['module_id'],
-                        'job_type': 'set_load_mode',
-                        'load_mode': module['load_mode']
-                    }
-                    print(f'manager: {job_id} (set_load_mode: {module["load_mode"]}) scheduled for {scheduled_time.astimezone(TZ_LOCAL)}')
-                    job_id += 1
-
-            modules = [
-                x for x in modules
-                if not x.get('disabled', False)
-            ]
-
-            # Time to update the jobs list
-            if jobs:
-                schedule_start = max([job['scheduled_time'] for job in jobs.values()])
-            else:
-                schedule_start = present()
-            schedule_end = present() + datetime.timedelta(seconds=schedule_horizon)
-            for module in modules:
-                # Schedule point measurements
-                point_interval = datetime.timedelta(
-                    seconds=module['interval_point']
-                )
-                # Find times in the scheduling window, spaced by the interval
-                scheduled_times = datetime_range(
-                    schedule_start,
-                    schedule_end,
-                    point_interval,
-                    include_start_point=False
-                )
-                
-                # Jobs expire when they reach the scheduled time plus the
-                # measurement interval, because then they are redundant with
-                # the next repetition of the measurement.
-
-                # Eliminate times that would already have expired
-                scheduled_times = [
-                    t
-                    for t
-                    in scheduled_times
-                    if t + point_interval >= present()
-                ]
-
-                # Create a dict that gives the job instructions
-                for scheduled_time in scheduled_times:
-                    jobs[job_id] = {
-                        'scheduled_time': scheduled_time,
-                        'expiration_time': scheduled_time + point_interval,
-                        'opet_name': module['tracer'],
-                        'opet_bus': load_info[module['tracer']]['bus'],
-                        'opet_address': load_info[module['tracer']]['address'],
-                        'module_id': module['module_id'],
-                        'job_type': 'point',
-                        'data_destination': config['data_destination']
-                    }
-                    print(f'manager: {job_id} (point) scheduled for {scheduled_time.astimezone(TZ_LOCAL)}')
-                    job_id += 1
-                
-                # Schedule curve measurements
-                curve_interval = datetime.timedelta(
-                    seconds=module['interval_curve']
-                )
-
-                # Find times in the scheduling window, spaced by the interval
-                scheduled_times = datetime_range(
-                    schedule_start,
-                    schedule_end,
-                    curve_interval,
-                    include_start_point=False
-                )
-
-                # Eliminate times that would already have expired
-                scheduled_times = [
-                    t
-                    for t
-                    in scheduled_times
-                    if t + point_interval >= present()
-                ]
-                
-                # Create a dict that gives the job instructions
-                for scheduled_time in scheduled_times:
-                    jobs[job_id] = {
-                        'scheduled_time': scheduled_time,
-                        'expiration_time': scheduled_time + curve_interval,
-                        'opet_name': module['tracer'],
-                        'opet_bus': load_info[module['tracer']]['bus'],
-                        'opet_address': load_info[module['tracer']]['address'],
-                        'module_id': module['module_id'],
-                        'job_type': 'curve',
-                        'data_destination': config['data_destination']
-                    }
-                    print(f'manager: {job_id} (curve) scheduled for {scheduled_time.astimezone(TZ_LOCAL)}')
-                    job_id += 1
-            print(f'manager: {len(jobs)} jobs are scheduled')
-            print(f'manager: {jobs.keys()}')
-
-        for process in processes:
-            process.join()
