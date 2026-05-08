@@ -3,6 +3,7 @@ import datetime
 import time
 import json
 from pathlib import Path
+from io import StringIO
 import numpy as np
 import pandas as pd
 import ast
@@ -38,9 +39,10 @@ cur = conn.cursor()
 
 def dailyloop():
      while(1):
-        if print(datetime.datetime.now().hour)==1: #When time is equal to 1 hour, upload the data from yesterday
+        if datetime.datetime.now().hour==15: #When time is equal to 1 hour, upload the data from yesterday
             adddata()
-        time.sleep(1*60*60) # Wait for an hour and check again. This is done to reduce cpu load, so that it does not check unnecessarily quickly.
+            count_entries("curve")
+        time.sleep(60) # Wait for an hour and check again. This is done to reduce cpu load, so that it does not check unnecessarily quickly.
              
              
              
@@ -50,7 +52,7 @@ def adddata():
     today = datetime.date.today()
     date = str(today-datetime.timedelta(days=1)) #upload the data of the day before
     date = '2024-12-20' #test
-    print(date)
+    date = str(today)
     data_path = data_path_base / date / config['data_destination']
     
     #point data add
@@ -82,11 +84,14 @@ def adddata():
     # print(df['v'])
     # print(type(df["v"].iloc[0]))
     # df.to_csv("example-data/2024-12-20/config_2024-12-20T15-16-00/opet_results_curve2_2024-12-20.csv", sep=',', index= False)
-    
-    with open(data_file_path) as f:
-    #with open("C:/Users/wesse/OneDrive/Documenten/Tu Delft/EE3P1/Database/SQL/pv.csv") as f: #test
-        #cur.copy_expert("COPY pv_curve(measurement_time, scheduled_time, measurement_duration, module_name, mounted_on, v,i, azimuth, inclination, t_air, humidity, dewpoint, relative_pressure, wind_speed, wind_speed_spread, wind_direction, wind_direction_spread, irradiance) FROM STDIN WITH DELIMITER',' HEADER CSV", f)
-        cur.copy_expert("COPY pv_curve_test(measurement_time, scheduled_time, measurement_duration, module_id, v, i, g) FROM STDIN WITH DELIMITER',' HEADER CSV", f)
+    print(data_file_path)
+    with open(data_file_path, 'r', encoding='utf-8', errors='replace') as f:
+        filtered_csv = StringIO(''.join(line for line in f if line.strip()))
+        cur.copy_expert(
+            "COPY pv_curve(measurement_time, scheduled_time, measurement_duration, module_name, v, i, azimuth, inclination, t_air, humidity, dewpoint, relative_pressure, wind_speed, wind_speed_spread, wind_direction, wind_direction_spread, irradiance) FROM STDIN WITH DELIMITER',' HEADER CSV",
+            filtered_csv
+        )
+        #cur.copy_expert("COPY pv_curve_test(measurement_time, scheduled_time, measurement_duration, module_id, v, i, g) FROM STDIN WITH DELIMITER',' HEADER CSV", f)
     conn.commit()
 
 def count_entries(type):
@@ -112,8 +117,8 @@ def createtable(type):
             measurement_duration VARCHAR(255),
             module_name VARCHAR(255),
             mounted_on VARCHAR(255),
-            v VARCHAR(),
-            i VARCHAR(),
+            v VARCHAR(2000),
+            i VARCHAR(2000),
             azimuth float,
             inclination float,
             t_air float,
@@ -180,10 +185,9 @@ def downloadtable(file, type, datetime1, datetime2, module_name):
         print(df['scheduled_time'])
         print(df.dtypes)
         result = df.loc[(df['scheduled_time'] >= datetime.datetime.fromisoformat(datetime1)) & (df["scheduled_time"]<= datetime.datetime.fromisoformat(datetime2))]
-        result = df.loc[(df['module_id'].isin(module_name))]
+        result = df.loc[(df['module_name'].isin(module_name))]
         print(result)
-  
-  
         
-downloadtable("test.csv", "curve_test", "2024-12-20 16:00:50-07:00", "2024-12-20 16:07:20-07:00", ["P-0000-01", "p-0234"])
-conn.close()
+
+
+#conn.close()
