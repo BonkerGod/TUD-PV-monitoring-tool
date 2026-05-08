@@ -147,7 +147,7 @@ if __name__ == '__main__':
                 #Only schedule modules which are not due
                 modules = [
                     x for x in modules
-                    if x["stopdate"] == "None" or 
+                    if x["stopdate"] == None or 
                     datetime.datetime.strptime(x["stopdate"], "%Y-%m-%d").date() >= datetime.datetime.now().date()
                 ]           
 

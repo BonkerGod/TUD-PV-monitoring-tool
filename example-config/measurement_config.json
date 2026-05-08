@@ -13,14 +13,15 @@
       "load_mode": "pmp"
     },
     {
-      "module_name": "My_other_solar_panel",
+      "module_name": "My_solar_panel_2",
       "mounted_on": "Fixed-rack",
       "azimuth": 180,
       "inclination": 30,
       "tracer": "O002",
       "interval_point": 10,
       "interval_curve": 30,
-      "disabled": true,
+      "disabled": false,
+      "stopdate": "2026-05-07",
       "load_mode": "voc"
     },
     {
@@ -32,6 +33,31 @@
       "interval_point": 10,
       "interval_curve": 30,
       "disabled": true,
+      "stopdate": "2026-05-07",
+      "load_mode": "voc"
+    },
+    {
+      "module_name": "My_solar_panel_4",
+      "mounted_on": "Fixed-rack",
+      "azimuth": 180,
+      "inclination": 30,
+      "tracer": "O004",
+      "interval_point": 10,
+      "interval_curve": 30,
+      "disabled": false,
+      "stopdate": "2026-05-06",
+      "load_mode": "isc"
+    },
+    {
+      "module_name": "My_solar_panel_5",
+      "mounted_on": "Fixed-rack",
+      "azimuth": 180,
+      "inclination": 30,
+      "tracer": "O005",
+      "interval_point": 10,
+      "interval_curve": 30,
+      "disabled": false,
+      "stopdate": null,
       "load_mode": "isc"
     }
   ],

@@ -1,7 +1,3 @@
 {
-    "O001": {"bus": "a", "address": 1},
-    "O002": {"bus": "a", "address": 2},
-    "O003": {"bus": "a", "address": 3},
-    "O004": {"bus": "a", "address": 4},
-    "O005": {"bus": "a", "address": 5}
+    "O001": {"bus": "a", "address": 1}
 }

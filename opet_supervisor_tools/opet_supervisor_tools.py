@@ -23,7 +23,7 @@ def measurement_loop(bus, jobs, jobs_in_progress, results, bus_info, load_info, 
         # individual OPETs. Returns None if something goes wrong.
         # TODO: handle the hot-plugging and power failure cases
         try:
-            serial_port_name = 'COM3' #device_name(bus_info[bus]['adapter_serial_number'])[0]
+            serial_port_name = device_name(bus_info[bus]['adapter_serial_number'])[0]
             serial_port = Serial(serial_port_name, baudrate=200000, timeout=1)
             opet_bus = OPETBus(serial_port)
             this_bus_opet_addresses = [
@@ -154,7 +154,7 @@ def measurement_loop(bus, jobs, jobs_in_progress, results, bus_info, load_info, 
                         'measurement_type': job['job_type'],
                         'v': result['voltage'],
                         'i': result['current'],
-                        'module_id': job['module_id'],
+                        'module_name': job['module_name'],
                         'status_integer': result['status_integer'],
                         'data_destination': job['data_destination']
                     }
