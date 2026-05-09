@@ -9,50 +9,53 @@ import pandas as pd
 import ast
 from dateutil import parser
 
-with open('opet-supervisor-config.json') as f:
-    opet_supervisor_config = json.load(f)
-data_path_base = Path(opet_supervisor_config['data_path_base'])
-config_path = Path(opet_supervisor_config['config_path'])
-with open(config_path / 'measurement_config.json') as f:
-    config = json.load(f)
+def DB_initialize():
+    with open('opet-supervisor-config.json') as f:
+        opet_supervisor_config = json.load(f)
+    data_path_base = Path(opet_supervisor_config['data_path_base'])
+    config_path = Path(opet_supervisor_config['config_path'])
+    with open(config_path / 'measurement_config.json') as f:
+        config = json.load(f)
 
 
-DB_NAME = "postgres"
-DB_USER = "postgres"
-DB_PASS = "1234"
-DB_HOST = "localhost"
-DB_PORT = "5432"
+    DB_NAME = "postgres"
+    DB_USER = "postgres"
+    DB_PASS = "1234"
+    DB_HOST = "localhost"
+    DB_PORT = "5432"
 
-try:
-    conn = psycopg2.connect(database=DB_NAME,
-                            user =DB_USER,
-                            password=DB_PASS,
-                            host=DB_HOST,
-                            port=DB_PORT)
-    print("Database connected succefully")
-except:
-    print("Database not connected succesfully")
-    
-cur = conn.cursor()
+    try:
+        conn = psycopg2.connect(database=DB_NAME,
+                                user =DB_USER,
+                                password=DB_PASS,
+                                host=DB_HOST,
+                                port=DB_PORT)
+        print("Database connected succefully")
+    except:
+        print("Database not connected succesfully")
+        
+    cur = conn.cursor()
+    return data_path_base, config, cur, conn
 
-#print(datetime.datetime.now().hour)
 
 def dailyloop():
-     while(1):
-        if datetime.datetime.now().hour==15: #When time is equal to 1 hour, upload the data from yesterday
-            adddata()
-            count_entries("curve")
+    data_path_base, config, cur, conn = DB_initialize()
+    while(1):
+        if datetime.datetime.now().hour==12: #When time is equal to 1 hour, upload the data from yesterday
+            adddata(data_path_base, config, cur, conn)
+            count_entries("curve", cur, conn)
         time.sleep(60) # Wait for an hour and check again. This is done to reduce cpu load, so that it does not check unnecessarily quickly.
+    closeconnection(conn)
              
              
              
 
 
-def adddata():
+def adddata(data_path_base, config, cur, conn):
     today = datetime.date.today()
     date = str(today-datetime.timedelta(days=1)) #upload the data of the day before
-    date = '2024-12-20' #test
-    date = str(today)
+    #date = '2024-12-20' #test
+    date = str(date)
     data_path = data_path_base / date / config['data_destination']
     
     #point data add
@@ -94,7 +97,7 @@ def adddata():
         #cur.copy_expert("COPY pv_curve_test(measurement_time, scheduled_time, measurement_duration, module_id, v, i, g) FROM STDIN WITH DELIMITER',' HEADER CSV", f)
     conn.commit()
 
-def count_entries(type):
+def count_entries(type, cur, conn):
     cur.execute("SELECT COUNT(*) FROM pv_"+type)
     count = cur.fetchall()
     for i in count:
@@ -102,21 +105,20 @@ def count_entries(type):
     conn.commit()
 
 
-def printtable(type):
+def printtable(type, cur, conn):
     cur.execute("SELECT * FROM pv_"+type)
     table_pv = cur.fetchall()
     for i in table_pv:
         print(i)
     conn.commit()
     
-def createtable(type):
+def createtable(type, cur, conn):
     if type == "curve":
         command = """CREATE TABLE pv_curve(
             measurement_time VARCHAR(255),
             scheduled_time VARCHAR(255),
             measurement_duration VARCHAR(255),
             module_name VARCHAR(255),
-            mounted_on VARCHAR(255),
             v VARCHAR(2000),
             i VARCHAR(2000),
             azimuth float,
@@ -165,7 +167,7 @@ def createtable(type):
         print("Table already exists, could not be created")
     conn.commit()
     
-def deletetable(type):
+def deletetable(type, cur, conn):
     try:
         cur.execute("""DROP TABLE pv_"""+type)
         print("Table pv_"+type+" succesfully deleted")
@@ -176,7 +178,7 @@ def deletetable(type):
 
 
 #File: ADDRESS LOCATION AND TYPE.   type: mearuements type.     datetime: put in datetime in "2024-12-20 16:00:50-07:00" to filter the moments.     module_names (array): only get the name of the modules.
-def downloadtable(file, type, datetime1, datetime2, module_name):
+def downloadtable(file, type, datetime1, datetime2, module_name, cur, conn):
         query = "COPY pv_"+type+" TO STDOUT WITH DELIMITER ',' CSV HEADER "
         with open(file, 'w') as f:
             cur.copy_expert(query, f)
@@ -189,5 +191,6 @@ def downloadtable(file, type, datetime1, datetime2, module_name):
         print(result)
         
 
+def closeconnection(conn):
+    conn.close()
 
-#conn.close()
