@@ -51,10 +51,10 @@ except Exception as e:
 
 def dailyloop():
     while(1):
-        if datetime.datetime.now().minute % 5 == 0: #When the time is a multiple of 5.\
-            print(str(datetime.datetime.today()))
+        if datetime.datetime.now().minute % 1 == 0: #When the time is a multiple of 5.\
+            print(str(datetime.date.today()))
             try:
-                date = str(datetime.date.today)
+                date = str(datetime.date.today())
                 adddata(date)
                 count_entries("point")
                 count_entries('curve')
@@ -62,10 +62,10 @@ def dailyloop():
             
         elif (datetime.datetime.now().minute == 5 and datetime.datetime.now().hour == 0): #When time is equal to 1 hour, upload the data from yesterday
             try:
-                date = str(datetime.date.today-datetime.timedelta(days=1))
+                date = str(datetime.date.today()-datetime.timedelta(days=1))
                 adddata(date)
             except: print("Data could not be added, maybe the file is not yet created or there is an error")
-        time.sleep(60) # Wait for an hour and check again. This is done to reduce cpu load, so that it does not check unnecessarily quickly.
+        time.sleep(15) # Wait for an hour and check again. This is done to reduce cpu load, so that it does not check unnecessarily quickly.
              
              
              
