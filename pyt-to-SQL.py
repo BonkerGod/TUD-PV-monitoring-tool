@@ -50,19 +50,27 @@ except Exception as e:
 #print(datetime.datetime.now().hour)
 
 def dailyloop():
-     while(1):
-        if print(datetime.datetime.now().hour)==1: #When time is equal to 1 hour, upload the data from yesterday
-            adddata()
-        time.sleep(1*60*60) # Wait for an hour and check again. This is done to reduce cpu load, so that it does not check unnecessarily quickly.
+    print(datetime.datetime.now().minute)
+    while(1):
+        if datetime.datetime.now().minute % 5 == 0: #When the time is a multiple of 5.
+            try:
+                date = str(datetime.date.today)
+                adddata(date)
+            except: print("Data could not be added, maybe the file is not yet created or there is an error")
+            
+        elif (datetime.datetime.now().minute == 5 and datetime.datetime.now().hour == 0): #When time is equal to 1 hour, upload the data from yesterday
+            try:
+                date = str(datetime.date.today-datetime.timedelta(days=1))
+                adddata(date)
+            except: print("Data could not be added, maybe the file is not yet created or there is an error")
+        time.sleep(60) # Wait for an hour and check again. This is done to reduce cpu load, so that it does not check unnecessarily quickly.
              
              
              
 
 
-def adddata():
-    today = datetime.date.today()
-    date = str(today-datetime.timedelta(days=1)) #upload the data of the day before
-    date = '2024-12-20' #test
+def adddata(date):
+    #date = '2024-12-20' #test
     print(date)
     data_path = data_path_base / date / config['data_destination']
     
@@ -75,6 +83,17 @@ def adddata():
         + '.csv'
         )
     )
+    df = pd.read_csv(data_file_path, delimiter=",")
+    data = df.to_numpy()
+    point_insert = (
+        "INSERT INTO pv_point (measurement_time, scheduled_time, module_name, mounted_on, v, i, status_integer, azimuth, inclination, t_air, humidity, dewpoint, relative_pressure, wind_speed, wind_speed_spread, wind_direction, wind_direction_spread, irradiance) "
+        "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) "
+        "ON CONFLICT (measurement_time, module_name) DO NOTHING"
+    )
+    for d in data:
+        cur.execute(point_insert, d)
+    conn.commit()
+    
     #with open(data_file_path) as f:
     #with open("C:/Users/wesse/OneDrive/Documenten/Tu Delft/EE3P1/Database/SQL/pv.csv") as f: #test
         #cur.copy_expert("COPY pv_point(measurement_time, scheduled_time, module_id, v, i, g, t_ext, status_integer) FROM STDIN WITH DELIMITER',' HEADER CSV", f)
@@ -89,7 +108,6 @@ def adddata():
         )
     )
     
-    # Could not get the string away, but this may be for the better, because postgres expects array in {} and not in [].
     df = pd.read_csv(data_file_path, delimiter=",")
     df["v"] = df["v"].apply(ast.literal_eval)
     df['i'] = df['i'].apply(ast.literal_eval)
@@ -98,9 +116,13 @@ def adddata():
     #print(type(df["v"].iloc[0]))
     
     data = df.to_numpy()
-    
+    curve_insert = (
+        "INSERT INTO pv_curve (measurement_time, scheduled_time, measurement_duration, module_name, mounted_on, v, i, azimuth, inclination, t_air, humidity, dewpoint, relative_pressure, wind_speed, wind_speed_spread, wind_direction, wind_direction_spread, irradiance) "
+        "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) "
+        "ON CONFLICT (measurement_time, module_name) DO NOTHING"
+    )
     for d in data:
-        cur.execute("INSERT into pv_curve_test VALUES (%s, %s, %s, %s, %s, %s, %s) ON CONFLICT (measurement_time, module_id) DO NOTHING", d)
+        cur.execute(curve_insert, d)
     conn.commit()
 
 def count_entries(type):
@@ -123,7 +145,7 @@ def createtable(type):
         command = """CREATE TABLE pv_curve(
             measurement_time VARCHAR(255),
             scheduled_time VARCHAR(255),
-            measurement_duration VARCHAR(255),
+            measurement_duration float,
             module_name VARCHAR(255),
             mounted_on VARCHAR(255),
             v VECTOR(100),
@@ -198,7 +220,7 @@ def downloadtable(file, type, datetime1, datetime2, module_name):
         # print(df['scheduled_time'])
         # print(df.dtypes)
         result = df.loc[(df['scheduled_time'] >= datetime.datetime.fromisoformat(datetime1)) & (df["scheduled_time"]<= datetime.datetime.fromisoformat(datetime2))]
-        result = df.loc[(df['module_id'].isin(module_name))]
+        result = df.loc[(df['module_name'].isin(module_name))]
         #print(result)
   
 def printtabletype(type):
@@ -216,16 +238,13 @@ def retrievevector():
     conn.commit()
 
 
+deletetable('curve')
+deletetable('point')
+createtable('curve')
+createtable('point')
 
-
-adddata()
-downloadtable("test1.csv", "curve_test", "2024-12-20 00:00:00-07:00", "2024-12-21 00:00:00-07:00", ["P-0000-01", "module_2"])
-count_entries("curve_test")
-adddata()
-count_entries("curve_test")
-
-downloadtable("test2.csv", "curve_test", "2024-12-20 00:00:00-07:00", "2024-12-21 00:00:00-07:00", ["P-0000-01", "module_2"])
-#printtabletype("curve_test")
-#retrievevector()
+adddata('2026-05-11')
+downloadtable("export/point.csv", "point", "2024-12-20 00:00:00-07:00", "2024-12-20 23:59:59-07:00", ["P-0000-01", "My_solar_panel_1"])
+downloadtable("export/curve.csv", "curve", "2024-12-20 00:00:00-07:00", "2024-12-20 23:59:59-07:00", ["P-0000-01", "My_solar_panel_1"])
 
 conn.close()
