@@ -95,21 +95,23 @@ def adddata():
     # print(type(df['v'].iloc[0]))
     df["v"] = df["v"].apply(ast.literal_eval)
     df['i'] = df['i'].apply(ast.literal_eval)
-    print(df['v'].iloc[0])
-    print(np.shape(df['v'].iloc[0]))
-    print(type(df["v"].iloc[0]))
+    # print(df['v'].iloc[0])
+    # print(np.shape(df['v'].iloc[0]))
+    # print(type(df["v"].iloc[0]))
     #df.to_sql("pv_curve_test", conn, if_exists='append', index=False)
     #df.to_json("example-data/2024-12-20/config_2024-12-20T15-16-00/opet_results_curve2_2024-12-20.json", orient="records", lines=True)
     
-    # with open(data_file_path) as f:
+    #with open(data_file_path) as f:
     # #with open("example-data/2024-12-20/config_2024-12-20T15-16-00/opet_results_curve2_2024-12-20.csv") as f: #test
-    #     #cur.copy_expert("COPY pv_curve(measurement_time, scheduled_time, measurement_duration, module_name, mounted_on, v,i, azimuth, inclination, t_air, humidity, dewpoint, relative_pressure, wind_speed, wind_speed_spread, wind_direction, wind_direction_spread, irradiance) FROM STDIN WITH DELIMITER',' HEADER CSV", f)
-    #     cur.copy_expert("COPY pv_curve_test(measurement_time, scheduled_time, measurement_duration, module_id, v, i, g) FROM STDIN WITH DELIMITER',' HEADER CSV", f)
-    
+        #cur.copy_expert("COPY pv_curve(measurement_time, scheduled_time, measurement_duration, module_name, mounted_on, v,i, azimuth, inclination, t_air, humidity, dewpoint, relative_pressure, wind_speed, wind_speed_spread, wind_direction, wind_direction_spread, irradiance) FROM STDIN WITH DELIMITER',' HEADER CSV", f)
+        #cur.copy_expert("COPY pv_curve_test_temp(measurement_time, scheduled_time, measurement_duration, module_id, v, i, g) FROM STDIN WITH DELIMITER',' HEADER CSV", f)
+
+        
     data = df.to_numpy()
     #data[0][4]
+    
     for d in data:
-        cur.execute("INSERT into pv_curve_test VALUES (%s, %s, %s, %s, %s, %s, %s)", d)
+        cur.execute("INSERT into pv_curve_test VALUES (%s, %s, %s, %s, %s, %s, %s) ON CONFLICT (measurement_time, module_id) DO NOTHING", d)
     conn.commit()
 
 def count_entries(type):
@@ -135,8 +137,28 @@ def createtable(type):
             measurement_duration VARCHAR(255),
             module_name VARCHAR(255),
             mounted_on VARCHAR(255),
-            v VARCHAR(),
-            i VARCHAR(),
+            v VECTOR(100),
+            i VECTOR(100),
+            azimuth float,
+            inclination float,
+            t_air float,
+            humidity float,
+            dewpoint float,
+            relative_pressure float,
+            wind_speed float,
+            wind_speed_spread float,
+            wind_direction float,
+            wind_direction_spread float,
+            irradiance float)"""
+    if type == "curve_temp":
+        command = """CREATE TABLE pv_curve_temp(
+            measurement_time VARCHAR(255),
+            scheduled_time VARCHAR(255),
+            measurement_duration VARCHAR(255),
+            module_name VARCHAR(255),
+            mounted_on VARCHAR(255),
+            v VECTOR(100),
+            i VECTOR(100),
             azimuth float,
             inclination float,
             t_air float,
@@ -168,6 +190,26 @@ def createtable(type):
             wind_direction float,
             wind_direction_spread float,
             irradiance float)"""
+    if type == "point_temp":
+        command = """CREATE TABLE pv_point_temp(
+            measurement_time VARCHAR(255),
+            scheduled_time VARCHAR(255),
+            module_name VARCHAR(255),
+            mounted_on VARCHAR(255),
+            v float,
+            i float,
+            status_integer INT,
+            azimuth float,
+            inclination float,
+            t_air float,
+            humidity float,
+            dewpoint float,
+            relative_pressure float,
+            wind_speed float,
+            wind_speed_spread float,
+            wind_direction float,
+            wind_direction_spread float,
+            irradiance float)"""
     if type == "curve_test":
         command = """CREATE TABLE pv_curve_test(
             measurement_time VARCHAR(255),
@@ -176,9 +218,21 @@ def createtable(type):
             module_id VARCHAR(255),
             v VECTOR(100),
             i VECTOR(100),
-            g float)"""
+            g float,
+            PRIMARY KEY (measurement_time, module_id))"""
+    if type == "curve_test_temp":
+        command = """CREATE TABLE pv_curve_test_temp(
+            measurement_time VARCHAR(255),
+            scheduled_time VARCHAR(255),
+            measurement_duration VARCHAR(255),
+            module_id VARCHAR(255),
+            v VECTOR(100),
+            i VECTOR(100),
+            g float,
+            CONSTRAINT ID PRIMARY KEY (measurement_time, module_id))"""
     try:
         cur.execute(command)
+        print('Table pv_'+type+' succesfully created')
     except:
         print("Table already exists, could not be created")
     conn.commit()
@@ -219,12 +273,17 @@ def retrievevector():
     for i in vector:
         print(i)
     conn.commit()
-    
+
+
 deletetable("curve_test")
 createtable("curve_test")
+
+
 adddata()
-#printtable("curve_test")
-#downloadtable("test.csv", "curve_test", "2024-12-20 00:00:00-07:00", "2024-12-21 00:00:00-07:00", ["P-0000-01", "module_2"])
+downloadtable("test1.csv", "curve_test", "2024-12-20 00:00:00-07:00", "2024-12-21 00:00:00-07:00", ["P-0000-01", "module_2"])
+adddata()
+
+downloadtable("test2.csv", "curve_test", "2024-12-20 00:00:00-07:00", "2024-12-21 00:00:00-07:00", ["P-0000-01", "module_2"])
 #printtabletype("curve_test")
 #retrievevector()
 
