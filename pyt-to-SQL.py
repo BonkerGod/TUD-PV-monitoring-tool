@@ -50,12 +50,14 @@ except Exception as e:
 #print(datetime.datetime.now().hour)
 
 def dailyloop():
-    print(datetime.datetime.now().minute)
     while(1):
-        if datetime.datetime.now().minute % 5 == 0: #When the time is a multiple of 5.
+        if datetime.datetime.now().minute % 5 == 0: #When the time is a multiple of 5.\
+            print(str(datetime.datetime.today()))
             try:
                 date = str(datetime.date.today)
                 adddata(date)
+                count_entries("point")
+                count_entries('curve')
             except: print("Data could not be added, maybe the file is not yet created or there is an error")
             
         elif (datetime.datetime.now().minute == 5 and datetime.datetime.now().hour == 0): #When time is equal to 1 hour, upload the data from yesterday
@@ -238,13 +240,7 @@ def retrievevector():
     conn.commit()
 
 
-deletetable('curve')
-deletetable('point')
-createtable('curve')
-createtable('point')
 
-adddata('2026-05-11')
-downloadtable("export/point.csv", "point", "2024-12-20 00:00:00-07:00", "2024-12-20 23:59:59-07:00", ["P-0000-01", "My_solar_panel_1"])
-downloadtable("export/curve.csv", "curve", "2024-12-20 00:00:00-07:00", "2024-12-20 23:59:59-07:00", ["P-0000-01", "My_solar_panel_1"])
+dailyloop()
 
 conn.close()
