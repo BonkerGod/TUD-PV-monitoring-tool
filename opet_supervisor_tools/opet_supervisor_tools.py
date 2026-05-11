@@ -5,7 +5,7 @@ import csv
 from measurement_scheduling_tools import datetime_range, present, next_occurrence
 import json
 from pathlib import Path
-from OPET_control import OPETBus, OPET
+from OPET_control import OPETBus, OPET, OPETTimeoutError
 from serial_by_serial import device_name
 from serial import Serial
 import logging
@@ -41,10 +41,12 @@ def measurement_loop(bus, jobs, jobs_in_progress, results, bus_info, load_info, 
         except IndexError:
             logging.error(f'Couldn\'t find the serial port for bus {bus}')
             return None
+        except OPETTimeoutError:
+            logging.error(f'Couldn\'t connect to OPET on bus {bus}')
+            return None           
 
     # Attempt to set up the bus
     opets = initialize_bus()
-    print(opets)
 
     # Do jobs as they are scheduled and become due
     while True:
@@ -116,7 +118,7 @@ def measurement_loop(bus, jobs, jobs_in_progress, results, bus_info, load_info, 
             #Set load mode, also enable output if disable is false
             if job['job_type'] == 'set_load_mode':
                 #mppt
-                if job["load_mode"] == 'pmp':
+                if job["load_mode"] == 'mpp':
                     opets[job['opet_address']].mode = 'mppt'
                     if job["disabled"] == True:
                         opets[job['opet_address']].output_enabled = False
@@ -137,6 +139,11 @@ def measurement_loop(bus, jobs, jobs_in_progress, results, bus_info, load_info, 
                         opets[job['opet_address']].output_enabled = False
                     else:
                         opets[job['opet_address']].output_enabled = True
+
+                #disable output
+                elif job["load_mode"] == 'disable':
+                    opets[job['opet_address']].output_enabled = False
+
 
             #Do point measurement
             elif job['job_type'] == 'point':
@@ -258,6 +265,7 @@ def writer_loop(results, data_path_base, TZ_LOCAL, minimum_wait,weather_data):
             'scheduled_time',
             'measurement_duration',
             'module_name',
+            'mounted_on',
             'v',
             'i',
             'azimuth',
@@ -318,3 +326,4 @@ def writer_loop(results, data_path_base, TZ_LOCAL, minimum_wait,weather_data):
                     writer.writeheader()
                 writer.writerow(result)
         sleep(minimum_wait)
+

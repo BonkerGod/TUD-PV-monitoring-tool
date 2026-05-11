@@ -1,5 +1,5 @@
 """OPET_control — Python interface for OPET loads."""
 
-from .OPET_control import OPETBus, OPET
+from .OPET_control import OPETBus, OPET, OPETTimeoutError
 
-__all__ = ["OPETBus", "OPET"]
+__all__ = ["OPETBus", "OPET","OPETTimeoutError"]

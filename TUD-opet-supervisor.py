@@ -137,7 +137,6 @@ if __name__ == '__main__':
                     x for x in config['modules']
                     if x['tracer'].startswith('O')
                 ]
-                
                 #Only schedule modules which are enabled
                 modules = [
                     x for x in modules
@@ -149,11 +148,32 @@ if __name__ == '__main__':
                     x for x in modules
                     if x["stopdate"] == None or 
                     datetime.datetime.strptime(x["stopdate"], "%Y-%m-%d").date() >= datetime.datetime.now().date()
-                ]           
+                ]         
 
                 # Add set_load_mode jobs
                 for module in modules:
-                    if module.get('load_mode'):
+                    #module is enabled, and stopdate has yet not passed
+                    if not module.get('disabled') and (module["stopdate"] == None or datetime.datetime.strptime(module["stopdate"], "%Y-%m-%d").date() >= datetime.datetime.now().date()):  
+                        if module.get('load_mode'):
+                            scheduled_time = present()
+                            jobs[job_id] = {
+                                'scheduled_time': scheduled_time,
+                                'expiration_time': schedule_update_time,
+                                'opet_name': module['tracer'],
+                                'opet_bus': load_info[module['tracer']]['bus'],
+                                'opet_address': load_info[module['tracer']]['address'],
+                                'module_name': module['module_name'],
+                                'mounted_on': module['mounted_on'],
+                                'azimuth': config[module['mounted_on']]['azimuth'],
+                                'inclination': config[module['inclination']]['inclination'],
+                                'job_type': 'set_load_mode',
+                                'load_mode': module['load_mode'],
+                                'disabled':  module['disabled']
+                            }
+                            print(f'manager: {job_id} (set_load_mode: {module["load_mode"]}) scheduled for {scheduled_time.astimezone(TZ_LOCAL)}')
+                            job_id += 1
+
+                    else: #Module should be disabled
                         scheduled_time = present()
                         jobs[job_id] = {
                             'scheduled_time': scheduled_time,
@@ -163,14 +183,14 @@ if __name__ == '__main__':
                             'opet_address': load_info[module['tracer']]['address'],
                             'module_name': module['module_name'],
                             'mounted_on': module['mounted_on'],
-                            'azimuth': module['azimuth'],
-                            'inclination': module['inclination'],
+                            'azimuth': config[module['mounted_on']]['azimuth'],
+                            'inclination': config[module['inclination']]['inclination'],
                             'job_type': 'set_load_mode',
-                            'load_mode': module['load_mode'],
+                            'load_mode': 'disable',
                             'disabled':  module['disabled']
                         }
                         print(f'manager: {job_id} (set_load_mode: {module["load_mode"]}) scheduled for {scheduled_time.astimezone(TZ_LOCAL)}')
-                        job_id += 1
+                        job_id += 1                       
 
 
 
@@ -215,8 +235,8 @@ if __name__ == '__main__':
                             'opet_address': load_info[module['tracer']]['address'],
                             'module_name': module['module_name'],
                             'mounted_on': module['mounted_on'],
-                            'azimuth': module['azimuth'],
-                            'inclination': module['inclination'],
+                            'azimuth': config[module['mounted_on']]['azimuth'],
+                            'inclination': config[module['inclination']]['inclination'],
                             'job_type': 'point',
                             'data_destination': config['data_destination']
                         }
@@ -254,8 +274,8 @@ if __name__ == '__main__':
                             'opet_address': load_info[module['tracer']]['address'],
                             'module_name': module['module_name'],
                             'mounted_on': module['mounted_on'],
-                            'azimuth': module['azimuth'],
-                            'inclination': module['inclination'],
+                            'azimuth': config[module['mounted_on']]['azimuth'],
+                            'inclination': config[module['inclination']]['inclination'],
                             'job_type': 'curve',
                             'data_destination': config['data_destination']
                         }
@@ -268,8 +288,37 @@ if __name__ == '__main__':
         except KeyboardInterrupt:
             print("Keyboard interrupt: shutting down")
             #Let processes close cleanly
-            Serial.close()
+
+            #First disable outputs of all opets
+            modules = [
+                    x for x in config['modules']
+                    if x['tracer'].startswith('O')
+                ]     
+            print("disabling opets")
+            # Add set_load_mode jobs
+            for module in modules:
+                if module.get('load_mode'):
+                    scheduled_time = present()
+                    jobs[job_id] = {
+                        'scheduled_time': scheduled_time,
+                        'expiration_time': schedule_update_time,
+                        'opet_name': module['tracer'],
+                        'opet_bus': load_info[module['tracer']]['bus'],
+                        'opet_address': load_info[module['tracer']]['address'],
+                        'module_name': module['module_name'],
+                        'mounted_on': module['mounted_on'],
+                        'azimuth': config[module['mounted_on']]['azimuth'],
+                        'inclination': config[module['inclination']]['inclination'],
+                        'job_type': 'set_load_mode',
+                        'load_mode': 'disable',
+                        'disabled':  module['disabled']
+                    }
+                    print(f'manager: {job_id} (set_load_mode: {module["load_mode"]}) scheduled for {scheduled_time.astimezone(TZ_LOCAL)}')
+                    job_id += 1
+
+            for process in processes:
+                process.join()  
             for process in processes:
                 process.terminate()
-            for process in processes:
-                process.join()            
+            Serial.close()         
+            print("Done")

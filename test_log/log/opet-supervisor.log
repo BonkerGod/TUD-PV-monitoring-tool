@@ -3033,3 +3033,23 @@ Traceback (most recent call last):
     Serial.close()
 TypeError: Serial.close() missing 1 required positional argument: 'self'
 NoneType: None
+2026-05-11 15:16:00,246 opet-supervisor started
+2026-05-11 15:16:00,532 opet-supervisor started
+2026-05-11 15:16:00,676 Traceback (most recent call last):
+  File "c:\Users\Juste\Git_clones\TUD-PV-monitoring-tool\TUD-opet-supervisor.py", line 144, in <module>
+    if not module.get('disabled') and datetime.datetime.strptime(module["stopdate"], "%Y-%m-%d").date() >= datetime.datetime.now().date():
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: strptime() argument 1 must be str, not None
+NoneType: None
+2026-05-11 15:16:00,822 opet-supervisor started
+2026-05-11 15:16:00,852 opet-supervisor started
+2026-05-11 15:17:42,545 opet-supervisor started
+2026-05-11 15:17:42,828 opet-supervisor started
+2026-05-11 15:17:42,966 Traceback (most recent call last):
+  File "c:\Users\Juste\Git_clones\TUD-PV-monitoring-tool\TUD-opet-supervisor.py", line 168, in <module>
+    'inclination': config[module['inclination']]['inclination'],
+                          ~~~~~~^^^^^^^^^^^^^^^
+KeyError: 'inclination'
+NoneType: None
+2026-05-11 15:17:43,131 opet-supervisor started
+2026-05-11 15:17:43,154 opet-supervisor started
