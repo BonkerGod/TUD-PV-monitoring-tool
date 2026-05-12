@@ -1,21 +1,16 @@
-import multiprocessing
-import datetime
 from time import sleep
 import csv
-from measurement_scheduling_tools import datetime_range, present, next_occurrence
-import json
-from pathlib import Path
+from measurement_scheduling_tools import present
 from OPET_control import OPETBus, OPET, OPETTimeoutError
 from serial_by_serial import device_name
 from serial import Serial
 import logging
-import sys
-import traceback
 
 
+logger = logging.getLogger(__name__)
 
 
-def measurement_loop(bus, jobs, jobs_in_progress, results, bus_info, load_info, logger, maximum_wait, minimum_wait):
+def measurement_loop(bus, jobs, jobs_in_progress, results, bus_info, load_info, maximum_wait, minimum_wait):
     '''In an infinite loop, do the jobs in `dict` that are assigned to `bus`
     and store the `results`.'''
     def initialize_bus():
@@ -162,6 +157,9 @@ def measurement_loop(bus, jobs, jobs_in_progress, results, bus_info, load_info, 
                         'v': result['voltage'],
                         'i': result['current'],
                         'module_name': job['module_name'],
+                        'mounted_on': job['mounted_on'],
+                        'azimuth': job['azimuth'],
+                        'inclination': job['inclination'],
                         'status_integer': result['status_integer'],
                         'data_destination': job['data_destination']
                     }
@@ -219,6 +217,9 @@ def measurement_loop(bus, jobs, jobs_in_progress, results, bus_info, load_info, 
                         'measurement_duration': job['measurement_duration'],
                         'measurement_type': job['job_type'],
                         'module_name': job['module_name'],
+                        'mounted_on': job['mounted_on'],
+                        'azimuth': job['azimuth'],
+                        'inclination': job['inclination'],
                         'v': result['voltage'],
                         'i': result['current'],
                         'data_destination': job['data_destination']
@@ -315,8 +316,7 @@ def writer_loop(results, data_path_base, TZ_LOCAL, minimum_wait,weather_data):
 
             # Decide whether to write headers
             need_headers = not data_file_path.exists()
-
-            with open(data_file_path, 'a') as log:
+            with open(data_file_path, 'a', newline='') as log:
                 writer = csv.DictWriter(
                     log,
                     fieldnames=headers[result['measurement_type']],
