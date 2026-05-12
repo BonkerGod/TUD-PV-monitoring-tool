@@ -69,11 +69,11 @@ def updateloop():
 
 def dailyloop():
     while(1):
-        if datetime.datetime.now().hour == 0: #At midnight
+        if datetime.datetime.now().hour == 15: #At midnight
             try:
                 pastdataupload()
             except: print("Data could not be added, maybe the file is not yet created or there is an error")
-        time.sleep(1*60*60) # Wait for an hour and check again.
+        time.sleep(5) # Wait for an hour and check again.
              
 def pastdataupload():
     start_date = datetime.date(2026, 5, 1)
@@ -254,6 +254,8 @@ def retrievevector():
     conn.commit()
 
 
-dailyloop()
+#dailyloop()
+downloadtable("export/point.csv", "point", "2024-12-20 16:00:50-07:00", "2024-12-21 16:00:50-07:00", ["My_solar_panel_1", "module_2"])
+downloadtable("export/curve.csv", "curve", "2024-12-20 16:00:50-07:00", "2024-12-21 16:00:50-07:00", ["My_solar_panel_1", "module_2"])
 
 conn.close()
