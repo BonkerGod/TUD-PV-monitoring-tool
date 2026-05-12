@@ -102,9 +102,9 @@ def adddata(date):
     df = pd.read_csv(data_file_path, delimiter=",")
     data = df.to_numpy()
     point_insert = (
-        "INSERT INTO pv_point (measurement_time, scheduled_time, module_name, mounted_on, v, i, status_integer, azimuth, inclination, t_air, humidity, dewpoint, relative_pressure, wind_speed, wind_speed_spread, wind_direction, wind_direction_spread, irradiance) "
+        "INSERT INTO pv_point (date_time, scheduled_time, module_name, mounted_on, v, i, status_integer, axis_azimuth, axis_tilt, temperature_air, relative_humidity, dew_point, relative_pressure, wind_speed, wind_speed_std, wind_direction, wind_direction_std, irradiance) "
         "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) "
-        "ON CONFLICT (measurement_time, module_name) DO NOTHING"
+        "ON CONFLICT (date_time, module_name) DO NOTHING"
     )
     for d in data:
         cur.execute(point_insert, d)
@@ -112,7 +112,7 @@ def adddata(date):
     
     #with open(data_file_path) as f:
     #with open("C:/Users/wesse/OneDrive/Documenten/Tu Delft/EE3P1/Database/SQL/pv.csv") as f: #test
-        #cur.copy_expert("COPY pv_point(measurement_time, scheduled_time, module_id, v, i, g, t_ext, status_integer) FROM STDIN WITH DELIMITER',' HEADER CSV", f)
+        #cur.copy_expert("COPY pv_point(date_time, scheduled_time, module_id, v, i, g, t_ext, status_integer) FROM STDIN WITH DELIMITER',' HEADER CSV", f)
     
     #curve data add
     data_file_path = (
@@ -133,9 +133,9 @@ def adddata(date):
     
     data = df.to_numpy()
     curve_insert = (
-        "INSERT INTO pv_curve (measurement_time, scheduled_time, measurement_duration, module_name, mounted_on, v, i, azimuth, inclination, t_air, humidity, dewpoint, relative_pressure, wind_speed, wind_speed_spread, wind_direction, wind_direction_spread, irradiance) "
+        "INSERT INTO pv_curve (date_time, scheduled_time, measurement_duration, module_name, mounted_on, v, i, axis_azimuth, axis_tilt, temperature_air, relative_humidity, dew_point, relative_pressure, wind_speed, wind_speed_std, wind_direction, wind_direction_std, irradiance) "
         "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) "
-        "ON CONFLICT (measurement_time, module_name) DO NOTHING"
+        "ON CONFLICT (date_time, module_name) DO NOTHING"
     )
     for d in data:
         cur.execute(curve_insert, d)
@@ -177,7 +177,7 @@ def createtable(type):
             wind_direction float,
             wind_direction_std float,
             irradiance float,
-            PRIMARY KEY (measurement_time, module_name))"""
+            PRIMARY KEY (date_time, module_name))"""
     if type == "point":
         command = """CREATE TABLE pv_point(
             date_time VARCHAR(255),
@@ -198,17 +198,17 @@ def createtable(type):
             wind_direction float,
             wind_direction_std float,
             irradiance float,
-            PRIMARY KEY (measurement_time, module_name))"""
+            PRIMARY KEY (date_time, module_name))"""
     if type == "curve_test":
         command = """CREATE TABLE pv_curve_test(
-            measurement_time VARCHAR(255),
+            date_time VARCHAR(255),
             scheduled_time VARCHAR(255),
             measurement_duration VARCHAR(255),
             module_id VARCHAR(255),
             v VECTOR(100),
             i VECTOR(100),
             g float,
-            PRIMARY KEY (measurement_time, module_id))"""
+            PRIMARY KEY (date_time, module_id))"""
     try:
         cur.execute(command)
         print('Table pv_'+type+' succesfully created')
