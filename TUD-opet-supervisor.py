@@ -10,14 +10,14 @@ import sys
 import traceback
 from zoneinfo import ZoneInfo
 
-weather_data = {'t_air': 23.0,
-            'humidity': 67.0,
-            'dewpoint': 24.0,
+weather_data = {'temperature_air': 23.0,
+            'relative_humidity': 67.0,
+            'dew_point': 24.0,
             'relative_pressure': 1.0,
             'wind_speed': 1.5,
-            'wind_speed_spread':0.5,
+            'wind_speed_std':0.5,
             'wind_direction':10.0 ,
-            'wind_direction_spread':1.5,
+            'wind_direction_std':1.5,
             'irradiance': 17.0
         }
 
@@ -148,8 +148,8 @@ if __name__ == '__main__':
                                 'opet_address': load_info[module['tracer']]['address'],
                                 'module_name': module['module_name'],
                                 'mounted_on': module['mounted_on'],
-                                'azimuth': config[module['mounted_on']]['azimuth'],
-                                'inclination': config[module['mounted_on']]['inclination'],
+                                'axis_azimuth': config[module['mounted_on']]['axis_azimuth'],
+                                'axis_tilt': config[module['mounted_on']]['axis_tilt'],
                                 'job_type': 'set_load_mode',
                                 'load_mode': module['load_mode'],
                                 'disabled':  module['disabled']
@@ -167,8 +167,8 @@ if __name__ == '__main__':
                             'opet_address': load_info[module['tracer']]['address'],
                             'module_name': module['module_name'],
                             'mounted_on': module['mounted_on'],
-                            'azimuth': config[module['mounted_on']]['azimuth'],
-                            'inclination': config[module['mounted_on']]['inclination'],
+                            'axis_azimuth': config[module['mounted_on']]['axis_azimuth'],
+                            'axis_tilt': config[module['mounted_on']]['axis_tilt'],
                             'job_type': 'set_load_mode',
                             'load_mode': 'disable',
                             'disabled':  module['disabled']
@@ -230,8 +230,8 @@ if __name__ == '__main__':
                             'opet_address': load_info[module['tracer']]['address'],
                             'module_name': module['module_name'],
                             'mounted_on': module['mounted_on'],
-                            'azimuth': config[module['mounted_on']]['azimuth'],
-                            'inclination': config[module['mounted_on']]['inclination'],
+                            'axis_azimuth': config[module['mounted_on']]['axis_azimuth'],
+                            'axis_tilt': config[module['mounted_on']]['axis_tilt'],
                             'job_type': 'point',
                             'data_destination': config['data_destination']
                         }
@@ -269,8 +269,8 @@ if __name__ == '__main__':
                             'opet_address': load_info[module['tracer']]['address'],
                             'module_name': module['module_name'],
                             'mounted_on': module['mounted_on'],
-                            'azimuth': config[module['mounted_on']]['azimuth'],
-                            'inclination': config[module['mounted_on']]['inclination'],
+                            'axis_azimuth': config[module['mounted_on']]['axis_azimuth'],
+                            'axis_tilt': config[module['mounted_on']]['axis_tilt'],
                             'job_type': 'curve',
                             'data_destination': config['data_destination']
                         }

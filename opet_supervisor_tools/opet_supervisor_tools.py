@@ -151,15 +151,15 @@ def measurement_loop(bus, jobs, jobs_in_progress, results, bus_info, load_info, 
                     logger.debug(f'bus {bus}: job {job_id}: {result["voltage"], result["current"]}, {present() - job["scheduled_time"]} late')
                     # Store the results
                     results[job_id] = {
-                        'measurement_time': present(),
+                        'date_time': present(),
                         'scheduled_time': job['scheduled_time'],
                         'measurement_type': job['job_type'],
                         'v': result['voltage'],
                         'i': result['current'],
                         'module_name': job['module_name'],
                         'mounted_on': job['mounted_on'],
-                        'azimuth': job['azimuth'],
-                        'inclination': job['inclination'],
+                        'axis_azimuth': job['axis_azimuth'],
+                        'axis_tilt': job['axis_tilt'],
                         'status_integer': result['status_integer'],
                         'data_destination': job['data_destination']
                     }
@@ -177,7 +177,7 @@ def measurement_loop(bus, jobs, jobs_in_progress, results, bus_info, load_info, 
                     logger.debug(f'bus {bus}: job {job_id}: curve measurement (start) {job_id}, {present() - job["scheduled_time"]} late')
             
                     # Add the job to jobs_in_progress
-                    job['measurement_time'] = present()
+                    job['date_time'] = present()
                     job['measurement_duration'] = reply
                     jobs_in_progress[job_id] = job
                 else:
@@ -213,13 +213,13 @@ def measurement_loop(bus, jobs, jobs_in_progress, results, bus_info, load_info, 
                     # Store the result
                     results[job_id] = {
                         'scheduled_time': job['scheduled_time'],
-                        'measurement_time': job['measurement_time'],
+                        'date_time': job['date_time'],
                         'measurement_duration': job['measurement_duration'],
                         'measurement_type': job['job_type'],
                         'module_name': job['module_name'],
                         'mounted_on': job['mounted_on'],
-                        'azimuth': job['azimuth'],
-                        'inclination': job['inclination'],
+                        'axis_azimuth': job['axis_azimuth'],
+                        'axis_tilt': job['axis_tilt'],
                         'v': result['voltage'],
                         'i': result['current'],
                         'data_destination': job['data_destination']
@@ -242,50 +242,50 @@ def measurement_loop(bus, jobs, jobs_in_progress, results, bus_info, load_info, 
 def writer_loop(results, data_path_base, TZ_LOCAL, minimum_wait,weather_data):
     headers = {
         'point': [
-            'measurement_time',  
+            'date_time',  
             'scheduled_time',    
             'module_name',       
             'mounted_on',
             'v',                 
             'i',                 
             'status_integer',    
-            'azimuth',  
-            'inclination',
-            't_air',             
-            'humidity',          
-            'dewpoint',          
+            'axis_azimuth',  
+            'axis_tilt',
+            'temperature_air',             
+            'relative_humidity',          
+            'dew_point',          
             'relative_pressure',    
             'wind_speed',        
-            'wind_speed_spread',     
+            'wind_speed_std',     
             'wind_direction',        
-            'wind_direction_spread',     
+            'wind_direction_std',     
             'irradiance'         
         ],
         'curve': [
-            'measurement_time',
+            'date_time',
             'scheduled_time',
             'measurement_duration',
             'module_name',
             'mounted_on',
             'v',
             'i',
-            'azimuth',
-            'inclination',
-            't_air',
-            'humidity',
-            'dewpoint',
+            'axis_azimuth',
+            'axis_tilt',
+            'temperature_air',
+            'relative_humidity',
+            'dew_point',
             'relative_pressure',
             'wind_speed',
-            'wind_speed_spread',
+            'wind_speed_std',
             'wind_direction',
-            'wind_direction_spread',
+            'wind_direction_std',
             'irradiance'
         ]
     }
     while True:
         while results:
             result = results.pop(next(iter(results.keys())))
-            measurement_date = result['measurement_time'].astimezone(TZ_LOCAL).date().isoformat()
+            measurement_date = result['date_time'].astimezone(TZ_LOCAL).date().isoformat()
             data_path = data_path_base / measurement_date / result['data_destination']
             data_file_path = (
                 data_path / (
@@ -297,18 +297,18 @@ def writer_loop(results, data_path_base, TZ_LOCAL, minimum_wait,weather_data):
             )
 
             # Convert datetimes to ISO 8601 strings
-            result['measurement_time'] = result['measurement_time'].astimezone(TZ_LOCAL).isoformat()
+            result['date_time'] = result['date_time'].astimezone(TZ_LOCAL).isoformat()
             result['scheduled_time'] = result['scheduled_time'].astimezone(TZ_LOCAL).isoformat()
             
             #Add latest weather data to results
-            result['t_air'] = weather_data['t_air']
-            result['humidity'] = weather_data['humidity']
-            result['dewpoint'] = weather_data['dewpoint']
+            result['temperature_air'] = weather_data['temperature_air']
+            result['relative_humidity'] = weather_data['relative_humidity']
+            result['dew_point'] = weather_data['dew_point']
             result['relative_pressure'] = weather_data['relative_pressure']
             result['wind_speed'] = weather_data['wind_speed']
-            result['wind_speed_spread'] = weather_data['wind_speed_spread']
+            result['wind_speed_std'] = weather_data['wind_speed_std']
             result['wind_direction'] = weather_data['wind_direction']
-            result['wind_direction_spread'] = weather_data['wind_direction_spread']
+            result['wind_direction_std'] = weather_data['wind_direction_std']
             result['irradiance'] = weather_data['irradiance']
 
             # Create the log file directory, if necessary

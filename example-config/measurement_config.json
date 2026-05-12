@@ -2,64 +2,29 @@
   "modules":
   [
     {
-      "module_name": "My_solar_panel",
-      "mounted_on": "Fixed-rack",
-      "azimuth": 180,
-      "inclination": 30,
+      "module_name": "My_solar_panel_1",
+      "mounted_on": "Egis-tracker",
       "tracer": "O001",
       "interval_point": 10,
       "interval_curve": 30,
       "disabled": false,
-      "load_mode": "pmp"
-    },
-    {
-      "module_name": "My_solar_panel_2",
-      "mounted_on": "Fixed-rack",
-      "azimuth": 180,
-      "inclination": 30,
-      "tracer": "O002",
-      "interval_point": 10,
-      "interval_curve": 30,
-      "disabled": false,
-      "stopdate": "2026-05-07",
-      "load_mode": "voc"
-    },
-    {
-      "module_name": "My_solar_panel_3",
-      "mounted_on": "Fixed-rack",
-      "azimuth": 180,
-      "inclination": 30,
-      "tracer": "O003",
-      "interval_point": 10,
-      "interval_curve": 30,
-      "disabled": true,
-      "stopdate": "2026-05-07",
-      "load_mode": "voc"
-    },
-    {
-      "module_name": "My_solar_panel_4",
-      "mounted_on": "Fixed-rack",
-      "azimuth": 180,
-      "inclination": 30,
-      "tracer": "O004",
-      "interval_point": 10,
-      "interval_curve": 30,
-      "disabled": false,
-      "stopdate": "2026-05-06",
-      "load_mode": "isc"
-    },
-    {
-      "module_name": "My_solar_panel_5",
-      "mounted_on": "Fixed-rack",
-      "azimuth": 180,
-      "inclination": 30,
-      "tracer": "O005",
-      "interval_point": 10,
-      "interval_curve": 30,
-      "disabled": false,
       "stopdate": null,
-      "load_mode": "isc"
+      "load_mode": "mpp"
+
     }
   ],
-  "data_destination": "config_2024-12-20T15-16-00"
+  
+  "Fixed-rack":
+    {
+      "axis_azimuth": 180,
+      "axis_tilt": 30
+    },
+
+  "Egis-tracker":
+    {
+      "axis_azimuth": 180,
+      "axis_tilt": 30
+      
+    },
+  "data_destination": "config_2026-04-30T15-00-00"
 }

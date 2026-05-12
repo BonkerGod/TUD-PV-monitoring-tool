@@ -16,14 +16,14 @@
   
   "Fixed-rack":
     {
-      "azimuth": 180,
-      "inclination": 30
+      "axis_azimuth": 180,
+      "axis_tilt": 30
     },
 
   "Egis-tracker":
     {
-      "azimuth": 180,
-      "inclination": 30
+      "axis_azimuth": 180,
+      "axis_tilt": 30
       
     },
   "data_destination": "config_2026-04-30T15-00-00"
