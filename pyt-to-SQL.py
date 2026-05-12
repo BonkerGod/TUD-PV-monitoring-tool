@@ -49,7 +49,7 @@ except Exception as e:
 
 #print(datetime.datetime.now().hour)
 
-def dailyloop():
+def updateloop():
     while(1):
         if datetime.datetime.now().minute % 1 == 0: #When the time is a multiple of 5.\
             print(str(datetime.date.today()))
@@ -65,9 +65,23 @@ def dailyloop():
                 date = str(datetime.date.today()-datetime.timedelta(days=1))
                 adddata(date)
             except: print("Data could not be added, maybe the file is not yet created or there is an error")
-        time.sleep(15) # Wait for an hour and check again. This is done to reduce cpu load, so that it does not check unnecessarily quickly.
+        time.sleep(10) # Wait for an 10s and check again. This is done to reduce cpu load, so that it does not check unnecessarily quickly.
+
+def dailyloop():
+    while(1):
+        if datetime.datetime.now().hour == 0: #At midnight
+            try:
+                pastdataupload()
+            except: print("Data could not be added, maybe the file is not yet created or there is an error")
+        time.sleep(1*60*60) # Wait for an hour and check again.
              
-             
+def pastdataupload():
+    start_date = datetime.date(2026, 5, 1)
+    for date in (start_date + datetime.timedelta(days=n) for n in range(datetime.date.today().day - start_date.day+1)):
+        try:
+            adddata(str(date))
+            print('hello')
+        except: print("Data could not be added, maybe the file is not yet created or there is an error")
              
 
 
@@ -238,7 +252,6 @@ def retrievevector():
     for i in vector:
         print(i)
     conn.commit()
-
 
 
 dailyloop()
