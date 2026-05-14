@@ -2,7 +2,7 @@
   "modules":
   [
     {
-      "module_id": "P-0000-01",
+      "module_id": "My_solar_panel_1",
       "tracer": "O001",
       "sensors":
       [
@@ -13,8 +13,10 @@
         "rack tilt"
       ],
       "interval_point": 10,
-      "interval_curve": 30
+      "interval_curve": 30,
+      "user_email": "wessel.oosterkamp@gmail.com"
     }
   ],
-  "data_destination": "config_2026-04-30T15-00-00"
+  "data_destination": "config_2026-04-30T15-00-00",
+  "admins_email": "woosterkamp@tudelft.nl,wessel.oosterkamp.spam@gmail.com" 
 }

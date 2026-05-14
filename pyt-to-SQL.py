@@ -9,6 +9,9 @@ import ast
 from dateutil import parser
 import pgvector.psycopg2
 from sqlalchemy import create_engine
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 
 with open('opet-supervisor-config.json') as f:
     opet_supervisor_config = json.load(f)
@@ -69,10 +72,14 @@ def updateloop():
 
 def dailyloop():
     while(1):
-        if datetime.datetime.now().hour == 16: #At midnight
+        if datetime.datetime.now().hour == 0: #At midnight
             try:
                 pastdataupload()
             except: print("Data could not be added, maybe the file is not yet created or there is an error")
+            try:
+                errordetect()
+            except Exception as e:
+                print(f"Error detection failed with error: {e}")
         time.sleep(5) # Wait for an hour and check again.
              
 def pastdataupload():
@@ -233,7 +240,7 @@ def downloadtable(file, type, datetime1, datetime2, module_name):
             cur.copy_expert(query, f)
         df = pd.read_csv(file)
         df['scheduled_time'] = pd.to_datetime(df['scheduled_time'])
-        # print(df['scheduled_time'])
+        print(df['scheduled_time'])
         # print(df.dtypes)
         result = df.loc[(df['scheduled_time'] >= datetime.datetime.fromisoformat(datetime1)) & (df["scheduled_time"]<= datetime.datetime.fromisoformat(datetime2))]
         result = df.loc[(df['module_name'].isin(module_name))]
@@ -252,14 +259,70 @@ def retrievevector():
     for i in vector:
         print(i)
     conn.commit()
+    
+def sendmail(error, receiver_email = ''):
+    smpt_server = "smtp.gmail.com"
+    port = 587
+    sender_email = 'wessel.oosterkamp@gmail.com'
+    password = 'puxp gwhx zrsa cczv'
+    admin = config['admins_email']
+    users = receiver_email + ',' + admin
+    message = MIMEMultipart()
+    message['From'] = sender_email
+    message['To'] = users 
+    message['Subject'] = 'There is a problem with the PV monitoring system'
+    
+    body = 'Error: ' + str(error)
+    message.attach(MIMEText(body, 'plain'))
+    
+    try:
+        server = smtplib.SMTP(smpt_server, port)
+        server.starttls()
+        server.login(sender_email, password)
+        server.send_message(message)
+        print("Email sent successfully")
+        server.quit()
+    except Exception as e:
+        print(f"Error sending email: {e}")
+        
+def errordetect():
+    #Check if data is being collected, if not send an email to the admin.
+    cur.execute("SELECT date_time FROM pv_point ORDER BY date_time DESC LIMIT 1")
+    last_entry_point = cur.fetchone()[0]
+    print(last_entry_point)
+    cur.execute("SELECT date_time FROM pv_curve ORDER BY date_time DESC LIMIT 1")
+    last_entry_curve = cur.fetchone()[0]
+    print(last_entry_curve)
+    if last_entry_point < str(datetime.datetime.now() - datetime.timedelta(days=1)) and (last_entry_curve < str(datetime.datetime.now() - datetime.timedelta(days=1))):
+        sendmail('The PV monitoring system has not received data from both point and curve measurements in the past 24 hours \n' +
+                'Most recent data from point measurements: ' + last_entry_point +
+                '\nMost recent data from curve measurements: ' + last_entry_curve)
+    elif last_entry_point < str(datetime.datetime.now() - datetime.timedelta(days=1)):
+        sendmail('The PV monitoring system database has not received data from point measurements in the past 24 hours \nMost recent data from point measurements: ' + last_entry_point)
+    elif last_entry_curve < str(datetime.datetime.now() - datetime.timedelta(days=1)):
+        sendmail('The PV monitoring system database has not received data from curve measurements in the past 24 hours\nMost recent data from curve measurements: ' + last_entry_curve)
+
+    #If data is collected check whether the OPETs are suffering from errors, ie status_integer is not 1. If there are errors, send an email to the user of the OPET and the admin.
+    for module in config['modules']: 
+        print(module['module_id'])
+        cur.execute("SELECT date_time, status_integer FROM pv_point WHERE date_time > %s AND module_name = %s ORDER BY date_time DESC", (str(datetime.datetime.now() - datetime.timedelta(days=1)),) + (module['module_id'],))
+        last_24h = cur.fetchall()
+        print(len(last_24h))
+        errorcount = 0
+        for i in range(len(last_24h)):
+            if last_24h[i][1] != 1:
+                errorcount += 1
+        print(errorcount)
+        if errorcount > 0: # if there is at least one error in the last 24 hours, send an email
+                sendmail(module['module_id']+' Has had an error in the past 24 hours, please check the system. \n'+str(errorcount)+' of '+str(len(last_24h))+' measurements have had an error in the past 24 hours', module['user_email'])
+        
 
 
-# deletetable('curve')
-# deletetable('point')
-# createtable('curve')
-# createtable('point')
+
 #dailyloop()
-downloadtable("export/point.csv", "point", "2024-12-20 16:00:50-07:00", "2024-12-21 16:00:50-07:00", ["My_solar_panel_1", "module_2"])
-downloadtable("export/curve.csv", "curve", "2024-12-20 16:00:50-07:00", "2024-12-21 16:00:50-07:00", ["My_solar_panel_1", "module_2"])
+#downloadtable("export/point.csv", "point", "2024-12-20 16:00:50-07:00", "2024-12-21 16:00:50-07:00", ["My_solar_panel_1", "module_2"])
+# downloadtable("export/curve.csv", "curve", "2024-12-20 16:00:50-07:00", "2024-12-21 16:00:50-07:00", ["My_solar_panel_1", "module_2"])
+#sendmail(1453)
+errordetect()
 
 conn.close()
