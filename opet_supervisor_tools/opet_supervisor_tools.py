@@ -1,7 +1,7 @@
 from time import sleep
 import csv
 from measurement_scheduling_tools import present
-from OPET_control import OPETBus, OPET, OPETTimeoutError
+from OPET_control import OPETBus, OPET, OPETTimeoutError, UnexpectedReplyError
 from serial_by_serial import device_name
 from serial import Serial
 import logging
@@ -38,7 +38,13 @@ def measurement_loop(bus, jobs, jobs_in_progress, results, bus_info, load_info, 
             return None
         except OPETTimeoutError:
             logging.error(f'Couldn\'t connect to OPET on bus {bus}')
-            return None           
+            return None   
+        except UnexpectedReplyError:
+            logging.error(f'Got unexpected reply while connecting to OPET on bus {bus}')
+            return None        
+        except Exception:
+            logging.error(f'Caught exception while connecting to OPET on bus {bus}')
+            return None
 
     # Attempt to set up the bus
     opets = initialize_bus()
@@ -114,31 +120,50 @@ def measurement_loop(bus, jobs, jobs_in_progress, results, bus_info, load_info, 
             if job['job_type'] == 'set_load_mode':
                 #mppt
                 if job["load_mode"] == 'mpp':
-                    opets[job['opet_address']].mode = 'mppt'
-                    if job["disabled"] == True:
-                        opets[job['opet_address']].output_enabled = False
-                        logger.debug(f'bus {bus}: job {job_id}: setting load mode on {job["opet_name"]} to {job["load_mode"]}')
-                    else:
+                    try:
+                        opets[job['opet_address']].mode = 'mppt'
                         opets[job['opet_address']].output_enabled = True
+                    except OPETTimeoutError:
+                        logger.error(f'bus {bus}: job {job_id}: OPETTimeoutError in `set_load_mode` on {job["opet_name"]}; Got an empty reply on the OPET bus')  
+                    except UnexpectedReplyError:
+                        logger.error(f'bus {bus}: job {job_id}: UnexpectedReplyError in `set_load_mode` on {job["opet_name"]}; Got an unexpected reply the OPET bus')  
+                    except Exception:
+                        logger.error(f'bus {bus}: job {job_id}: Unexpected error in `set_load_mode` on {job["opet_name"]};')  
+
                 #voc
                 elif job["load_mode"] == 'voc':
-                    opets[job['opet_address']].mode = 'voc'
-                    if job["disabled"] == True:
-                        opets[job['opet_address']].output_enabled = False
-                    else:
+                    try:
+                        opets[job['opet_address']].mode = 'voc'
                         opets[job['opet_address']].output_enabled = True    
+                    except OPETTimeoutError:
+                        logger.error(f'bus {bus}: job {job_id}: OPETTimeoutError in `set_load_mode` on {job["opet_name"]}; Got an empty reply on the OPET bus') 
+                    except UnexpectedReplyError:
+                        logger.error(f'bus {bus}: job {job_id}: UnexpectedReplyError in `set_load_mode` on {job["opet_name"]}; Got an unexpected reply the OPET bus')  
+                    except Exception:
+                        logger.error(f'bus {bus}: job {job_id}: Unexpected error in `set_load_mode` on {job["opet_name"]};')  
+
                 #isc
                 elif job["load_mode"] == 'isc':
-                    opets[job['opet_address']].mode = 'isc'
-                    if job["disabled"] == True:
-                        opets[job['opet_address']].output_enabled = False
-                    else:
+                    try:
+                        opets[job['opet_address']].mode = 'isc'
                         opets[job['opet_address']].output_enabled = True
+                    except OPETTimeoutError:
+                        logger.error(f'bus {bus}: job {job_id}: OPETTimeoutError in `set_load_mode` on {job["opet_name"]}; Got an empty reply on the OPET bus') 
+                    except UnexpectedReplyError:
+                        logger.error(f'bus {bus}: job {job_id}: UnexpectedReplyError in `set_load_mode` on {job["opet_name"]}; Got an unexpected reply the OPET bus')  
+                    except Exception:
+                        logger.error(f'bus {bus}: job {job_id}: Unexpected error in `set_load_mode` on {job["opet_name"]};')  
 
                 #disable output
                 elif job["load_mode"] == 'disable':
-                    opets[job['opet_address']].output_enabled = False
-
+                    try:
+                        opets[job['opet_address']].output_enabled = False
+                    except OPETTimeoutError:
+                        logger.error(f'bus {bus}: job {job_id}: OPETTimeoutError in disable OPET on {job["opet_name"]}; Got an empty reply on the OPET bus')
+                    except UnexpectedReplyError:
+                        logger.error(f'bus {bus}: job {job_id}: UnexpectedReplyError in `set_load_mode` on {job["opet_name"]}; Got an unexpected reply the OPET bus')  
+                    except Exception:
+                        logger.error(f'bus {bus}: job {job_id}: Unexpected error in `set_load_mode` on {job["opet_name"]};')  
 
             #Do point measurement
             elif job['job_type'] == 'point':
@@ -168,21 +193,37 @@ def measurement_loop(bus, jobs, jobs_in_progress, results, bus_info, load_info, 
                 except ValueError: 
                     logger.error(f'bus {bus}: job {job_id}: ValueError in `sample` property on load {job["opet_name"]}; couldn\'t parse the load\'s reply')
                     # The job has already been taken off the jobs list
+                
+                #OPET may give error
+                except OPETTimeoutError:
+                    logger.error(f'bus {bus}: job {job_id}: OPETTimeoutError in `sample` property on load {job["opet_name"]}; Got an empty reply on the OPET bus')
+                except UnexpectedReplyError:
+                    logger.error(f'bus {bus}: job {job_id}: UnexpectedReplyError in `sample` property on load {job["opet_name"]}; Got an unexpected reply the OPET bus')  
+                except Exception:
+                    logger.error(f'bus {bus}: job {job_id}: Unexpected error in `sample` property on load  {job["opet_name"]};')  
+
             elif job['job_type'] == 'curve':
                 # Curve measurements are first all requested as scheduled,
                 # then collected and recorded later in a separate step
                 # Request the curve
-                reply = opets[job['opet_address']].start_iv_curve()
-                if reply:
-                    logger.debug(f'bus {bus}: job {job_id}: curve measurement (start) {job_id}, {present() - job["scheduled_time"]} late')
-            
-                    # Add the job to jobs_in_progress
-                    job['date_time'] = present()
-                    job['measurement_duration'] = reply
-                    jobs_in_progress[job_id] = job
-                else:
-                    logger.debug(f'bus {bus}: job {job_id}: curve measurement (not started) {job_id}, {present() - job["scheduled_time"]} late')
-            
+                try:
+                    reply = opets[job['opet_address']].start_iv_curve()
+                    if reply:
+                        logger.debug(f'bus {bus}: job {job_id}: curve measurement (start) {job_id}, {present() - job["scheduled_time"]} late')
+
+                        # Add the job to jobs_in_progress
+                        job['date_time'] = present()
+                        job['measurement_duration'] = reply
+                        jobs_in_progress[job_id] = job
+                    else:
+                        logger.debug(f'bus {bus}: job {job_id}: curve measurement (not started) {job_id}, {present() - job["scheduled_time"]} late')
+                except OPETTimeoutError:
+                    logger.error(f'bus {bus}: job {job_id}: OPETTimeoutError in start_iv_curve property on load {job["opet_name"]}; Got an empty reply on the OPET bus')
+                except UnexpectedReplyError:
+                    logger.error(f'bus {bus}: job {job_id}: UnexpectedReplyError in start_iv_curve property on load {job["opet_name"]}; Got an unexpected reply the OPET bus')  
+                except Exception:
+                    logger.error(f'bus {bus}: job {job_id}: Unexpected error in start_iv_curve property on load {job["opet_name"]};')  
+
         # Now check whether the jobs in progress are complete, reading back
         # results as they become available
 
@@ -203,7 +244,16 @@ def measurement_loop(bus, jobs, jobs_in_progress, results, bus_info, load_info, 
             if not opets[job['opet_address']].available:
                 measurement_complete = False
             else:
-                measurement_complete = opets[job['opet_address']].operation_complete()
+                try:
+                    measurement_complete = opets[job['opet_address']].operation_complete()
+                except OPETTimeoutError:
+                    measurement_complete = False
+                    logger.error(f'bus {bus}: job {job_id}: OPETTimeoutError in check operation complete status on {job["opet_name"]}; Got an empty reply on the OPET bus')
+                except UnexpectedReplyError:
+                    logger.error(f'bus {bus}: job {job_id}: UnexpectedReplyError in check operation complete status on {job["opet_name"]}; Got an unexpected reply the OPET bus')  
+                except Exception:
+                    logger.error(f'bus {bus}: job {job_id}: Unexpected error in check operation complete status on {job["opet_name"]};')  
+
             if measurement_complete:
                 # The measurement is ready
                 logger.debug(f'bus {bus}: job {job_id}: curve measurement (complete) {present() - job["scheduled_time"]} late')
@@ -230,6 +280,12 @@ def measurement_loop(bus, jobs, jobs_in_progress, results, bus_info, load_info, 
                     logger.error(f'bus {bus}: job {job_id}: ValueError in `iv_data` property on load {job["opet_name"]}; couldn\'t parse the load\'s reply')
                     # The job has already been taken off the jobs_in_progress
                     # list
+                except OPETTimeoutError:
+                    logger.error(f'bus {bus}: job {job_id}: OPETTimeoutError in `iv_data` property on load {job["opet_name"]}; Got an empty reply on the OPET bus')
+                except UnexpectedReplyError:
+                    logger.error(f'bus {bus}: job {job_id}: UnexpectedReplyError in `iv_data` property on load {job["opet_name"]}; Got an unexpected reply the OPET bus')  
+                except Exception:
+                    logger.error(f'bus {bus}: job {job_id}: Unexpected error in `iv_data` property on load {job["opet_name"]};')  
             else:
                 # The measurement is not yet ready
                 # logger.debug(f'bus {bus}: job {job_id}: curve measurement (not yet ready) {present() - job["scheduled_time"]} late')

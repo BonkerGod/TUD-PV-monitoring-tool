@@ -46,7 +46,7 @@ log_path_base = Path(opet_supervisor_config['log_path_base'])
 with open(config_path / 'opet_info.json') as f:
     load_info = json.load(f)
 
-print(load_info)
+
 with open(config_path / 'opet_bus_info.json') as f:
     bus_info = json.load(f)
 
