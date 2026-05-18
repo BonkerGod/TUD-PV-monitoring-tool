@@ -16,7 +16,6 @@ def measurement_loop(bus, jobs, jobs_in_progress, results, bus_info, load_info, 
     def initialize_bus():
         # Set up the OPET bus serial communication, returning a list of
         # individual OPETs. Returns None if something goes wrong.
-        # TODO: handle the hot-plugging and power failure cases
         try:
             serial_port_name = device_name(bus_info[bus]['adapter_serial_number'])[0]
             serial_port = Serial(serial_port_name, baudrate=200000, timeout=1)
