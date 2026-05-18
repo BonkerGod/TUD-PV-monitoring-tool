@@ -251,8 +251,10 @@ def measurement_loop(bus, jobs, jobs_in_progress, results, bus_info, load_info, 
                     logger.error(f'bus {bus}: job {job_id}: OPETTimeoutError in check operation complete status on {job["opet_name"]}; Got an empty reply on the OPET bus')
                 except UnexpectedReplyError:
                     logger.error(f'bus {bus}: job {job_id}: UnexpectedReplyError in check operation complete status on {job["opet_name"]}; Got an unexpected reply the OPET bus')  
+                    measurement_complete = False
                 except Exception:
                     logger.error(f'bus {bus}: job {job_id}: Unexpected error in check operation complete status on {job["opet_name"]};')  
+                    measurement_complete = False
 
             if measurement_complete:
                 # The measurement is ready
