@@ -241,10 +241,12 @@ def downloadtable(file, type, datetime1, datetime2, module_name):
         df = pd.read_csv(file)
         df['scheduled_time'] = pd.to_datetime(df['scheduled_time'])
         print(df['scheduled_time'])
+        print(datetime.datetime.fromisoformat(datetime1))
         # print(df.dtypes)
-        result = df.loc[(df['scheduled_time'] >= datetime.datetime.fromisoformat(datetime1)) & (df["scheduled_time"]<= datetime.datetime.fromisoformat(datetime2))]
-        result = df.loc[(df['module_name'].isin(module_name))]
-        #print(result)
+        result = df.loc[(df['scheduled_time'] >= str(datetime.datetime.fromisoformat(datetime1))) & (df["scheduled_time"]<= str(datetime.datetime.fromisoformat(datetime2)))]
+        result = result.loc[(df['module_name'].isin(module_name))]
+        print(result)
+        result.to_csv(file, index=False)
   
 def printtabletype(type):
     cur.execute(f"SELECT column_name, data_type FROM information_schema.columns WHERE table_name = 'pv_{type}'")
@@ -340,7 +342,6 @@ def errordetect():
 
 
 #updateloop()
-downloadtable("export/point3.csv", "point", "2024-12-20 16:00:50-07:00", "2024-12-21 16:00:50-07:00", ["My_solar_panel_1", "module_2"])
-errordetect()
+downloadtable("export/point3.csv", "point", "2026-05-14 16:00:50-07:00", "2026-12-21 16:00:50-07:00", ["My_solar_panel_1", "module_2"])
 
 conn.close()
