@@ -286,6 +286,8 @@ def sendmail(error, receiver_email = ''):
         print(f"Error sending email: {e}")
         
 def errordetect():
+    point_measurements = True
+    curve_measurements = True
     #Check if data is being collected, if not send an email to the admin.
     cur.execute("SELECT date_time FROM pv_point ORDER BY date_time DESC LIMIT 1")
     last_entry_point = cur.fetchone()[0]
@@ -297,26 +299,44 @@ def errordetect():
         sendmail('The PV monitoring system has not received data from both point and curve measurements in the past 24 hours \n' +
                 'Most recent data from point measurements: ' + last_entry_point +
                 '\nMost recent data from curve measurements: ' + last_entry_curve)
+        point_measurements = False
+        curve_measurements = False
     elif last_entry_point < str(datetime.datetime.now() - datetime.timedelta(days=1)):
         sendmail('The PV monitoring system database has not received data from point measurements in the past 24 hours \nMost recent data from point measurements: ' + last_entry_point)
+        point_measurements = False
     elif last_entry_curve < str(datetime.datetime.now() - datetime.timedelta(days=1)):
         sendmail('The PV monitoring system database has not received data from curve measurements in the past 24 hours\nMost recent data from curve measurements: ' + last_entry_curve)
+        curve_measurements = False
 
     #If data is collected check whether the OPETs are suffering from errors, ie status_integer is not 1. If there are errors, send an email to the user of the OPET and the admin.
     for module in config['modules']: 
+        #send the number of errors in the last 24 hours and the total number of measurements in the last 24 hours.
         print(module['module_id'])
         cur.execute("SELECT date_time, status_integer FROM pv_point WHERE date_time > %s AND module_name = %s ORDER BY date_time DESC", (str(datetime.datetime.now() - datetime.timedelta(days=1)),) + (module['module_id'],))
         last_24h = cur.fetchall()
-        print(len(last_24h))
+        #print(len(last_24h))
         errorcount = 0
         for i in range(len(last_24h)):
             if last_24h[i][1] != 1:
                 errorcount += 1
-        print(errorcount)
+        #print(errorcount)
         if errorcount > 0: # if there is at least one error in the last 24 hours, send an email
+            if module['disabled'] == False:
                 sendmail(module['module_id']+' Has had an error in the past 24 hours, please check the system. \n'+str(errorcount)+' of '+str(len(last_24h))+' measurements have had an error in the past 24 hours', module['user_email'])
         
-
+        if module['disabled'] == False:
+            cur.execute("SELECT date_time FROM pv_point WHERE module_name = %s ORDER BY date_time DESC LIMIT 1", (module['module_id'],))
+            last_entry_point = cur.fetchone()[0]
+            cur.execute("SELECT date_time FROM pv_curve WHERE module_name = %s ORDER BY date_time DESC LIMIT 1", (module['module_id'],))
+            last_entry_curve = cur.fetchone()[0]
+            if (last_entry_point < str(datetime.datetime.now() - datetime.timedelta(days=1)) and last_entry_curve < str(datetime.datetime.now() - datetime.timedelta(days=1)) and point_measurements == True and curve_measurements == True):
+                sendmail(module['module_id']+' Has not received data from both point and curve measurements in the past 24 hours \n' +
+                'Most recent data from point measurements: ' + last_entry_point +
+                '\nMost recent data from curve measurements: ' + last_entry_curve, module['user_email'])
+            elif last_entry_point < str(datetime.datetime.now() - datetime.timedelta(days=1)) and point_measurements == True:
+                sendmail(module['module_id']+' Has not received data from point measurements in the past 24 hours \nMost recent data from point measurements: ' + last_entry_point, module['user_email'])
+            elif last_entry_curve < str(datetime.datetime.now() - datetime.timedelta(days=1)) and curve_measurements == True:
+                sendmail(module['module_id']+' Has not received data from curve measurements in the past 24 hours\nMost recent data from curve measurements: ' + last_entry_curve, module['user_email'])
 
 
 #dailyloop()
