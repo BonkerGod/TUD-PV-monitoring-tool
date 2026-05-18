@@ -1,27 +1,21 @@
-import multiprocessing
-import datetime
 from time import sleep
 import csv
-from measurement_scheduling_tools import datetime_range, present, next_occurrence
-import json
-from pathlib import Path
-from OPET_control import OPETBus, OPET
+from measurement_scheduling_tools import present
+from OPET_control import OPETBus, OPET, OPETTimeoutError, UnexpectedReplyError
 from serial_by_serial import device_name
 from serial import Serial
 import logging
-import sys
-import traceback
 
 
+logger = logging.getLogger(__name__)
 
 
-def measurement_loop(bus, jobs, jobs_in_progress, results, bus_info, load_info, logger, maximum_wait, minimum_wait):
+def measurement_loop(bus, jobs, jobs_in_progress, results, bus_info, load_info, maximum_wait, minimum_wait):
     '''In an infinite loop, do the jobs in `dict` that are assigned to `bus`
     and store the `results`.'''
     def initialize_bus():
         # Set up the OPET bus serial communication, returning a list of
         # individual OPETs. Returns None if something goes wrong.
-        # TODO: handle the hot-plugging and power failure cases
         try:
             serial_port_name = device_name(bus_info[bus]['adapter_serial_number'])[0]
             serial_port = Serial(serial_port_name, baudrate=200000, timeout=1)
@@ -41,10 +35,18 @@ def measurement_loop(bus, jobs, jobs_in_progress, results, bus_info, load_info, 
         except IndexError:
             logging.error(f'Couldn\'t find the serial port for bus {bus}')
             return None
+        except OPETTimeoutError:
+            logging.error(f'Couldn\'t connect to OPET on bus {bus}')
+            return None   
+        except UnexpectedReplyError:
+            logging.error(f'Got unexpected reply while connecting to OPET on bus {bus}')
+            return None        
+        except Exception:
+            logging.error(f'Caught exception while connecting to OPET on bus {bus}')
+            return None
 
     # Attempt to set up the bus
     opets = initialize_bus()
-    print(opets)
 
     # Do jobs as they are scheduled and become due
     while True:
@@ -116,27 +118,51 @@ def measurement_loop(bus, jobs, jobs_in_progress, results, bus_info, load_info, 
             #Set load mode, also enable output if disable is false
             if job['job_type'] == 'set_load_mode':
                 #mppt
-                if job["load_mode"] == 'pmp':
-                    opets[job['opet_address']].mode = 'mppt'
-                    if job["disabled"] == True:
-                        opets[job['opet_address']].output_enabled = False
-                        logger.debug(f'bus {bus}: job {job_id}: setting load mode on {job["opet_name"]} to {job["load_mode"]}')
-                    else:
+                if job["load_mode"] == 'mpp':
+                    try:
+                        opets[job['opet_address']].mode = 'mppt'
                         opets[job['opet_address']].output_enabled = True
+                    except OPETTimeoutError:
+                        logger.error(f'bus {bus}: job {job_id}: OPETTimeoutError in `set_load_mode` on {job["opet_name"]}; Got an empty reply on the OPET bus')  
+                    except UnexpectedReplyError:
+                        logger.error(f'bus {bus}: job {job_id}: UnexpectedReplyError in `set_load_mode` on {job["opet_name"]}; Got an unexpected reply the OPET bus')  
+                    except Exception:
+                        logger.error(f'bus {bus}: job {job_id}: Unexpected error in `set_load_mode` on {job["opet_name"]};')  
+
                 #voc
                 elif job["load_mode"] == 'voc':
-                    opets[job['opet_address']].mode = 'voc'
-                    if job["disabled"] == True:
-                        opets[job['opet_address']].output_enabled = False
-                    else:
+                    try:
+                        opets[job['opet_address']].mode = 'voc'
                         opets[job['opet_address']].output_enabled = True    
+                    except OPETTimeoutError:
+                        logger.error(f'bus {bus}: job {job_id}: OPETTimeoutError in `set_load_mode` on {job["opet_name"]}; Got an empty reply on the OPET bus') 
+                    except UnexpectedReplyError:
+                        logger.error(f'bus {bus}: job {job_id}: UnexpectedReplyError in `set_load_mode` on {job["opet_name"]}; Got an unexpected reply the OPET bus')  
+                    except Exception:
+                        logger.error(f'bus {bus}: job {job_id}: Unexpected error in `set_load_mode` on {job["opet_name"]};')  
+
                 #isc
                 elif job["load_mode"] == 'isc':
-                    opets[job['opet_address']].mode = 'isc'
-                    if job["disabled"] == True:
-                        opets[job['opet_address']].output_enabled = False
-                    else:
+                    try:
+                        opets[job['opet_address']].mode = 'isc'
                         opets[job['opet_address']].output_enabled = True
+                    except OPETTimeoutError:
+                        logger.error(f'bus {bus}: job {job_id}: OPETTimeoutError in `set_load_mode` on {job["opet_name"]}; Got an empty reply on the OPET bus') 
+                    except UnexpectedReplyError:
+                        logger.error(f'bus {bus}: job {job_id}: UnexpectedReplyError in `set_load_mode` on {job["opet_name"]}; Got an unexpected reply the OPET bus')  
+                    except Exception:
+                        logger.error(f'bus {bus}: job {job_id}: Unexpected error in `set_load_mode` on {job["opet_name"]};')  
+
+                #disable output
+                elif job["load_mode"] == 'disable':
+                    try:
+                        opets[job['opet_address']].output_enabled = False
+                    except OPETTimeoutError:
+                        logger.error(f'bus {bus}: job {job_id}: OPETTimeoutError in disable OPET on {job["opet_name"]}; Got an empty reply on the OPET bus')
+                    except UnexpectedReplyError:
+                        logger.error(f'bus {bus}: job {job_id}: UnexpectedReplyError in `set_load_mode` on {job["opet_name"]}; Got an unexpected reply the OPET bus')  
+                    except Exception:
+                        logger.error(f'bus {bus}: job {job_id}: Unexpected error in `set_load_mode` on {job["opet_name"]};')  
 
             #Do point measurement
             elif job['job_type'] == 'point':
@@ -149,12 +175,15 @@ def measurement_loop(bus, jobs, jobs_in_progress, results, bus_info, load_info, 
                     logger.debug(f'bus {bus}: job {job_id}: {result["voltage"], result["current"]}, {present() - job["scheduled_time"]} late')
                     # Store the results
                     results[job_id] = {
-                        'measurement_time': present(),
+                        'date_time': present(),
                         'scheduled_time': job['scheduled_time'],
                         'measurement_type': job['job_type'],
                         'v': result['voltage'],
                         'i': result['current'],
                         'module_name': job['module_name'],
+                        'mounted_on': job['mounted_on'],
+                        'axis_azimuth': job['axis_azimuth'],
+                        'axis_tilt': job['axis_tilt'],
                         'status_integer': result['status_integer'],
                         'data_destination': job['data_destination']
                     }
@@ -163,21 +192,37 @@ def measurement_loop(bus, jobs, jobs_in_progress, results, bus_info, load_info, 
                 except ValueError: 
                     logger.error(f'bus {bus}: job {job_id}: ValueError in `sample` property on load {job["opet_name"]}; couldn\'t parse the load\'s reply')
                     # The job has already been taken off the jobs list
+                
+                #OPET may give error
+                except OPETTimeoutError:
+                    logger.error(f'bus {bus}: job {job_id}: OPETTimeoutError in `sample` property on load {job["opet_name"]}; Got an empty reply on the OPET bus')
+                except UnexpectedReplyError:
+                    logger.error(f'bus {bus}: job {job_id}: UnexpectedReplyError in `sample` property on load {job["opet_name"]}; Got an unexpected reply the OPET bus')  
+                except Exception:
+                    logger.error(f'bus {bus}: job {job_id}: Unexpected error in `sample` property on load  {job["opet_name"]};')  
+
             elif job['job_type'] == 'curve':
                 # Curve measurements are first all requested as scheduled,
                 # then collected and recorded later in a separate step
                 # Request the curve
-                reply = opets[job['opet_address']].start_iv_curve()
-                if reply:
-                    logger.debug(f'bus {bus}: job {job_id}: curve measurement (start) {job_id}, {present() - job["scheduled_time"]} late')
-            
-                    # Add the job to jobs_in_progress
-                    job['measurement_time'] = present()
-                    job['measurement_duration'] = reply
-                    jobs_in_progress[job_id] = job
-                else:
-                    logger.debug(f'bus {bus}: job {job_id}: curve measurement (not started) {job_id}, {present() - job["scheduled_time"]} late')
-            
+                try:
+                    reply = opets[job['opet_address']].start_iv_curve()
+                    if reply:
+                        logger.debug(f'bus {bus}: job {job_id}: curve measurement (start) {job_id}, {present() - job["scheduled_time"]} late')
+
+                        # Add the job to jobs_in_progress
+                        job['date_time'] = present()
+                        job['measurement_duration'] = reply
+                        jobs_in_progress[job_id] = job
+                    else:
+                        logger.debug(f'bus {bus}: job {job_id}: curve measurement (not started) {job_id}, {present() - job["scheduled_time"]} late')
+                except OPETTimeoutError:
+                    logger.error(f'bus {bus}: job {job_id}: OPETTimeoutError in start_iv_curve property on load {job["opet_name"]}; Got an empty reply on the OPET bus')
+                except UnexpectedReplyError:
+                    logger.error(f'bus {bus}: job {job_id}: UnexpectedReplyError in start_iv_curve property on load {job["opet_name"]}; Got an unexpected reply the OPET bus')  
+                except Exception:
+                    logger.error(f'bus {bus}: job {job_id}: Unexpected error in start_iv_curve property on load {job["opet_name"]};')  
+
         # Now check whether the jobs in progress are complete, reading back
         # results as they become available
 
@@ -198,7 +243,18 @@ def measurement_loop(bus, jobs, jobs_in_progress, results, bus_info, load_info, 
             if not opets[job['opet_address']].available:
                 measurement_complete = False
             else:
-                measurement_complete = opets[job['opet_address']].operation_complete()
+                try:
+                    measurement_complete = opets[job['opet_address']].operation_complete()
+                except OPETTimeoutError:
+                    measurement_complete = False
+                    logger.error(f'bus {bus}: job {job_id}: OPETTimeoutError in check operation complete status on {job["opet_name"]}; Got an empty reply on the OPET bus')
+                except UnexpectedReplyError:
+                    logger.error(f'bus {bus}: job {job_id}: UnexpectedReplyError in check operation complete status on {job["opet_name"]}; Got an unexpected reply the OPET bus')  
+                    measurement_complete = False
+                except Exception:
+                    logger.error(f'bus {bus}: job {job_id}: Unexpected error in check operation complete status on {job["opet_name"]};')  
+                    measurement_complete = False
+
             if measurement_complete:
                 # The measurement is ready
                 logger.debug(f'bus {bus}: job {job_id}: curve measurement (complete) {present() - job["scheduled_time"]} late')
@@ -208,10 +264,13 @@ def measurement_loop(bus, jobs, jobs_in_progress, results, bus_info, load_info, 
                     # Store the result
                     results[job_id] = {
                         'scheduled_time': job['scheduled_time'],
-                        'measurement_time': job['measurement_time'],
+                        'date_time': job['date_time'],
                         'measurement_duration': job['measurement_duration'],
                         'measurement_type': job['job_type'],
                         'module_name': job['module_name'],
+                        'mounted_on': job['mounted_on'],
+                        'axis_azimuth': job['axis_azimuth'],
+                        'axis_tilt': job['axis_tilt'],
                         'v': result['voltage'],
                         'i': result['current'],
                         'data_destination': job['data_destination']
@@ -222,6 +281,12 @@ def measurement_loop(bus, jobs, jobs_in_progress, results, bus_info, load_info, 
                     logger.error(f'bus {bus}: job {job_id}: ValueError in `iv_data` property on load {job["opet_name"]}; couldn\'t parse the load\'s reply')
                     # The job has already been taken off the jobs_in_progress
                     # list
+                except OPETTimeoutError:
+                    logger.error(f'bus {bus}: job {job_id}: OPETTimeoutError in `iv_data` property on load {job["opet_name"]}; Got an empty reply on the OPET bus')
+                except UnexpectedReplyError:
+                    logger.error(f'bus {bus}: job {job_id}: UnexpectedReplyError in `iv_data` property on load {job["opet_name"]}; Got an unexpected reply the OPET bus')  
+                except Exception:
+                    logger.error(f'bus {bus}: job {job_id}: Unexpected error in `iv_data` property on load {job["opet_name"]};')  
             else:
                 # The measurement is not yet ready
                 # logger.debug(f'bus {bus}: job {job_id}: curve measurement (not yet ready) {present() - job["scheduled_time"]} late')
@@ -234,49 +299,50 @@ def measurement_loop(bus, jobs, jobs_in_progress, results, bus_info, load_info, 
 def writer_loop(results, data_path_base, TZ_LOCAL, minimum_wait,weather_data):
     headers = {
         'point': [
-            'measurement_time',  
+            'date_time',  
             'scheduled_time',    
             'module_name',       
             'mounted_on',
             'v',                 
             'i',                 
             'status_integer',    
-            'azimuth',  
-            'inclination',
-            't_air',             
-            'humidity',          
-            'dewpoint',          
+            'axis_azimuth',  
+            'axis_tilt',
+            'temperature_air',             
+            'relative_humidity',          
+            'dew_point',          
             'relative_pressure',    
             'wind_speed',        
-            'wind_speed_spread',     
+            'wind_speed_std',     
             'wind_direction',        
-            'wind_direction_spread',     
+            'wind_direction_std',     
             'irradiance'         
         ],
         'curve': [
-            'measurement_time',
+            'date_time',
             'scheduled_time',
             'measurement_duration',
             'module_name',
+            'mounted_on',
             'v',
             'i',
-            'azimuth',
-            'inclination',
-            't_air',
-            'humidity',
-            'dewpoint',
+            'axis_azimuth',
+            'axis_tilt',
+            'temperature_air',
+            'relative_humidity',
+            'dew_point',
             'relative_pressure',
             'wind_speed',
-            'wind_speed_spread',
+            'wind_speed_std',
             'wind_direction',
-            'wind_direction_spread',
+            'wind_direction_std',
             'irradiance'
         ]
     }
     while True:
         while results:
             result = results.pop(next(iter(results.keys())))
-            measurement_date = result['measurement_time'].astimezone(TZ_LOCAL).date().isoformat()
+            measurement_date = result['date_time'].astimezone(TZ_LOCAL).date().isoformat()
             data_path = data_path_base / measurement_date / result['data_destination']
             data_file_path = (
                 data_path / (
@@ -288,18 +354,18 @@ def writer_loop(results, data_path_base, TZ_LOCAL, minimum_wait,weather_data):
             )
 
             # Convert datetimes to ISO 8601 strings
-            result['measurement_time'] = result['measurement_time'].astimezone(TZ_LOCAL).isoformat()
+            result['date_time'] = result['date_time'].astimezone(TZ_LOCAL).isoformat()
             result['scheduled_time'] = result['scheduled_time'].astimezone(TZ_LOCAL).isoformat()
             
             #Add latest weather data to results
-            result['t_air'] = weather_data['t_air']
-            result['humidity'] = weather_data['humidity']
-            result['dewpoint'] = weather_data['dewpoint']
+            result['temperature_air'] = weather_data['temperature_air']
+            result['relative_humidity'] = weather_data['relative_humidity']
+            result['dew_point'] = weather_data['dew_point']
             result['relative_pressure'] = weather_data['relative_pressure']
             result['wind_speed'] = weather_data['wind_speed']
-            result['wind_speed_spread'] = weather_data['wind_speed_spread']
+            result['wind_speed_std'] = weather_data['wind_speed_std']
             result['wind_direction'] = weather_data['wind_direction']
-            result['wind_direction_spread'] = weather_data['wind_direction_spread']
+            result['wind_direction_std'] = weather_data['wind_direction_std']
             result['irradiance'] = weather_data['irradiance']
 
             # Create the log file directory, if necessary
@@ -307,8 +373,7 @@ def writer_loop(results, data_path_base, TZ_LOCAL, minimum_wait,weather_data):
 
             # Decide whether to write headers
             need_headers = not data_file_path.exists()
-
-            with open(data_file_path, 'a') as log:
+            with open(data_file_path, 'a', newline='') as log:
                 writer = csv.DictWriter(
                     log,
                     fieldnames=headers[result['measurement_type']],
@@ -318,3 +383,4 @@ def writer_loop(results, data_path_base, TZ_LOCAL, minimum_wait,weather_data):
                     writer.writeheader()
                 writer.writerow(result)
         sleep(minimum_wait)
+
