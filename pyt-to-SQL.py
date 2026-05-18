@@ -330,19 +330,17 @@ def errordetect():
             cur.execute("SELECT date_time FROM pv_curve WHERE module_name = %s ORDER BY date_time DESC LIMIT 1", (module['module_id'],))
             last_entry_curve = cur.fetchone()[0]
             if (last_entry_point < str(datetime.datetime.now() - datetime.timedelta(days=1)) and last_entry_curve < str(datetime.datetime.now() - datetime.timedelta(days=1)) and point_measurements == True and curve_measurements == True):
-                sendmail(module['module_id']+' Has not received data from both point and curve measurements in the past 24 hours \n' +
+                sendmail(module['module_id']+' on tracer:'+module['tracer']+ ' has not received data from both point and curve measurements in the past 24 hours \n' +
                 'Most recent data from point measurements: ' + last_entry_point +
                 '\nMost recent data from curve measurements: ' + last_entry_curve, module['user_email'])
             elif last_entry_point < str(datetime.datetime.now() - datetime.timedelta(days=1)) and point_measurements == True:
-                sendmail(module['module_id']+' Has not received data from point measurements in the past 24 hours \nMost recent data from point measurements: ' + last_entry_point, module['user_email'])
+                sendmail(module['module_id']+' on tracer:'+module['tracer']+ ' has not received data from point measurements in the past 24 hours \nMost recent data from point measurements: ' + last_entry_point, module['user_email'])
             elif last_entry_curve < str(datetime.datetime.now() - datetime.timedelta(days=1)) and curve_measurements == True:
-                sendmail(module['module_id']+' Has not received data from curve measurements in the past 24 hours\nMost recent data from curve measurements: ' + last_entry_curve, module['user_email'])
+                sendmail(module['module_id']+' on tracer:'+module['tracer']+ ' has not received data from curve measurements in the past 24 hours\nMost recent data from curve measurements: ' + last_entry_curve, module['user_email'])
 
 
-#dailyloop()
-#downloadtable("export/point.csv", "point", "2024-12-20 16:00:50-07:00", "2024-12-21 16:00:50-07:00", ["My_solar_panel_1", "module_2"])
-# downloadtable("export/curve.csv", "curve", "2024-12-20 16:00:50-07:00", "2024-12-21 16:00:50-07:00", ["My_solar_panel_1", "module_2"])
-#sendmail(1453)
+#updateloop()
+downloadtable("export/point3.csv", "point", "2024-12-20 16:00:50-07:00", "2024-12-21 16:00:50-07:00", ["My_solar_panel_1", "module_2"])
 errordetect()
 
 conn.close()

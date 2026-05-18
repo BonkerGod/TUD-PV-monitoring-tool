@@ -15,7 +15,7 @@
       "interval_point": 10,
       "interval_curve": 30,
       "user_email": "wessel.oosterkamp@gmail.com",
-      "disabled": true
+      "disabled": false
     }
   ],
   "data_destination": "config_2026-04-30T15-00-00",
