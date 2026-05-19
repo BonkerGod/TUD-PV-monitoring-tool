@@ -108,11 +108,12 @@ def adddata(date):
         )
     )
     df = pd.read_csv(data_file_path, delimiter=",")
-    #f['weather_id'] = None # add weather_id column with None values, this is done because the weather data is not always available, so the weather_id will be added later when the weather data is available, and by adding the column with None values, the data can still be added to the database without having to worry about missing weather data.
+    df['weather_id'] = None # add weather_id column with None values, this is done because the weather data is not always available, so the weather_id will be added later when the weather data is available, and by adding the column with None values, the data can still be added to the database without having to worry about missing weather data.
+    
     data = df.to_numpy()
     point_insert = (
-        "INSERT INTO pv_point (date_time, scheduled_time, module_name, mounted_on, v, i, status_integer, axis_azimuth, axis_tilt, temperature_air, relative_humidity, dew_point, relative_pressure, wind_speed, wind_speed_std, wind_direction, wind_direction_std, irradiance) "
-        "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) "
+        "INSERT INTO pv_point_test (date_time, scheduled_time, module_name, mounted_on, v, i, status_integer, temperature_cell, axis_azimuth, axis_tilt, weather_id) "
+        "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) "
         "ON CONFLICT (date_time, module_name) DO NOTHING"
     )
     for d in data:
@@ -136,14 +137,15 @@ def adddata(date):
     df = pd.read_csv(data_file_path, delimiter=",")
     df["v"] = df["v"].apply(ast.literal_eval)
     df['i'] = df['i'].apply(ast.literal_eval)
+    df['weather_id'] = None
     #print(df['v'].iloc[0])
     #print(np.shape(df['v'].iloc[0]))
     #print(type(df["v"].iloc[0]))
     
     data = df.to_numpy()
     curve_insert = (
-        "INSERT INTO pv_curve (date_time, scheduled_time, measurement_duration, module_name, mounted_on, v, i, axis_azimuth, axis_tilt, temperature_air, relative_humidity, dew_point, relative_pressure, wind_speed, wind_speed_std, wind_direction, wind_direction_std, irradiance) "
-        "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) "
+        "INSERT INTO pv_curve_test (date_time, scheduled_time, measurement_duration, module_name, mounted_on, v, i, iv_status_integer, axis_azimuth, axis_tilt, weather_id) "
+        "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) "
         "ON CONFLICT (date_time, module_name) DO NOTHING"
     )
     for d in data:
@@ -226,11 +228,13 @@ def createtable(type):
             mounted_on VARCHAR(255),
             v VECTOR(100),
             i VECTOR(100),
+            iv_status_integer INT,
             axis_azimuth float,
             axis_tilt float,
             weather_id int,
-            constraint fk_weather FOREIGN KEY (weather_id) REFERENCES pv_Weather(weather_id),
-            PRIMARY KEY (date_time, module_name))"""
+            constraint fk_module FOREIGN KEY (module_name) REFERENCES modules(module_name),
+            UNIQUE (date_time, module_name))"""
+            #  constraint fk_weather FOREIGN KEY (weather_id) REFERENCES pv_Weather(weather_id),
     if type == "pv_point_test":
         command = """CREATE TABLE pv_point_test(
             date_time VARCHAR(255),
@@ -240,6 +244,7 @@ def createtable(type):
             v float,
             i float,
             status_integer INT,
+            temperature_cell float,
             axis_azimuth float,
             axis_tilt float,
             weather_id int,
@@ -420,9 +425,12 @@ def datatester():
 
 deletetable("pv_point_test")
 createtable("pv_point_test")
-datatester()
+
+deletetable("pv_curve_test")
+createtable("pv_curve_test")
+
+adddata('2026-05-19')
 printtable("pv_point_test")
-addmoduledata(config)
-printtable("modules")
+printtable("pv_curve_test")
 
 conn.close()
