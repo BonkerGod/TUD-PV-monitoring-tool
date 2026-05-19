@@ -257,7 +257,7 @@ def createtable(type):
     if type == "weather":
         command = """CREATE TABLE weather(
             weather_id serial PRIMARY KEY,
-            date_time varchar(255) UNIQUE,
+            weather_time varchar(255) UNIQUE,
             temperature_air float,
             relative_humidity float,
             dew_point float,
@@ -296,7 +296,7 @@ def deletetable(type):
 
 #File: ADDRESS LOCATION AND TYPE.   type: mearuements type.     datetime: put in datetime in "2024-12-20 16:00:50-07:00" to filter the moments.     module_names (array): only get the name of the modules.
 def downloadtable(file, type, datetime1, datetime2, module_name):
-        query = "COPY (SELECT * FROM " +type+ " LEFT JOIN modules ON "+type+".module_name = modules.module_name) TO STDOUT WITH DELIMITER ',' CSV HEADER "
+        query = "COPY (SELECT * FROM " +type+ " LEFT JOIN weather ON "+type+".weather_id = weather.weather_id) TO STDOUT WITH DELIMITER ',' CSV HEADER "
         with open(file, 'w') as f:
             cur.copy_expert(query, f)
         df = pd.read_csv(file)
@@ -403,9 +403,9 @@ def errordetect():
 
 def datatester():
     curve_insert = (
-            "INSERT INTO weather (date_time, temperature_air, relative_humidity, dew_point, relative_pressure, wind_speed, wind_speed_std, wind_direction, wind_direction_std, irradiance) "
+            "INSERT INTO weather (weather_time, temperature_air, relative_humidity, dew_point, relative_pressure, wind_speed, wind_speed_std, wind_direction, wind_direction_std, irradiance) "
             "VALUES ('2026-05-18T10:05:50.028240+02:00', 23, 53, 10, 4, 10, 3, 360, 35, 400) "
-            "ON CONFLICT (date_time) DO NOTHING")
+            "ON CONFLICT (weather_time) DO NOTHING")
     cur.execute(curve_insert)
     conn.commit()
     
@@ -428,6 +428,10 @@ createtable("pv_point_test")
 
 deletetable("pv_curve_test")
 createtable("pv_curve_test")
+
+deletetable("weather")
+createtable("weather")
+datatester()
 
 adddata('2026-05-19')
 printtable("pv_point_test")
