@@ -296,7 +296,7 @@ def deletetable(type):
 
 #File: ADDRESS LOCATION AND TYPE.   type: mearuements type.     datetime: put in datetime in "2024-12-20 16:00:50-07:00" to filter the moments.     module_names (array): only get the name of the modules.
 def downloadtable(file, type, datetime1, datetime2, module_name):
-        query = "COPY pv_"+type+" TO STDOUT WITH DELIMITER ',' CSV HEADER "
+        query = "COPY (SELECT * FROM " +type+ " LEFT JOIN modules ON "+type+".module_name = modules.module_name) TO STDOUT WITH DELIMITER ',' CSV HEADER "
         with open(file, 'w') as f:
             cur.copy_expert(query, f)
         df = pd.read_csv(file)
@@ -432,5 +432,6 @@ createtable("pv_curve_test")
 adddata('2026-05-19')
 printtable("pv_point_test")
 printtable("pv_curve_test")
+downloadtable("export/point_data.csv", "pv_point_test", "2026-05-18T00:00:00+02:00", "2026-05-19T23:59:59+02:00", ["My_solar_panel_1"])
 
 conn.close()
