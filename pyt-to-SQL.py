@@ -301,6 +301,7 @@ def downloadtable(file, type, datetime1, datetime2, module_name):
             cur.copy_expert(query, f)
         df = pd.read_csv(file)
         df['scheduled_time'] = pd.to_datetime(df['scheduled_time'])
+        df.drop('weather_id.1', axis=1, inplace=True) # Drop the double weahter_id column
         print(df['scheduled_time'])
         print(datetime.datetime.fromisoformat(datetime1))
         # print(df.dtypes)
