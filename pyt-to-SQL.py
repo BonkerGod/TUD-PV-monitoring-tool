@@ -108,6 +108,7 @@ def adddata(date):
         )
     )
     df = pd.read_csv(data_file_path, delimiter=",")
+    #f['weather_id'] = None # add weather_id column with None values, this is done because the weather data is not always available, so the weather_id will be added later when the weather data is available, and by adding the column with None values, the data can still be added to the database without having to worry about missing weather data.
     data = df.to_numpy()
     point_insert = (
         "INSERT INTO pv_point (date_time, scheduled_time, module_name, mounted_on, v, i, status_integer, axis_azimuth, axis_tilt, temperature_air, relative_humidity, dew_point, relative_pressure, wind_speed, wind_speed_std, wind_direction, wind_direction_std, irradiance) "
@@ -154,7 +155,7 @@ def addmoduledata(config = config):
         module_insert = (
             "INSERT INTO modules (module_name, tracer, username, user_email, area, technology, manufacturer) "
             "VALUES (%s, %s, %s, %s, %s, %s, %s) "
-            "ON CONFLICT (module_name) DO NOTHING"
+            "ON CONFLICT (module_name) DO NOTHING" #Means that if there is already a module with the same name, the data will not be added, this is done so that a name cannot be used twice.
         )
         cur.execute(module_insert, (module['module_id'], module['tracer'], module['username'], module['user_email'], module['area'], module['technology'], module['manufacturer']))
 
@@ -174,7 +175,7 @@ def printtable(type):
     conn.commit()
     
 def createtable(type):
-    if type == "curve":
+    if type == "pv_curve":
         command = """CREATE TABLE pv_curve(
             date_time VARCHAR(255),
             scheduled_time VARCHAR(255),
@@ -195,7 +196,7 @@ def createtable(type):
             wind_direction_std float,
             irradiance float,
             PRIMARY KEY (date_time, module_name))"""
-    if type == "point":
+    if type == "pv_point":
         command = """CREATE TABLE pv_point(
             date_time VARCHAR(255),
             scheduled_time VARCHAR(255),
@@ -216,7 +217,7 @@ def createtable(type):
             wind_direction_std float,
             irradiance float,
             PRIMARY KEY (date_time, module_name))"""
-    if type == "curve_test":
+    if type == "pv_curve_test":
         command = """CREATE TABLE pv_curve_test(
             date_time VARCHAR(255),
             scheduled_time VARCHAR(255),
@@ -230,7 +231,7 @@ def createtable(type):
             weather_id int,
             constraint fk_weather FOREIGN KEY (weather_id) REFERENCES pv_Weather(weather_id),
             PRIMARY KEY (date_time, module_name))"""
-    if type == "point_test":
+    if type == "pv_point_test":
         command = """CREATE TABLE pv_point_test(
             date_time VARCHAR(255),
             scheduled_time VARCHAR(255),
@@ -242,9 +243,12 @@ def createtable(type):
             axis_azimuth float,
             axis_tilt float,
             weather_id int,
-            constraint fk_weather FOREIGN KEY (weather_id) REFERENCES weather(weather_id),
             constraint fk_module FOREIGN KEY (module_name) REFERENCES modules(module_name),
             UNIQUE (date_time, module_name))"""
+            #   constraint for the module_name means that module_name must be present in the modules table to be able to add data.
+            #   constraint fk_weather FOREIGN KEY (weather_id) REFERENCES weather(weather_id), 
+            #   have removed it, because if the weather key would be missing the data would not be added, and this is not desired, because the weather data is not always available.
+            #   By removing the foreign key constraint, the data will still be added, even if the weather data is missing.
     if type == "weather":
         command = """CREATE TABLE weather(
             weather_id serial PRIMARY KEY,
@@ -409,12 +413,16 @@ def datatester():
     
     curve_insert = (
             "INSERT INTO pv_point_test (date_time, scheduled_time, module_name, mounted_on, v, i, status_integer, axis_azimuth, axis_tilt, weather_id) "
-            "VALUES ('2026-05-19T10:05:50.028240+02:00','2026-05-18T10:05:50+02:00','My_solar_panel_1','Egis-tracker',-0.000303534,8.00177e-07,1,180,30,1) "
+            "VALUES ('2026-05-19T10:05:50.028240+02:00','2026-05-18T10:05:50+02:00','My_solar_panel_1','Egis-tracker',-0.000303534,8.00177e-07,1,180,30,5) "
             "ON CONFLICT (date_time, module_name) DO NOTHING")
     cur.execute(curve_insert)
     conn.commit()
 
-
-
+deletetable("pv_point_test")
+createtable("pv_point_test")
+datatester()
+printtable("pv_point_test")
+addmoduledata(config)
+printtable("modules")
 
 conn.close()
