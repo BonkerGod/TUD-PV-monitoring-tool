@@ -14,7 +14,11 @@
       ],
       "interval_point": 10,
       "interval_curve": 30,
+      "username": "Wessel_Oosterkamp",
       "user_email": "wessel.oosterkamp@gmail.com",
+      "area": 1.7,
+      "technology": "Monocrystalline",
+      "manufacturer": "Longli",
       "disabled": false
     }
   ],

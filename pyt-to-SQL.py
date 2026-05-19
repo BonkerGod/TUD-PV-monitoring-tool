@@ -94,6 +94,7 @@ def pastdataupload():
 
 def adddata(date):
     #date = '2024-12-20' #test
+    addmoduledata(config)
     print(date)
     data_path = data_path_base / date / config['data_destination']
     
@@ -147,9 +148,18 @@ def adddata(date):
     for d in data:
         cur.execute(curve_insert, d)
     conn.commit()
+    
+def addmoduledata(config = config):
+    for module in config['modules']:
+        module_insert = (
+            "INSERT INTO modules (module_name, tracer, username, user_email, area, technology, manufacturer) "
+            "VALUES (%s, %s, %s, %s, %s, %s, %s) "
+            "ON CONFLICT (module_name) DO NOTHING"
+        )
+        cur.execute(module_insert, (module['module_id'], module['tracer'], module['username'], module['user_email'], module['area'], module['technology'], module['manufacturer']))
 
 def count_entries(type):
-    cur.execute("SELECT COUNT(*) FROM pv_"+type)
+    cur.execute("SELECT COUNT(*) FROM "+type)
     count = cur.fetchall()
     for i in count:
         print(i)
@@ -157,7 +167,7 @@ def count_entries(type):
 
 
 def printtable(type):
-    cur.execute("SELECT * FROM pv_"+type)
+    cur.execute("SELECT * FROM "+type)
     table_pv = cur.fetchall()
     for i in table_pv:
         print(i)
@@ -210,27 +220,69 @@ def createtable(type):
         command = """CREATE TABLE pv_curve_test(
             date_time VARCHAR(255),
             scheduled_time VARCHAR(255),
-            measurement_duration VARCHAR(255),
-            module_id VARCHAR(255),
+            measurement_duration float,
+            module_name VARCHAR(255),
+            mounted_on VARCHAR(255),
             v VECTOR(100),
             i VECTOR(100),
-            g float,
-            PRIMARY KEY (date_time, module_id))"""
+            axis_azimuth float,
+            axis_tilt float,
+            weather_id int,
+            constraint fk_weather FOREIGN KEY (weather_id) REFERENCES pv_Weather(weather_id),
+            PRIMARY KEY (date_time, module_name))"""
+    if type == "point_test":
+        command = """CREATE TABLE pv_point_test(
+            date_time VARCHAR(255),
+            scheduled_time VARCHAR(255),
+            module_name VARCHAR(255),
+            mounted_on VARCHAR(255),
+            v float,
+            i float,
+            status_integer INT,
+            axis_azimuth float,
+            axis_tilt float,
+            weather_id int,
+            constraint fk_weather FOREIGN KEY (weather_id) REFERENCES weather(weather_id),
+            constraint fk_module FOREIGN KEY (module_name) REFERENCES modules(module_name),
+            UNIQUE (date_time, module_name))"""
+    if type == "weather":
+        command = """CREATE TABLE weather(
+            weather_id serial PRIMARY KEY,
+            date_time varchar(255) UNIQUE,
+            temperature_air float,
+            relative_humidity float,
+            dew_point float,
+            relative_pressure float,
+            wind_speed float,
+            wind_speed_std float,
+            wind_direction float,
+            wind_direction_std float,
+            irradiance float)"""
+    if type == "modules":
+        command = """CREATE TABLE modules(
+            module_name varchar(255) PRIMARY KEY,
+            tracer varchar(255),
+            username varchar(255),
+            user_email varchar(255),
+            area float,
+            technology varchar(255),
+            manufacturer varchar(255))"""
     try:
         cur.execute(command)
+        conn.commit()
         print('Table pv_'+type+' succesfully created')
-    except:
-        print("Table already exists, could not be created")
-    conn.commit()
+    except Exception as e:
+        conn.rollback()
+        print(f"Table already exists or error: {e}")
     
 def deletetable(type):
     try:
-        cur.execute("""DROP TABLE pv_"""+type)
-        print("Table pv_"+type+" succesfully deleted")
-    except:
-        print("Whoops something went wrong, could not delete")
-        
-    conn.commit()
+        cur.execute("DROP TABLE "+type+ " CASCADE")
+        conn.commit()
+        print("Table "+type+" succesfully deleted")
+    except Exception as e:
+        conn.rollback()
+        print(f"Delete failed (table may not exist): {e}")
 
 
 #File: ADDRESS LOCATION AND TYPE.   type: mearuements type.     datetime: put in datetime in "2024-12-20 16:00:50-07:00" to filter the moments.     module_names (array): only get the name of the modules.
@@ -249,7 +301,7 @@ def downloadtable(file, type, datetime1, datetime2, module_name):
         result.to_csv(file, index=False)
   
 def printtabletype(type):
-    cur.execute(f"SELECT column_name, data_type FROM information_schema.columns WHERE table_name = 'pv_{type}'")
+    cur.execute(f"SELECT column_name, data_type FROM information_schema.columns WHERE table_name = '{type}'")
     columns = cur.fetchall()
     for i in columns:
         print(i)
@@ -340,8 +392,29 @@ def errordetect():
             elif last_entry_curve < str(datetime.datetime.now() - datetime.timedelta(days=1)) and curve_measurements == True:
                 sendmail(module['module_id']+' on tracer:'+module['tracer']+ ' has not received data from curve measurements in the past 24 hours\nMost recent data from curve measurements: ' + last_entry_curve, module['user_email'])
 
+def datatester():
+    curve_insert = (
+            "INSERT INTO weather (date_time, temperature_air, relative_humidity, dew_point, relative_pressure, wind_speed, wind_speed_std, wind_direction, wind_direction_std, irradiance) "
+            "VALUES ('2026-05-18T10:05:50.028240+02:00', 23, 53, 10, 4, 10, 3, 360, 35, 400) "
+            "ON CONFLICT (date_time) DO NOTHING")
+    cur.execute(curve_insert)
+    conn.commit()
+    
+    curve_insert = (
+            "INSERT INTO modules (module_name, tracer, username, user_email, area, technology, manufacturer) "
+            "VALUES ('My_solar_panel_1', 'O001', 'Wessel_Oosterkamp', 'woostekamp@tudelft.nl', 1.7, 'Monocrystalline', 'Longli') "
+            "ON CONFLICT (module_name) DO NOTHING")
+    cur.execute(curve_insert)
+    conn.commit()
+    
+    curve_insert = (
+            "INSERT INTO pv_point_test (date_time, scheduled_time, module_name, mounted_on, v, i, status_integer, axis_azimuth, axis_tilt, weather_id) "
+            "VALUES ('2026-05-19T10:05:50.028240+02:00','2026-05-18T10:05:50+02:00','My_solar_panel_1','Egis-tracker',-0.000303534,8.00177e-07,1,180,30,1) "
+            "ON CONFLICT (date_time, module_name) DO NOTHING")
+    cur.execute(curve_insert)
+    conn.commit()
 
-#updateloop()
-downloadtable("export/point3.csv", "point", "2026-05-14 16:00:50-07:00", "2026-12-21 16:00:50-07:00", ["My_solar_panel_1", "module_2"])
+
+
 
 conn.close()
