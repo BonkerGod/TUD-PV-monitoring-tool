@@ -180,6 +180,7 @@ def measurement_loop(bus, jobs, jobs_in_progress, results, bus_info, load_info, 
                         'measurement_type': job['job_type'],
                         'v': result['voltage'],
                         'i': result['current'],
+                        'temperature_cell': result['temperature_cell'],
                         'module_name': job['module_name'],
                         'mounted_on': job['mounted_on'],
                         'axis_azimuth': job['axis_azimuth'],
@@ -273,6 +274,8 @@ def measurement_loop(bus, jobs, jobs_in_progress, results, bus_info, load_info, 
                         'axis_tilt': job['axis_tilt'],
                         'v': result['voltage'],
                         'i': result['current'],
+                        'iv_status_integer': result['iv_status'],
+                        'temperature_cell': result['temperature_cell'],
                         'data_destination': job['data_destination']
                     }
                 # We may get ValueError if the load returned something that
@@ -285,8 +288,8 @@ def measurement_loop(bus, jobs, jobs_in_progress, results, bus_info, load_info, 
                     logger.error(f'bus {bus}: job {job_id}: OPETTimeoutError in `iv_data` property on load {job["opet_name"]}; Got an empty reply on the OPET bus')
                 except UnexpectedReplyError:
                     logger.error(f'bus {bus}: job {job_id}: UnexpectedReplyError in `iv_data` property on load {job["opet_name"]}; Got an unexpected reply the OPET bus')  
-                except Exception:
-                    logger.error(f'bus {bus}: job {job_id}: Unexpected error in `iv_data` property on load {job["opet_name"]};')  
+                except Exception as e:
+                    logger.error(f'bus {bus}: job {job_id}: Unexpected error in `iv_data` property on load {job["opet_name"]}; {e}')  
             else:
                 # The measurement is not yet ready
                 # logger.debug(f'bus {bus}: job {job_id}: curve measurement (not yet ready) {present() - job["scheduled_time"]} late')
@@ -296,7 +299,7 @@ def measurement_loop(bus, jobs, jobs_in_progress, results, bus_info, load_info, 
         sleep(minimum_wait)
 
 
-def writer_loop(results, data_path_base, TZ_LOCAL, minimum_wait,weather_data):
+def writer_loop(results, data_path_base, TZ_LOCAL, minimum_wait):
     headers = {
         'point': [
             'date_time',  
@@ -305,18 +308,10 @@ def writer_loop(results, data_path_base, TZ_LOCAL, minimum_wait,weather_data):
             'mounted_on',
             'v',                 
             'i',                 
-            'status_integer',    
+            'status_integer',
+            'temperature_cell',    
             'axis_azimuth',  
-            'axis_tilt',
-            'temperature_air',             
-            'relative_humidity',          
-            'dew_point',          
-            'relative_pressure',    
-            'wind_speed',        
-            'wind_speed_std',     
-            'wind_direction',        
-            'wind_direction_std',     
-            'irradiance'         
+            'axis_tilt'   
         ],
         'curve': [
             'date_time',
@@ -326,17 +321,10 @@ def writer_loop(results, data_path_base, TZ_LOCAL, minimum_wait,weather_data):
             'mounted_on',
             'v',
             'i',
+            'iv_status_integer',
+            'temperature_cell',
             'axis_azimuth',
             'axis_tilt',
-            'temperature_air',
-            'relative_humidity',
-            'dew_point',
-            'relative_pressure',
-            'wind_speed',
-            'wind_speed_std',
-            'wind_direction',
-            'wind_direction_std',
-            'irradiance'
         ]
     }
     while True:
@@ -357,16 +345,6 @@ def writer_loop(results, data_path_base, TZ_LOCAL, minimum_wait,weather_data):
             result['date_time'] = result['date_time'].astimezone(TZ_LOCAL).isoformat()
             result['scheduled_time'] = result['scheduled_time'].astimezone(TZ_LOCAL).isoformat()
             
-            #Add latest weather data to results
-            result['temperature_air'] = weather_data['temperature_air']
-            result['relative_humidity'] = weather_data['relative_humidity']
-            result['dew_point'] = weather_data['dew_point']
-            result['relative_pressure'] = weather_data['relative_pressure']
-            result['wind_speed'] = weather_data['wind_speed']
-            result['wind_speed_std'] = weather_data['wind_speed_std']
-            result['wind_direction'] = weather_data['wind_direction']
-            result['wind_direction_std'] = weather_data['wind_direction_std']
-            result['irradiance'] = weather_data['irradiance']
 
             # Create the log file directory, if necessary
             data_file_path.parent.mkdir(parents=True, exist_ok=True)

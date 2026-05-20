@@ -9,18 +9,7 @@ import logging
 import sys
 import traceback
 from zoneinfo import ZoneInfo
-from pyt_to_SQL import dailyloop
 
-weather_data = {'temperature_air': 23.0,
-            'relative_humidity': 67.0,
-            'dew_point': 24.0,
-            'relative_pressure': 1.0,
-            'wind_speed': 1.5,
-            'wind_speed_std':0.5,
-            'wind_direction':10.0 ,
-            'wind_direction_std':1.5,
-            'irradiance': 17.0
-        }
 
 
 #Constants
@@ -103,15 +92,10 @@ if __name__ == '__main__':
         processes.append(
             multiprocessing.Process(
                 target=writer_loop,
-                args=(results, data_path_base, TZ_LOCAL, minimum_wait,weather_data )
+                args=(results, data_path_base, TZ_LOCAL, minimum_wait)
             )
         )
-        processes.append(
-            multiprocessing.Process(
-               target=dailyloop
-           )
-       )       
-        
+
         for process in processes:
             process.start()
 
