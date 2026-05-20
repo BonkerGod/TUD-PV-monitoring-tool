@@ -1,7 +1,7 @@
 import mysql.connector
 
 conn = mysql.connector.connect(
-    host="131.180.192.70",
+    host="100.98.143.82",
     user="OPET",
     password="npjust",
     database="pvmonitoring",
@@ -9,5 +9,11 @@ conn = mysql.connector.connect(
 )
 
 cursor = conn.cursor()
-cursor.execute("SELECT NOW();")
-print(cursor.fetchone())
+# cursor.execute("SELECT * FROM results;")
+# print(cursor.fetchone())
+
+cursor.execute("SELECT * FROM results LIMIT 5;")
+for row in cursor:
+    print(row)
+
+conn.close()
