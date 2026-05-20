@@ -1,0 +1,85 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
+import ast
+
+
+#Plots all point measurements from csv file
+def plot_points(data_path_point):
+
+    df_point = pd.read_csv(data_path_point)
+
+    df_point["date_time"] = pd.to_datetime(df_point["date_time"])
+    df_point = df_point.sort_values("date_time").reset_index(drop=True) #Sort by time
+
+    measurement_cols = [
+        "v",
+        "i",
+        "temperature_cell"
+    ]
+
+    fig, axes = plt.subplots(
+        len(measurement_cols),
+        1,
+        figsize=(12, 2.5 * len(measurement_cols)),
+        sharex=True,
+        constrained_layout=True,
+    )
+
+    for ax, col in zip(axes, measurement_cols):
+        ax.plot(df_point["date_time"], df_point[col], marker="o", linewidth=1)
+        ax.set_ylabel(col)
+        ax.grid(True, alpha=0.3)
+
+    axes[-1].set_xlabel("Time")
+
+    #Handle axis labels for time
+    locator = mdates.AutoDateLocator()
+    formatter = mdates.ConciseDateFormatter(locator)
+    axes[-1].xaxis.set_major_locator(locator)
+    axes[-1].xaxis.set_major_formatter(formatter)
+
+    fig.suptitle("Solar Panel Measurements")
+    plt.show()
+
+#Plots first three curve measurements from csv file
+def plot_curve(data_path_curve):
+    df_curve = pd.read_csv(data_path_curve)
+
+    df_curve["date_time"] = pd.to_datetime(df_curve["date_time"])
+    df_curve = df_curve.sort_values("date_time").reset_index(drop=True)
+
+    df_curve["v"] = df_curve["v"].apply(ast.literal_eval)
+    df_curve["i"] = df_curve["i"].apply(ast.literal_eval)
+
+    fig, ax = plt.subplots(figsize=(8, 6), constrained_layout=True)
+
+    for _, row in df_curve.head(3).iterrows():
+        voltage_mV = [v * 1000 for v in row["v"]]
+        current_uA = [i * 1_000_000 for i in row["i"]]
+
+        label = row["date_time"].strftime("%H:%M:%S")
+
+        ax.plot(
+            voltage_mV,
+            current_uA,
+            marker="o",
+            linewidth=1,
+            markersize=3,
+            label=label,
+        )
+
+    ax.set_xlabel("Voltage [mV]")
+    ax.set_ylabel("Current [µA]")
+    ax.set_title("First 3 IV Curves")
+    ax.grid(True, alpha=0.3)
+    ax.legend(title="Measurement time")
+
+    plt.show(block=True)
+
+
+data_path_point = "test_log/data/2026-05-20/config_2026-04-30T15-00-00/opet_results_point_2026-05-20.csv"
+plot_points(data_path_point)
+
+data_path_curve = "test_log/data/2026-05-20/config_2026-04-30T15-00-00/opet_results_curve_2026-05-20.csv"
+plot_curve(data_path_curve)
