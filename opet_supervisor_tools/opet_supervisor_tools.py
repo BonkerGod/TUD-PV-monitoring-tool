@@ -41,8 +41,8 @@ def measurement_loop(bus, jobs, jobs_in_progress, results, bus_info, load_info, 
         except UnexpectedReplyError:
             logging.error(f'Got unexpected reply while connecting to OPET on bus {bus}')
             return None        
-        except Exception:
-            logging.error(f'Caught exception while connecting to OPET on bus {bus}')
+        except Exception as e:
+            logging.error(f'Caught exception while connecting to OPET on bus {bus}: {e}')
             return None
 
     # Attempt to set up the bus
@@ -126,8 +126,8 @@ def measurement_loop(bus, jobs, jobs_in_progress, results, bus_info, load_info, 
                         logger.error(f'bus {bus}: job {job_id}: OPETTimeoutError in `set_load_mode` on {job["opet_name"]}; Got an empty reply on the OPET bus')  
                     except UnexpectedReplyError:
                         logger.error(f'bus {bus}: job {job_id}: UnexpectedReplyError in `set_load_mode` on {job["opet_name"]}; Got an unexpected reply the OPET bus')  
-                    except Exception:
-                        logger.error(f'bus {bus}: job {job_id}: Unexpected error in `set_load_mode` on {job["opet_name"]};')  
+                    except Exception as e:
+                        logger.error(f'bus {bus}: job {job_id}: Unexpected error in `set_load_mode` on {job["opet_name"]}; {e}')  
 
                 #voc
                 elif job["load_mode"] == 'voc':
@@ -138,8 +138,8 @@ def measurement_loop(bus, jobs, jobs_in_progress, results, bus_info, load_info, 
                         logger.error(f'bus {bus}: job {job_id}: OPETTimeoutError in `set_load_mode` on {job["opet_name"]}; Got an empty reply on the OPET bus') 
                     except UnexpectedReplyError:
                         logger.error(f'bus {bus}: job {job_id}: UnexpectedReplyError in `set_load_mode` on {job["opet_name"]}; Got an unexpected reply the OPET bus')  
-                    except Exception:
-                        logger.error(f'bus {bus}: job {job_id}: Unexpected error in `set_load_mode` on {job["opet_name"]};')  
+                    except Exception as e:
+                        logger.error(f'bus {bus}: job {job_id}: Unexpected error in `set_load_mode` on {job["opet_name"]}; {e}')  
 
                 #isc
                 elif job["load_mode"] == 'isc':
@@ -150,8 +150,8 @@ def measurement_loop(bus, jobs, jobs_in_progress, results, bus_info, load_info, 
                         logger.error(f'bus {bus}: job {job_id}: OPETTimeoutError in `set_load_mode` on {job["opet_name"]}; Got an empty reply on the OPET bus') 
                     except UnexpectedReplyError:
                         logger.error(f'bus {bus}: job {job_id}: UnexpectedReplyError in `set_load_mode` on {job["opet_name"]}; Got an unexpected reply the OPET bus')  
-                    except Exception:
-                        logger.error(f'bus {bus}: job {job_id}: Unexpected error in `set_load_mode` on {job["opet_name"]};')  
+                    except Exception as e:
+                        logger.error(f'bus {bus}: job {job_id}: Unexpected error in `set_load_mode` on {job["opet_name"]}; {e}')  
 
                 #disable output
                 elif job["load_mode"] == 'disable':
@@ -199,8 +199,8 @@ def measurement_loop(bus, jobs, jobs_in_progress, results, bus_info, load_info, 
                     logger.error(f'bus {bus}: job {job_id}: OPETTimeoutError in `sample` property on load {job["opet_name"]}; Got an empty reply on the OPET bus')
                 except UnexpectedReplyError:
                     logger.error(f'bus {bus}: job {job_id}: UnexpectedReplyError in `sample` property on load {job["opet_name"]}; Got an unexpected reply the OPET bus')  
-                except Exception:
-                    logger.error(f'bus {bus}: job {job_id}: Unexpected error in `sample` property on load  {job["opet_name"]};')  
+                except Exception as e:
+                    logger.error(f'bus {bus}: job {job_id}: Unexpected error in `sample` property on load  {job["opet_name"]}; {e}')  
 
             elif job['job_type'] == 'curve':
                 # Curve measurements are first all requested as scheduled,
@@ -252,8 +252,8 @@ def measurement_loop(bus, jobs, jobs_in_progress, results, bus_info, load_info, 
                 except UnexpectedReplyError:
                     logger.error(f'bus {bus}: job {job_id}: UnexpectedReplyError in check operation complete status on {job["opet_name"]}; Got an unexpected reply the OPET bus')  
                     measurement_complete = False
-                except Exception:
-                    logger.error(f'bus {bus}: job {job_id}: Unexpected error in check operation complete status on {job["opet_name"]};')  
+                except Exception as e:
+                    logger.error(f'bus {bus}: job {job_id}: Unexpected error in check operation complete status on {job["opet_name"]};{e}')  
                     measurement_complete = False
 
             if measurement_complete:
