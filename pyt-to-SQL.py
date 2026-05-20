@@ -144,8 +144,8 @@ def adddata(date):
     
     data = df.to_numpy()
     curve_insert = (
-        "INSERT INTO pv_curve_test (date_time, scheduled_time, measurement_duration, module_name, mounted_on, v, i, iv_status_integer, axis_azimuth, axis_tilt, weather_id) "
-        "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) "
+        "INSERT INTO pv_curve_test (date_time, scheduled_time, measurement_duration, module_name, mounted_on, v, i, iv_status_integer, temperature_cell, axis_azimuth, axis_tilt, weather_id) "
+        "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) "
         "ON CONFLICT (date_time, module_name) DO NOTHING"
     )
     for d in data:
@@ -229,6 +229,7 @@ def createtable(type):
             v VECTOR(100),
             i VECTOR(100),
             iv_status_integer INT,
+            temperature_cell float,
             axis_azimuth float,
             axis_tilt float,
             weather_id int,
@@ -434,9 +435,8 @@ deletetable("weather")
 createtable("weather")
 datatester()
 
-adddata('2026-05-19')
-printtable("pv_point_test")
-printtable("pv_curve_test")
-downloadtable("export/point_data.csv", "pv_point_test", "2026-05-18T00:00:00+02:00", "2026-05-19T23:59:59+02:00", ["My_solar_panel_1"])
+adddata('2026-05-20')
+downloadtable("export/point_data.csv", "pv_point_test", "2026-05-20T00:00:00+02:00", "2026-05-20T23:59:59+02:00", ["My_solar_panel_1"])
+downloadtable("export/curve_data.csv", "pv_curve_test", "2026-05-20T00:00:00+02:00", "2026-05-20T23:59:59+02:00", ["My_solar_panel_1"])
 
 conn.close()
