@@ -1,4 +1,5 @@
 import psycopg2
+from psycopg2 import sql
 import datetime
 import time
 import json
@@ -42,8 +43,10 @@ except:
     print("Database not connected succesfully")
     
 cur = conn.cursor()
-
-mysql_conn, mysql_cur = mysql_init()
+try:
+    mysql_conn, mysql_cur = mysql_init()
+except:
+    print('Weatherdb not connected succesfully')
 
 # Create pgvector extension if it doesn't exist
 try:
@@ -59,7 +62,7 @@ except Exception as e:
 def updateloop():
     while(1):
         if datetime.datetime.now().minute % 1 == 0: #When the time is a multiple of 5.\
-            print(str(datetime.date.today()))
+            #print(str(datetime.date.today()))
             try:
                 date = str(datetime.date.today())
                 adddata(date)
@@ -92,7 +95,7 @@ def dailyloop():
         time.sleep(5) # Wait for an hour and check again.
              
 def pastdataupload():
-    start_date = datetime.date(2025, 5, 1)
+    start_date = datetime.date(2026, 5, 1)
     for date in (start_date + datetime.timedelta(days=n) for n in range((datetime.date.today() - start_date + datetime.timedelta(days=1)).days)):
         try:
             adddata(str(date))
@@ -126,6 +129,7 @@ def adddata(date):
     newest = weather_last(mysql_conn, mysql_cur)
     #mysql_close(mysql_conn)
     df['date_time']=pd.to_datetime(df['date_time'])
+    df['scheduled_time'] = pd.to_datetime(df['scheduled_time'])
     UTC_PLUS_2 = datetime.timezone(datetime.timedelta(hours=2))
     newest_time = pd.to_datetime(newest[1]).replace(tzinfo=UTC_PLUS_2)
     if (df['date_time'] < newest_time + datetime.timedelta(minutes=5)).any():   #Only add data when there is a weather id from the previous 5 minutes.
@@ -163,6 +167,7 @@ def adddata(date):
     newest = weather_last(mysql_conn, mysql_cur)
     #mysql_close(mysql_conn)
     df['date_time']=pd.to_datetime(df['date_time'])
+    df['scheduled_time'] = pd.to_datetime(df['scheduled_time'])    
     UTC_PLUS_2 = datetime.timezone(datetime.timedelta(hours=2))
     newest_time = pd.to_datetime(newest[1]).replace(tzinfo=UTC_PLUS_2)
     if (df['date_time'] < newest_time + datetime.timedelta(minutes=5)).any():   
@@ -261,8 +266,8 @@ def createtable(type):
             PRIMARY KEY (date_time, module_name))"""
     if type == "pv_curve_test":
         command = """CREATE TABLE pv_curve_test(
-            date_time VARCHAR(255),
-            scheduled_time VARCHAR(255),
+            date_time TIMESTAMP WITH TIME ZONE,
+            scheduled_time TIMESTAMP WITH TIME ZONE,
             measurement_duration float,
             module_name VARCHAR(255),
             mounted_on VARCHAR(255),
@@ -278,8 +283,8 @@ def createtable(type):
             #  constraint fk_weather FOREIGN KEY (weather_id) REFERENCES pv_Weather(weather_id),
     if type == "pv_point_test":
         command = """CREATE TABLE pv_point_test(
-            date_time VARCHAR(255),
-            scheduled_time VARCHAR(255),
+            date_time TIMESTAMP WITH TIME ZONE,
+            scheduled_time TIMESTAMP WITH TIME ZONE,
             module_name VARCHAR(255),
             mounted_on VARCHAR(255),
             v float,
@@ -298,7 +303,7 @@ def createtable(type):
     if type == "weather":
         command = """CREATE TABLE weather(
             weather_id int PRIMARY KEY,
-            weather_time varchar(255) UNIQUE,
+            weather_time TIMESTAMP WITH TIME ZONE UNIQUE,
             temperature_air float,
             relative_humidity float,
             dew_point float,
@@ -338,17 +343,20 @@ def deletetable(type):
 # Downloadtable needs a fix that it only downloads the data that is needed, currently it downloads all the data and then filters it in python, which is not efficient. The filtering should be done in the SQL query, so that only the data that is needed is downloaded. This can be done by adding a WHERE clause to the SQL query that filters the data based on the datetime and module_name.
 #File: ADDRESS LOCATION AND TYPE.   type: mearuements type.     datetime: put in datetime in "2024-12-20 16:00:50-07:00" to filter the moments.     module_names (array): only get the name of the modules.
 def downloadtable(file, type, datetime1, datetime2, module_name):
-        query = "COPY (SELECT * FROM " +type+ " LEFT JOIN weather ON "+type+".weather_id = weather.weather_id) TO STDOUT WITH DELIMITER ',' CSV HEADER "
+        dt1 = datetime.datetime.fromisoformat(datetime1)
+        dt2 = datetime.datetime.fromisoformat(datetime2)
+        query = sql.SQL("COPY (SELECT * FROM " +type+ " LEFT JOIN weather ON "+type+".weather_id = weather.weather_id WHERE scheduled_time > %s AND scheduled_time < %s) TO STDOUT WITH DELIMITER ',' CSV HEADER ")
         with open(file, 'w') as f:
-            cur.copy_expert(query, f)
+            formatted_query = cur.mogrify(query, [dt1,dt2]).decode('utf-8')
+            cur.copy_expert(formatted_query, f)
         df = pd.read_csv(file)
         df['scheduled_time'] = pd.to_datetime(df['scheduled_time'])
         df.drop('weather_id.1', axis=1, inplace=True) # Drop the double weahter_id column
-        print(df['scheduled_time'])
-        print(datetime.datetime.fromisoformat(datetime1))
+        #print(df['scheduled_time'])
+        #print(datetime.datetime.fromisoformat(datetime1))
         # print(df.dtypes)
-        result = df.loc[(df['scheduled_time'] >= str(datetime.datetime.fromisoformat(datetime1))) & (df["scheduled_time"]<= str(datetime.datetime.fromisoformat(datetime2)))]
-        result = result.loc[(df['module_name'].isin(module_name))]
+        #result = df.loc[(df['scheduled_time'] >= str(datetime.datetime.fromisoformat(datetime1))) & (df["scheduled_time"]<= str(datetime.datetime.fromisoformat(datetime2)))]
+        result = df.loc[(df['module_name'].isin(module_name))]
         print(result)
         result.to_csv(file, index=False)
   
@@ -467,17 +475,20 @@ def datatester():
     conn.commit()
 
 
-deletetable('pv_point_test')
-createtable('pv_point_test')
-deletetable('pv_curve_test')
-createtable('pv_curve_test')
+# deletetable('pv_point_test')
+# createtable('pv_point_test')
+# deletetable('pv_curve_test')
+# createtable('pv_curve_test')
 deletetable('weather')
 createtable('weather')
 
-updateloop()
-#printtable('pv_point_test')
+pastdataupload()
+# printtable('pv_point_test')
+#printtabletype('pv_point_test')
 #printtable('pv_curve_test')
 printtable('weather')
+# downloadtable('export/point.csv', 'pv_point_test', "2026-05-18 16:33:50+02:00", "2026-12-20 16:00:50+02:00", ['My_solar_panel_1','P-0001'])
+# downloadtable('export/curve.csv', 'pv_curve_test', "2026-05-19 16:33:50+02:00", "2026-12-20 16:00:50+02:00", ['My_solar_panel_1','P-0001'])
 
 mysql_close(mysql_conn)
 conn.close()
