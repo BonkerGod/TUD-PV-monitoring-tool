@@ -12,6 +12,8 @@ from sqlalchemy import create_engine
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+from Weatherdb_to_pyth import download_weather_last24hours, mysql_init, mysql_close, weather_last, weather_all
+
 
 with open('opet-supervisor-config.json') as f:
     opet_supervisor_config = json.load(f)
@@ -41,6 +43,8 @@ except:
     
 cur = conn.cursor()
 
+mysql_conn, mysql_cur = mysql_init()
+
 # Create pgvector extension if it doesn't exist
 try:
     cur.execute("CREATE EXTENSION IF NOT EXISTS vector;")
@@ -59,9 +63,14 @@ def updateloop():
             try:
                 date = str(datetime.date.today())
                 adddata(date)
-                count_entries("point")
-                count_entries('curve')
+                count_entries("pv_point_test")
+                count_entries('pv_curve_test')
             except: print("Data could not be added, maybe the file is not yet created or there is an error")
+            
+            try:
+                addweatherdata(download_weather_last24hours(1, mysql_conn, mysql_cur))
+            except:
+                print('Weatherdata could not be added')
             
         elif (datetime.datetime.now().minute == 5 and datetime.datetime.now().hour == 0): #When time is equal to 1 hour, upload the data from yesterday
             try:
@@ -83,18 +92,21 @@ def dailyloop():
         time.sleep(5) # Wait for an hour and check again.
              
 def pastdataupload():
-    start_date = datetime.date(2026, 5, 1)
-    for date in (start_date + datetime.timedelta(days=n) for n in range(datetime.date.today().day - start_date.day+1)):
+    start_date = datetime.date(2025, 5, 1)
+    for date in (start_date + datetime.timedelta(days=n) for n in range((datetime.date.today() - start_date + datetime.timedelta(days=1)).days)):
         try:
             adddata(str(date))
-            print('hello')
         except: print("Data could not be added, maybe the file is not yet created or there is an error")
+    try:    
+        addweatherdata(weather_all(start_date, mysql_conn, mysql_cur))
+    except:
+        print('Could not add the weather data')
              
 
 
 def adddata(date):
-    #date = '2024-12-20' #test
     addmoduledata(config)
+    
     print(date)
     data_path = data_path_base / date / config['data_destination']
     
@@ -108,7 +120,16 @@ def adddata(date):
         )
     )
     df = pd.read_csv(data_file_path, delimiter=",")
+    
     df['weather_id'] = None # add weather_id column with None values, this is done because the weather data is not always available, so the weather_id will be added later when the weather data is available, and by adding the column with None values, the data can still be added to the database without having to worry about missing weather data.
+    #mysql_conn, mysql_cur = mysql_init()
+    newest = weather_last(mysql_conn, mysql_cur)
+    #mysql_close(mysql_conn)
+    df['date_time']=pd.to_datetime(df['date_time'])
+    UTC_PLUS_2 = datetime.timezone(datetime.timedelta(hours=2))
+    newest_time = pd.to_datetime(newest[1]).replace(tzinfo=UTC_PLUS_2)
+    if (df['date_time'] < newest_time + datetime.timedelta(minutes=5)).any():   #Only add data when there is a weather id from the previous 5 minutes.
+        df['weather_id']=newest[0]
     
     data = df.to_numpy()
     point_insert = (
@@ -138,9 +159,14 @@ def adddata(date):
     df["v"] = df["v"].apply(ast.literal_eval)
     df['i'] = df['i'].apply(ast.literal_eval)
     df['weather_id'] = None
-    #print(df['v'].iloc[0])
-    #print(np.shape(df['v'].iloc[0]))
-    #print(type(df["v"].iloc[0]))
+    #mysql_conn, mysql_cur = mysql_init()
+    newest = weather_last(mysql_conn, mysql_cur)
+    #mysql_close(mysql_conn)
+    df['date_time']=pd.to_datetime(df['date_time'])
+    UTC_PLUS_2 = datetime.timezone(datetime.timedelta(hours=2))
+    newest_time = pd.to_datetime(newest[1]).replace(tzinfo=UTC_PLUS_2)
+    if (df['date_time'] < newest_time + datetime.timedelta(minutes=5)).any():   
+        df['weather_id']=newest[0]
     
     data = df.to_numpy()
     curve_insert = (
@@ -160,6 +186,20 @@ def addmoduledata(config = config):
             "ON CONFLICT (module_name) DO NOTHING" #Means that if there is already a module with the same name, the data will not be added, this is done so that a name cannot be used twice.
         )
         cur.execute(module_insert, (module['module_id'], module['tracer'], module['username'], module['user_email'], module['area'], module['technology'], module['manufacturer']))
+
+def addweatherdata(weather_data):
+    weather_insert = (
+        "INSERT INTO weather (weather_id, weather_time, temperature_air, relative_humidity, dew_point, relative_pressure, wind_speed, wind_speed_std, wind_direction, wind_direction_std, irradiance) "
+        "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) "
+        "ON CONFLICT (weather_id) DO NOTHING"
+    )
+    df = pd.DataFrame(weather_data, columns=['weather_id', 'weather_time', 'temperature_air', 'relative_humidity', 'dew_point', 'relative_pressure', 'wind_speed', 'wind_speed_std', 'wind_direction', 'wind_direction_std', 'irradiance', 'IrrDirect', 'IrrDiffused', 'ETotal', 'EDirect', 'EDiffused'])
+    df = df.drop(['IrrDirect', 'IrrDiffused', 'ETotal', 'EDirect', 'EDiffused'], axis=1) # drop the columns that are not needed, this is done because the data is not needed in the database and it would only take up space and make the database slower.
+    result = df.to_numpy()
+    for d in result:
+        cur.execute(weather_insert, d) # the first column is the weather_id which is automatically generated by the database and is not needed to be added.
+    conn.commit()
+
 
 def count_entries(type):
     cur.execute("SELECT COUNT(*) FROM "+type)
@@ -257,7 +297,7 @@ def createtable(type):
             #   By removing the foreign key constraint, the data will still be added, even if the weather data is missing.
     if type == "weather":
         command = """CREATE TABLE weather(
-            weather_id serial PRIMARY KEY,
+            weather_id int PRIMARY KEY,
             weather_time varchar(255) UNIQUE,
             temperature_air float,
             relative_humidity float,
@@ -280,7 +320,7 @@ def createtable(type):
     try:
         cur.execute(command)
         conn.commit()
-        print('Table pv_'+type+' succesfully created')
+        print('Table '+type+' succesfully created')
     except Exception as e:
         conn.rollback()
         print(f"Table already exists or error: {e}")
@@ -295,6 +335,7 @@ def deletetable(type):
         print(f"Delete failed (table may not exist): {e}")
 
 
+# Downloadtable needs a fix that it only downloads the data that is needed, currently it downloads all the data and then filters it in python, which is not efficient. The filtering should be done in the SQL query, so that only the data that is needed is downloaded. This can be done by adding a WHERE clause to the SQL query that filters the data based on the datetime and module_name.
 #File: ADDRESS LOCATION AND TYPE.   type: mearuements type.     datetime: put in datetime in "2024-12-20 16:00:50-07:00" to filter the moments.     module_names (array): only get the name of the modules.
 def downloadtable(file, type, datetime1, datetime2, module_name):
         query = "COPY (SELECT * FROM " +type+ " LEFT JOIN weather ON "+type+".weather_id = weather.weather_id) TO STDOUT WITH DELIMITER ',' CSV HEADER "
@@ -425,18 +466,18 @@ def datatester():
     cur.execute(curve_insert)
     conn.commit()
 
-deletetable("pv_point_test")
-createtable("pv_point_test")
 
-deletetable("pv_curve_test")
-createtable("pv_curve_test")
+deletetable('pv_point_test')
+createtable('pv_point_test')
+deletetable('pv_curve_test')
+createtable('pv_curve_test')
+deletetable('weather')
+createtable('weather')
 
-deletetable("weather")
-createtable("weather")
-datatester()
+updateloop()
+#printtable('pv_point_test')
+#printtable('pv_curve_test')
+printtable('weather')
 
-adddata('2026-05-20')
-downloadtable("export/point_data.csv", "pv_point_test", "2026-05-20T00:00:00+02:00", "2026-05-20T23:59:59+02:00", ["My_solar_panel_1"])
-downloadtable("export/curve_data.csv", "pv_curve_test", "2026-05-20T00:00:00+02:00", "2026-05-20T23:59:59+02:00", ["My_solar_panel_1"])
-
+mysql_close(mysql_conn)
 conn.close()
