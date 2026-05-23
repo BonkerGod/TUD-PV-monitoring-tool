@@ -137,7 +137,7 @@ def adddata(date):
     
     data = df.to_numpy()
     point_insert = (
-        "INSERT INTO pv_point_test (date_time, scheduled_time, module_name, mounted_on, v, i, status_integer, temperature_cell, axis_azimuth, axis_tilt, weather_id) "
+        "INSERT INTO pv_point (date_time, scheduled_time, module_name, mounted_on, v, i, status_integer, temperature_cell, axis_azimuth, axis_tilt, weather_id) "
         "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) "
         "ON CONFLICT (date_time, module_name) DO NOTHING"
     )
@@ -160,12 +160,13 @@ def adddata(date):
     )
     
     df = pd.read_csv(data_file_path, delimiter=",")
+    #For the vector
     df["v"] = df["v"].apply(ast.literal_eval)
     df['i'] = df['i'].apply(ast.literal_eval)
+    
+    #Assigning weather_id to the last weather measurement in the last 5 minutes.
     df['weather_id'] = None
-    #mysql_conn, mysql_cur = mysql_init()
     newest = weather_last(mysql_conn, mysql_cur)
-    #mysql_close(mysql_conn)
     df['date_time']=pd.to_datetime(df['date_time'])
     df['scheduled_time'] = pd.to_datetime(df['scheduled_time'])    
     UTC_PLUS_2 = datetime.timezone(datetime.timedelta(hours=2))
@@ -175,7 +176,7 @@ def adddata(date):
     
     data = df.to_numpy()
     curve_insert = (
-        "INSERT INTO pv_curve_test (date_time, scheduled_time, measurement_duration, module_name, mounted_on, v, i, iv_status_integer, temperature_cell, axis_azimuth, axis_tilt, weather_id) "
+        "INSERT INTO pv_curve (date_time, scheduled_time, measurement_duration, module_name, mounted_on, v, i, iv_status_integer, temperature_cell, axis_azimuth, axis_tilt, weather_id) "
         "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) "
         "ON CONFLICT (date_time, module_name) DO NOTHING"
     )
@@ -224,46 +225,38 @@ def printtable(type):
 def createtable(type):
     if type == "pv_curve":
         command = """CREATE TABLE pv_curve(
-            date_time VARCHAR(255),
-            scheduled_time VARCHAR(255),
+            date_time TIMESTAMP WITH TIME ZONE,
+            scheduled_time TIMESTAMP WITH TIME ZONE,
             measurement_duration float,
             module_name VARCHAR(255),
             mounted_on VARCHAR(255),
             v VECTOR(100),
             i VECTOR(100),
+            iv_status_integer INT,
+            temperature_cell float,
             axis_azimuth float,
             axis_tilt float,
-            temperature_air float,
-            relative_humidity float,
-            dew_point float,
-            relative_pressure float,
-            wind_speed float,
-            wind_speed_std float,
-            wind_direction float,
-            wind_direction_std float,
-            irradiance float,
-            PRIMARY KEY (date_time, module_name))"""
+            weather_id int,
+            constraint fk_module FOREIGN KEY (module_name) REFERENCES modules(module_name),
+            UNIQUE (date_time, module_name))"""
+            #  constraint fk_weather FOREIGN KEY (weather_id) REFERENCES pv_Weather(weather_id),
     if type == "pv_point":
         command = """CREATE TABLE pv_point(
-            date_time VARCHAR(255),
-            scheduled_time VARCHAR(255),
+            date_time TIMESTAMP WITH TIME ZONE,
+            scheduled_time TIMESTAMP WITH TIME ZONE,
             module_name VARCHAR(255),
             mounted_on VARCHAR(255),
             v float,
             i float,
             status_integer INT,
+            temperature_cell float,
             axis_azimuth float,
             axis_tilt float,
-            temperature_air float,
-            relative_humidity float,
-            dew_point float,
-            relative_pressure float,
-            wind_speed float,
-            wind_speed_std float,
-            wind_direction float,
-            wind_direction_std float,
-            irradiance float,
-            PRIMARY KEY (date_time, module_name))"""
+            weather_id int,
+            constraint fk_module FOREIGN KEY (module_name) REFERENCES modules(module_name),
+            UNIQUE (date_time, module_name))"""
+            #   constraint for the module_name means that module_name must be present in the modules table to be able to add data.
+            #   constraint fk_weather FOREIGN KEY (weather_id) REFERENCES weather(weather_id), 
     if type == "pv_curve_test":
         command = """CREATE TABLE pv_curve_test(
             date_time TIMESTAMP WITH TIME ZONE,
@@ -475,18 +468,19 @@ def datatester():
     conn.commit()
 
 
-# deletetable('pv_point_test')
-# createtable('pv_point_test')
-# deletetable('pv_curve_test')
-# createtable('pv_curve_test')
-deletetable('weather')
-createtable('weather')
+# deletetable('pv_curve')
+# deletetable('pv_point')
+# createtable('pv_curve')
+# createtable('pv_point')
+# deletetable('weather')
+# createtable('weather')
 
 pastdataupload()
-# printtable('pv_point_test')
-#printtabletype('pv_point_test')
-#printtable('pv_curve_test')
-printtable('weather')
+#printtable('pv_point')
+# count_entries('pv_point')
+# count_entries('pv_curve')
+
+
 # downloadtable('export/point.csv', 'pv_point_test', "2026-05-18 16:33:50+02:00", "2026-12-20 16:00:50+02:00", ['My_solar_panel_1','P-0001'])
 # downloadtable('export/curve.csv', 'pv_curve_test', "2026-05-19 16:33:50+02:00", "2026-12-20 16:00:50+02:00", ['My_solar_panel_1','P-0001'])
 
