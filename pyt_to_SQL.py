@@ -41,9 +41,12 @@ def DB_initialize():
 def dailyloop():
     data_path_base, config, cur, conn = DB_initialize()
     while(1):
-        if datetime.datetime.now().hour==12: #When time is equal to 1 hour, upload the data from yesterday
-            adddata(data_path_base, config, cur, conn)
-            count_entries("curve", cur, conn)
+        if datetime.datetime.now().hour==15: #When time is equal to 1 hour, upload the data from yesterday
+            try:
+                adddata(data_path_base, config, cur, conn)
+                count_entries("curve", cur, conn)
+            except:
+                print('could not add data to database')
         time.sleep(60) # Wait for an hour and check again. This is done to reduce cpu load, so that it does not check unnecessarily quickly.
     closeconnection(conn)
              
