@@ -2,16 +2,9 @@
   "modules":
   [
     {
-      "module_id": "My_solar_panel_1",
+      "module_name": "My_solar_panel_1",
+      "mounted_on": "Egis-tracker",
       "tracer": "O001",
-      "sensors":
-      [
-        "T006",
-        "ambient temperature",
-        "POAI east",
-        "POAI west",
-        "rack tilt"
-      ],
       "interval_point": 10,
       "interval_curve": 30,
       "username": "Wessel_Oosterkamp",
@@ -19,19 +12,13 @@
       "area": 1.7,
       "technology": "Monocrystalline",
       "manufacturer": "Longli",
-      "disabled": false
+      "disabled": false,
+      "stopdate": null,
+      "load_mode": "mpp"
     },
     {
       "module_id": "My_solar_panel_1",
       "tracer": "O002",
-      "sensors":
-      [
-        "T006",
-        "ambient temperature",
-        "POAI east",
-        "POAI west",
-        "rack tilt"
-      ],
       "interval_point": 10,
       "interval_curve": 30,
       "username": "Wessel_Oosterkamp",
@@ -39,9 +26,25 @@
       "area": 1.7,
       "technology": "Perovskite",
       "manufacturer": "Longli",
-      "disabled": false
+      "disabled": false,
+      "stopdate": null,
+      "load_mode": "mpp"
     }
   ],
-  "data_destination": "config_2026-04-30T15-00-00",
+
+  
+  "Fixed-rack":
+    {
+      "axis_azimuth": 180,
+      "axis_tilt": 30
+    },
+
+  "Egis-tracker":
+    {
+      "axis_azimuth": 180,
+      "axis_tilt": 30
+      
+    },
+  "data_destination": "config_2026-04-30T15-00-00"
   "admins_email": "woosterkamp@tudelft.nl,wessel.oosterkamp.spam@gmail.com" 
 }
