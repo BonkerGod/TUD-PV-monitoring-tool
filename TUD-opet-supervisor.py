@@ -1,28 +1,24 @@
 import multiprocessing
 import datetime
 from time import sleep
-import csv
 from measurement_scheduling_tools import datetime_range, present, next_occurrence
 import json
 from pathlib import Path
-from OPET_control import OPETBus, OPET
-from serial_by_serial import device_name
-from serial import Serial
-from opet_supervisor_tools.opet_supervisor_tools import measurement_loop, writer_loop
+from opet_supervisor_tools import measurement_loop, writer_loop
 import logging
 import sys
 import traceback
 from zoneinfo import ZoneInfo
 from pyt_to_SQL import dailyloop
 
-weather_data = {'t_air': 23.0,
-            'humidity': 67.0,
-            'dewpoint': 24.0,
+weather_data = {'temperature_air': 23.0,
+            'relative_humidity': 67.0,
+            'dew_point': 24.0,
             'relative_pressure': 1.0,
             'wind_speed': 1.5,
-            'wind_speed_spread':0.5,
+            'wind_speed_std':0.5,
             'wind_direction':10.0 ,
-            'wind_direction_spread':1.5,
+            'wind_direction_std':1.5,
             'irradiance': 17.0
         }
 
@@ -51,7 +47,7 @@ log_path_base = Path(opet_supervisor_config['log_path_base'])
 with open(config_path / 'opet_info.json') as f:
     load_info = json.load(f)
 
-print(load_info)
+
 with open(config_path / 'opet_bus_info.json') as f:
     bus_info = json.load(f)
 
@@ -97,7 +93,7 @@ if __name__ == '__main__':
         processes = [
             multiprocessing.Process(
                 target=measurement_loop,
-                args=(bus, jobs, jobs_in_progress, results, bus_info, load_info, logger, maximum_wait, minimum_wait)
+                args=(bus, jobs, jobs_in_progress, results, bus_info, load_info, maximum_wait, minimum_wait)
             )
             for bus
             in buses_all
@@ -142,8 +138,50 @@ if __name__ == '__main__':
                 modules = [
                     x for x in config['modules']
                     if x['tracer'].startswith('O')
-                ]
-                
+                ]   
+
+                # Add set_load_mode jobs
+                for module in modules:
+                    #module is enabled, and stopdate has yet not passed
+                    if not module.get('disabled', True) and (module.get('stopdate') is None or datetime.datetime.strptime(module["stopdate"], "%Y-%m-%d").date() >= datetime.datetime.now().date()):  
+                        if module.get('load_mode'):
+                            scheduled_time = present() + datetime.timedelta(seconds=3)
+                            jobs[job_id] = {
+                                'scheduled_time': scheduled_time,
+                                'expiration_time': schedule_update_time,
+                                'opet_name': module['tracer'],
+                                'opet_bus': load_info[module['tracer']]['bus'],
+                                'opet_address': load_info[module['tracer']]['address'],
+                                'module_name': module['module_name'],
+                                'mounted_on': module['mounted_on'],
+                                'axis_azimuth': config[module['mounted_on']]['axis_azimuth'],
+                                'axis_tilt': config[module['mounted_on']]['axis_tilt'],
+                                'job_type': 'set_load_mode',
+                                'load_mode': module['load_mode'],
+                                'disabled':  module['disabled']
+                            }
+                            print(f'manager: {job_id} (set_load_mode: {module["load_mode"]}) scheduled for {scheduled_time.astimezone(TZ_LOCAL)}')
+                            job_id += 1
+
+                    else: #Module should be disabled
+                        scheduled_time = present()
+                        jobs[job_id] = {
+                            'scheduled_time': scheduled_time,
+                            'expiration_time': schedule_update_time,
+                            'opet_name': module['tracer'],
+                            'opet_bus': load_info[module['tracer']]['bus'],
+                            'opet_address': load_info[module['tracer']]['address'],
+                            'module_name': module['module_name'],
+                            'mounted_on': module['mounted_on'],
+                            'axis_azimuth': config[module['mounted_on']]['axis_azimuth'],
+                            'axis_tilt': config[module['mounted_on']]['axis_tilt'],
+                            'job_type': 'set_load_mode',
+                            'load_mode': 'disable',
+                            'disabled':  module['disabled']
+                        }
+                        print(f'manager: {job_id} (set_load_mode: disabled) scheduled for {scheduled_time.astimezone(TZ_LOCAL)}')
+                        job_id += 1                       
+
                 #Only schedule modules which are enabled
                 modules = [
                     x for x in modules
@@ -155,30 +193,7 @@ if __name__ == '__main__':
                     x for x in modules
                     if x["stopdate"] == None or 
                     datetime.datetime.strptime(x["stopdate"], "%Y-%m-%d").date() >= datetime.datetime.now().date()
-                ]           
-
-                # Add set_load_mode jobs
-                for module in modules:
-                    if module.get('load_mode'):
-                        scheduled_time = present()
-                        jobs[job_id] = {
-                            'scheduled_time': scheduled_time,
-                            'expiration_time': schedule_update_time,
-                            'opet_name': module['tracer'],
-                            'opet_bus': load_info[module['tracer']]['bus'],
-                            'opet_address': load_info[module['tracer']]['address'],
-                            'module_name': module['module_name'],
-                            'mounted_on': module['mounted_on'],
-                            'azimuth': module['azimuth'],
-                            'inclination': module['inclination'],
-                            'job_type': 'set_load_mode',
-                            'load_mode': module['load_mode'],
-                            'disabled':  module['disabled']
-                        }
-                        print(f'manager: {job_id} (set_load_mode: {module["load_mode"]}) scheduled for {scheduled_time.astimezone(TZ_LOCAL)}')
-                        job_id += 1
-
-
+                ]      
 
                 # Time to update the jobs list
                 if jobs:
@@ -221,8 +236,8 @@ if __name__ == '__main__':
                             'opet_address': load_info[module['tracer']]['address'],
                             'module_name': module['module_name'],
                             'mounted_on': module['mounted_on'],
-                            'azimuth': module['azimuth'],
-                            'inclination': module['inclination'],
+                            'axis_azimuth': config[module['mounted_on']]['axis_azimuth'],
+                            'axis_tilt': config[module['mounted_on']]['axis_tilt'],
                             'job_type': 'point',
                             'data_destination': config['data_destination']
                         }
@@ -260,8 +275,8 @@ if __name__ == '__main__':
                             'opet_address': load_info[module['tracer']]['address'],
                             'module_name': module['module_name'],
                             'mounted_on': module['mounted_on'],
-                            'azimuth': module['azimuth'],
-                            'inclination': module['inclination'],
+                            'axis_azimuth': config[module['mounted_on']]['axis_azimuth'],
+                            'axis_tilt': config[module['mounted_on']]['axis_tilt'],
                             'job_type': 'curve',
                             'data_destination': config['data_destination']
                         }
@@ -273,9 +288,8 @@ if __name__ == '__main__':
         #Handle keyboard interrupt
         except KeyboardInterrupt:
             print("Keyboard interrupt: shutting down")
-            #Let processes close cleanly
-            Serial.close()
+            #Kill processes
             for process in processes:
                 process.terminate()
             for process in processes:
-                process.join()            
+                process.join()  
