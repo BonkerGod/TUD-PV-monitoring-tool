@@ -274,7 +274,8 @@ class OPET:
             'main_loop_timer_overrun',
             'iv_data_ready',
             'voltage_range_hold_up',
-            'current_range_hold_up'
+            'current_range_hold_up',
+            'dissipation_temerature_alarm'
         ]
         status = dict.fromkeys(status_bits, 0)
         for n, key in enumerate(status_bits):
