@@ -76,12 +76,24 @@ def measurement_loop(bus, jobs, jobs_in_progress, results, bus_info, load_info, 
             # Consider the first remaining job in this_bus_job_ids
             job_id = this_bus_job_ids[0]
 
+            try:
+                job = jobs[job_id]
+            except KeyError:
+                logger.warning(f'bus {bus}: job {job_id}: job disappeared before processing')
+                this_bus_job_ids.pop(0)
+                continue            
+
+
             # Skip this job if it has reached or passed the expiration time
             if present() >= jobs[job_id]['expiration_time']:
                 logger.debug(f'bus {bus}: job {job_id}: job expired (skipping)')
                 # Pop this job from the shared jobs dict and this bus's id list
-                this_bus_job_ids.pop(this_bus_job_ids.index(job_id))
-                jobs.pop(job_id)
+                this_bus_job_ids.pop(0)
+                try:
+                    jobs.pop(job_id)
+                except KeyError:
+                    pass
+
                 # Return to the top of the loop
                 continue
             
@@ -97,8 +109,13 @@ def measurement_loop(bus, jobs, jobs_in_progress, results, bus_info, load_info, 
             
             # It's time to do this job. Pop it out of the shared jobs dict and
             # this bus's job id list.
-            this_bus_job_ids.pop(this_bus_job_ids.index(job_id))
-            job = jobs.pop(job_id)
+            this_bus_job_ids.pop(0)
+            
+            try: 
+                job = jobs.pop(job_id)
+            except KeyError:
+                logger.warning(f'bus {bus}: job {job_id}: job disappeared before execution')
+                continue
 
             # Delay until the right moment
             sleep(max(0, seconds_until_target))
@@ -238,7 +255,11 @@ def measurement_loop(bus, jobs, jobs_in_progress, results, bus_info, load_info, 
         bus_jobs_in_progress = dict(sorted(bus_jobs_in_progress.items(), key=lambda x: x[1]['scheduled_time']))
         for job_id, _ in bus_jobs_in_progress.items():
             # Pop a job out of the shared in-progress jobs dictionary
-            job = jobs_in_progress.pop(job_id)
+            try:
+                job = jobs_in_progress.pop(job_id)
+            except KeyError:
+                logger.warning(f'bus {bus}: job {job_id}: in-progress job disappeared before checking')
+                continue                
             # logger.debug(f'bus {bus}: job {job_id}: curve measurement (check if ready) {present() - job["scheduled_time"]} late')
             # Check if the measurement is complete
             if not opets[job['opet_address']].available:

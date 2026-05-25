@@ -127,7 +127,7 @@ if __name__ == '__main__':
                 # Add set_load_mode jobs
                 for module in modules:
                     #module is enabled, and stopdate has yet not passed
-                    if not module.get('disabled', True) and (module.get('stopdate') is None or datetime.datetime.strptime(module["stopdate"], "%Y-%m-%d").date() >= datetime.datetime.now().date()):  
+                    if not module.get('disabled', False) and (module.get('stopdate') is None or datetime.datetime.strptime(module["stopdate"], "%Y-%m-%d").date() >= datetime.datetime.now().date()):  
                         if module.get('load_mode'):
                             scheduled_time = present() + datetime.timedelta(seconds=3)
                             jobs[job_id] = {
