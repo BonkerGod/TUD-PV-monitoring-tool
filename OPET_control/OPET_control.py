@@ -274,7 +274,32 @@ class OPET:
             'main_loop_timer_overrun',
             'iv_data_ready',
             'voltage_range_hold_up',
-            'current_range_hold_up'
+            'current_range_hold_up',
+            'dissipation_temerature_alarm'
+        ]
+        status = dict.fromkeys(status_bits, 0)
+        for n, key in enumerate(status_bits):
+            if integer & (1 << n):
+                status[key] = 1
+        return status
+
+    def parse_system_iv_status_integer(integer):
+        '''Parses the system iv curve status integer, returned as the `status` item
+        into a human-readable
+        dictionary.
+
+        Can be called without a device connection:
+            OPET.parse_system_iv_status_integer(5)
+        '''
+        status_bits = [
+            'IV_Report_OverCurr_Bypass_Active',
+            'IV_Report_OverTemp_Active',
+            'IV_Report_BiasVolt_Fault',
+            'none',
+            'IV_Report_Volt_AI_Over_Load',
+            'IV_Report_Volt_AI_Under_R',
+            'IV_Report_Curr_AI_Over_R',
+            'IV_Report_Curr_AI_Under_R'
         ]
         status = dict.fromkeys(status_bits, 0)
         for n, key in enumerate(status_bits):
@@ -296,13 +321,22 @@ class OPET:
             'voltage_offset_internal',
             'voltage_bias',
             'temperature_1',
-            'temperature_2'
+            'temperature_2',
         ]
         measurement_time = datetime.now().astimezone()
         reply = self.send_verify('READ?')
-        reply = dict(zip(keys, reply))
-        for key in keys[1:]:
-            reply[key] = float(reply[key])
+        if len(reply) == 8: #If longer reply, module temp is available
+            keys.append('temperature_cell')
+            reply = dict(zip(keys, reply))
+            for key in keys[1:]:
+                reply[key] = float(reply[key])
+
+        else: #Temperature cell not available, set to none
+            reply = dict(zip(keys, reply))
+            for key in keys[1:]:
+                reply[key] = float(reply[key])
+            reply['temperature_cell'] = None
+
         reply['power'] = reply['voltage']*reply['current']
         reply['status_integer'] = int(reply['status_integer'])
         reply['measurement_time'] = measurement_time
@@ -431,10 +465,16 @@ class OPET:
         The measurement is updated using `start_iv_curve()`.'''
         result = {}
         reply = self.send_verify('IV:DATA?')
-        # TODO: parse this iv_status integer into a human-readable dictionary
         result['iv_status'] = int(reply[0])
-        result['voltage'] = [float(value) for value in reply[1::2]]
-        result['current'] = [float(value) for value in reply[2::2]]
+        if len(reply) % 2 ==1: #Uneven amount of results, no temp data
+            result['temperature_cell'] = None
+            result['voltage'] = [float(value) for value in reply[1::2]]
+            result['current'] = [float(value) for value in reply[2::2]]
+
+        else: #even amount of result, temp data available
+            result['temperature_cell'] = float(reply[1])
+            result['voltage'] = [float(value) for value in reply[2::2]]
+            result['current'] = [float(value) for value in reply[3::2]]
         return result
 
     @property
