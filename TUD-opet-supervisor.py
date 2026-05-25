@@ -5,6 +5,7 @@ from measurement_scheduling_tools import datetime_range, present, next_occurrenc
 import json
 from pathlib import Path
 from opet_supervisor_tools import measurement_loop, writer_loop
+from pyt_to_SQL import dailyloop
 import logging
 import sys
 import traceback
@@ -100,6 +101,14 @@ if __name__ == '__main__':
             )
         )
 
+        processes.append(
+            multiprocessing.Process(
+                target=dailyloop,
+                name='dailyloop'
+            )
+        )       
+        
+
         for process in processes:
             process.start()
 
@@ -129,39 +138,29 @@ if __name__ == '__main__':
                     process.join(timeout=1)
 
                     old_name = process.name
-
+                    
+                    #make new process based on name
                     if old_name.startswith('measurement-bus-'):
                         bus = old_name.removeprefix('measurement-bus-')
 
                         new_process = multiprocessing.Process(
                             target=measurement_loop,
-                            args=(
-                                bus,
-                                jobs,
-                                jobs_in_progress,
-                                results,
-                                bus_info,
-                                load_info,
-                                maximum_wait,
-                                minimum_wait,
-                                shutdown,
-                            ),
+                            args=(bus,jobs,jobs_in_progress,results,bus_info,load_info,maximum_wait,minimum_wait,shutdown),
                             name=old_name,
                         )
 
                     elif old_name == 'writer':
                         new_process = multiprocessing.Process(
                             target=writer_loop,
-                            args=(
-                                results,
-                                data_path_base,
-                                TZ_LOCAL,
-                                minimum_wait,
-                                shutdown,
-                            ),
+                            args=(results,data_path_base,TZ_LOCAL,minimum_wait,shutdown),
                             name='writer',
                         )
 
+                    elif old_name == 'dailyloop':
+                        new_process = multiprocessing.Process(
+                            target=dailyloop,
+                            name='dailyloop'
+                        )
                     else:
                         logger.error(f'unknown child process name {old_name}; cannot restart')
                         continue
