@@ -72,6 +72,8 @@ if __name__ == '__main__':
         jobs_in_progress = manager.dict({})
         job_id = 0
 
+        shutdown = manager.Event()
+
         # All possible buses. Each bus will get a process
         buses_all = set([
             load_info_datum['bus']
@@ -82,8 +84,9 @@ if __name__ == '__main__':
         processes = [
             multiprocessing.Process(
                 target=measurement_loop,
-                args=(bus, jobs, jobs_in_progress, results, bus_info, load_info, maximum_wait, minimum_wait)
-            )
+                args=(bus, jobs, jobs_in_progress, results, bus_info, load_info, maximum_wait, minimum_wait, shutdown),
+                name=f'measurement-bus-{bus}',
+            )       
             for bus
             in buses_all
         ]
@@ -92,7 +95,8 @@ if __name__ == '__main__':
         processes.append(
             multiprocessing.Process(
                 target=writer_loop,
-                args=(results, data_path_base, TZ_LOCAL, minimum_wait)
+                args=(results, data_path_base, TZ_LOCAL, minimum_wait,shutdown),
+                name='writer',
             )
         )
 
@@ -105,13 +109,67 @@ if __name__ == '__main__':
         )
         schedule_never_updated = True
         try:
-            while True:
+            while not shutdown.is_set():
                 if schedule_never_updated:
                     schedule_never_updated = False
                 else:
-                    while present() < schedule_update_time:
-                        sleep(minimum_wait)
+                    while present() < schedule_update_time and not shutdown.is_set():
+                        shutdown.wait(minimum_wait)
                     schedule_update_time += datetime.timedelta(seconds=schedule_interval)
+
+                #Check if processes are still active and restart inactive ones
+                for i, process in enumerate(processes):
+                    if shutdown.is_set():
+                        break
+                    
+                    if process.is_alive():
+                        continue
+                    
+                    logger.error(f'Process {process.name} died: restarting')
+                    process.join(timeout=1)
+
+                    old_name = process.name
+
+                    if old_name.startswith('measurement-bus-'):
+                        bus = old_name.removeprefix('measurement-bus-')
+
+                        new_process = multiprocessing.Process(
+                            target=measurement_loop,
+                            args=(
+                                bus,
+                                jobs,
+                                jobs_in_progress,
+                                results,
+                                bus_info,
+                                load_info,
+                                maximum_wait,
+                                minimum_wait,
+                                shutdown,
+                            ),
+                            name=old_name,
+                        )
+
+                    elif old_name == 'writer':
+                        new_process = multiprocessing.Process(
+                            target=writer_loop,
+                            args=(
+                                results,
+                                data_path_base,
+                                TZ_LOCAL,
+                                minimum_wait,
+                                shutdown,
+                            ),
+                            name='writer',
+                        )
+
+                    else:
+                        logger.error(f'unknown child process name {old_name}; cannot restart')
+                        continue
+                    
+                    new_process.start()
+                    processes[i] = new_process
+
+                    logger.info(f'restarted {new_process.name}')
 
                 # Reload the configuration
                 with open(config_path / 'measurement_config.json') as f:
@@ -269,11 +327,21 @@ if __name__ == '__main__':
                 print(f'manager: {len(jobs)} jobs are scheduled')
                 print(f'manager: {jobs.keys()}')
         
-        #Handle keyboard interrupt
+        #Handle Exceptions
+        except Exception:
+            logger.exception('shutting down child processes')
+            shutdown.set()   
         except KeyboardInterrupt:
-            print("Keyboard interrupt: shutting down")
-            #Kill processes
+            logger.info('shutting down child processes')
+            shutdown.set()               
+        finally:
+            shutdown.set()            
+            #Wait for processes to finish 
             for process in processes:
-                process.terminate()
-            for process in processes:
-                process.join()  
+                process.join(timeout=10)  
+            
+            #Otherwise terminate remaining processes
+            for process in processes:  
+                if process.is_alive():
+                    process.terminate()
+                    process.join(timeout=5)
