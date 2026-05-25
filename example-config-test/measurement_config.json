@@ -7,12 +7,31 @@
       "tracer": "O001",
       "interval_point": 10,
       "interval_curve": 30,
+      "username": "Wessel_Oosterkamp",
+      "user_email": "wessel.oosterkamp@gmail.com",
+      "area": 1.7,
+      "technology": "Monocrystalline",
+      "manufacturer": "Longli",
       "disabled": false,
       "stopdate": null,
       "load_mode": "mpp"
-
+    },
+    {
+      "module_id": "My_solar_panel_1",
+      "tracer": "O002",
+      "interval_point": 10,
+      "interval_curve": 30,
+      "username": "Wessel_Oosterkamp",
+      "user_email": "wessel.oosterkamp@gmail.com",
+      "area": 1.7,
+      "technology": "Perovskite",
+      "manufacturer": "Longli",
+      "disabled": false,
+      "stopdate": null,
+      "load_mode": "mpp"
     }
   ],
+
   
   "Fixed-rack":
     {
@@ -27,4 +46,5 @@
       
     },
   "data_destination": "config_2026-04-30T15-00-00"
+  "admins_email": "woosterkamp@tudelft.nl,wessel.oosterkamp.spam@gmail.com" 
 }
