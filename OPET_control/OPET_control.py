@@ -283,6 +283,30 @@ class OPET:
                 status[key] = 1
         return status
 
+    def parse_system_iv_status_integer(integer):
+        '''Parses the system iv curve status integer, returned as the `status` item
+        into a human-readable
+        dictionary.
+
+        Can be called without a device connection:
+            OPET.parse_system_iv_status_integer(5)
+        '''
+        status_bits = [
+            'IV_Report_OverCurr_Bypass_Active',
+            'IV_Report_OverTemp_Active',
+            'IV_Report_BiasVolt_Fault',
+            'none',
+            'IV_Report_Volt_AI_Over_Load',
+            'IV_Report_Volt_AI_Under_R',
+            'IV_Report_Curr_AI_Over_R',
+            'IV_Report_Curr_AI_Under_R'
+        ]
+        status = dict.fromkeys(status_bits, 0)
+        for n, key in enumerate(status_bits):
+            if integer & (1 << n):
+                status[key] = 1
+        return status
+
     @property
     def status(self):
         return self.parse_system_status_integer(self.status_integer)
