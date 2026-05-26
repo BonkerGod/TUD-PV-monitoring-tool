@@ -21,11 +21,11 @@ def init():
     It opens the config file, it loads the datapath and established the connection with the postgreSQL db and the MySQL db.
 
     Returns:
-        conn: The connection to the PostgreSQL database
-        cur: The cursor for the PostgreSQL database
-        mysql_conn: The connection to the MySQL database
-        mysql_cur: The cursor for the MySQL database
-        config (dict): The measurement config
+        conn: The connection to the PostgreSQL database.
+        cur: The cursor for the PostgreSQL database.
+        mysql_conn: The connection to the MySQL database.
+        mysql_cur: The cursor for the MySQL database.
+        config (dict): The measurement config.
         data_path_base: The base location of the files. 
     """
     # Open the documents with all the instructions.
@@ -83,18 +83,16 @@ def update_loop():
             add_data(date, conn, cur ,mysql_conn , mysql_cur, config, data_path_base)
             count_entries("pv_point", conn, cur)
             count_entries('pv_curve', conn, cur)
-        except: print("Data could not be added, maybe the file is not yet created or there is an error")
+        except Exception as e: 
+            print(f"Data could not be added, maybe the file is not yet created or there is an error: {e}")
+            conn.rollback()
         
         try:
-            add_weather_data(download_weather_last24hours(1, mysql_conn, mysql_cur))
+            add_weather_data(download_weather_last24hours(1, mysql_conn, mysql_cur), conn, cur)
         except:
             print('Weather data could not be added')
-        
-        if (datetime.datetime.now().minute == 5 and datetime.datetime.now().hour == 0): 
-            try:
-                date = str(datetime.date.today()-datetime.timedelta(days=1))
-                add_data(date, conn, cur, mysql_conn, mysql_cur, config, data_path_base)
-            except: print("Data could not be added, maybe the file is not yet created or there is an error")
+            conn.rollback()
+
         time.sleep(10) # Wait for an 10s and check again.
     db_close(conn)
 
@@ -104,15 +102,18 @@ def daily_loop():
     """
     conn, cur, mysql_conn, mysql_cur, config, data_path_base = init()
     while(1):
-        if datetime.datetime.now().hour == 17: #At midnight
+        if datetime.datetime.now().hour == 0: #At midnight
             try:
                 past_data_upload(conn, cur, mysql_conn, mysql_cur, config, data_path_base)
-            except: print("Data could not be added, maybe the file is not yet created or there is an error")
+            except: 
+                print("Data could not be added, maybe the file is not yet created or there is an error")
+                conn.rollback()
             
             try:
                 error_detect(conn, cur, config)
             except Exception as e:
                 print(f"Error detection failed with error: {e}")
+                conn.rollback()
         time.sleep(60*1) # Wait for an hour and check again.
     db_close(conn)    
     
@@ -121,22 +122,25 @@ def past_data_upload(conn, cur, mysql_conn, mysql_cur, config, data_path_base):
     """ This function adds all the data to the database from the past starting a the start_date.
 
     Args:
-        conn (_type_): The connection to the PostgreSQL database
-        cur (_type_): The cursor for the PostgreSQL database
-        mysql_conn (_type_): The connection to the MySQL database
-        mysql_cur (_type_): The cursor for the MySQL database
-        config (dict): The measurement config
+        conn (_type_): The connection to the PostgreSQL database.
+        cur (_type_): The cursor for the PostgreSQL database.
+        mysql_conn (_type_): The connection to the MySQL database.
+        mysql_cur (_type_): The cursor for the MySQL database.
+        config (dict): The measurement config.
         data_path_base (_type_): The base location of the files. 
     """
     start_date = datetime.date(2026, 5, 20)
     for date in (start_date + datetime.timedelta(days=n) for n in range((datetime.date.today() - start_date + datetime.timedelta(days=1)).days)):
         try:
             add_data(str(date), conn, cur, mysql_conn, mysql_cur , config, data_path_base)
-        except: print("Data could not be added, maybe the file is not yet created or there is an error")
+        except: 
+            print("Data could not be added, maybe the file is not yet created or there is an error")
+            conn.rollback()
     try:    
         add_weather_data(weather_all(start_date, mysql_conn, mysql_cur), conn, cur)
     except:
         print('Could not add the weather data')
+        conn.rollback()
              
 
 
@@ -187,7 +191,6 @@ def add_data(date, conn, cur, mysql_conn, mysql_cur, config, data_path_base):
     
     
     data = df.to_numpy()
-    print(data)
     point_insert = (
         "INSERT INTO pv_point (date_time, scheduled_time, module_name, mounted_on, v, i, status_integer, temperature_cell, axis_azimuth, axis_tilt, weather_id) "
         "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) "
@@ -551,7 +554,7 @@ def error_detect(conn, cur, config):
                  )
         point_measurements = False
         curve_measurements = False       
-    elif last_entry_point < (datetime.datetime.now(zoneinfo.ZoneInfo("Europe/Amsterdam")) - datetime.timedelta(days = 1)):
+    elif last_entry_point < (datetime.datetime.now(zoneinfo.ZoneInfo("Europe/Amsterdam")) - datetime.timedelta(days =1)):
         send_mail('The PV monitoring system database has not received data from point measurements in the past 24 hours \n'
                  +'Most recent data from point measurements: ' 
                  + str(last_entry_point), config
@@ -568,7 +571,6 @@ def error_detect(conn, cur, config):
     # If there are errors, send an email to the user of the OPET and the admin.
     # Send the number of errors in the last 24 hours and the total number of measurements in the last 24 hours.
     for module in config['modules']: 
-        print(module['module_name'])
         cur.execute("SELECT date_time, status_integer FROM pv_point WHERE date_time > %s AND module_name = %s ORDER BY date_time DESC", 
                     (str(datetime.datetime.now() - datetime.timedelta(days=1)),) + (module['module_name'],)
                     )
@@ -650,9 +652,10 @@ def db_close(conn):
     conn.close()
 
 
-conn, cur, mysql_conn, mysql_cur, config, data_path_base = init()
-delete_table('pv_point', conn, cur)
-create_table('pv_point', conn, cur)
-add_data('2026-05-26', conn, cur, mysql_conn, mysql_cur, config, data_path_base)
-print_table('pv_point', conn, cur)
-db_close(conn)
+# conn, cur, mysql_conn, mysql_cur, config, data_path_base = init()
+# delete_table('pv_point', conn, cur)
+# create_table('pv_point', conn, cur)
+# add_data('2026-05-26', conn, cur , mysql_conn, mysql_cur, config, data_path_base)
+# db_close(conn)
+
+daily_loop()
