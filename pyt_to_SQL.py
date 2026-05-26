@@ -96,6 +96,7 @@ def update_loop():
         time.sleep(10) # Wait for an 10s and check again.
     db_close(conn)
 
+
 def daily_loop():
     """ This loop uploads past data at midnight so that data that was missed still gets uploaded.
         It also checks for errors in the system.
@@ -142,7 +143,6 @@ def past_data_upload(conn, cur, mysql_conn, mysql_cur, config, data_path_base):
         print('Could not add the weather data')
         conn.rollback()
              
-
 
 def add_data(date, conn, cur, mysql_conn, mysql_cur, config, data_path_base):
     """ Adds the data on a specifc date to the 
@@ -242,6 +242,7 @@ def add_data(date, conn, cur, mysql_conn, mysql_cur, config, data_path_base):
         cur.execute(curve_insert, d)
     conn.commit()
     print('curve data added')
+ 
     
 def add_module_data(config, conn, cur):
     """ Adds the module data to the modules table
@@ -258,6 +259,7 @@ def add_module_data(config, conn, cur):
             "ON CONFLICT (module_name) DO NOTHING" # If there is already a module with the same name, the data will not be added.
         )
         cur.execute(module_insert, (module['module_name'], module['tracer'], module['username'], module['user_email'], module['area'], module['technology'], module['manufacturer']))
+
 
 def add_weather_data(weather_data, conn, cur):
     """ Add the weather data collected to the weather table
@@ -307,6 +309,7 @@ def print_table(type, conn, cur):
     for i in table_pv:
         print(i)
     conn.commit()
+ 
     
 def create_table(type, conn, cur):
     """ Creates a table of a specific type
@@ -417,6 +420,7 @@ def create_table(type, conn, cur):
     except Exception as e:
         conn.rollback()
         print(f"Table already exists or error: {e}")
+   
     
 def delete_table(type, conn, cur):
     """ Deletes an entire table and its contents. This cannot be undone and the table must recreated from scratch
@@ -466,6 +470,7 @@ def download_table(file, type, datetime1, datetime2, module_name, conn, cur):
     print(result)
     result.to_csv(file, index=False)
   
+  
 def print_table_type(type, conn, cur):
     """ Prints the types of each column of a specific table.
 
@@ -481,6 +486,7 @@ def print_table_type(type, conn, cur):
         print(i)
     conn.commit()
     
+    
 def retrieve_vector(conn, cur):
     """ Retrieves the voltage vector of the pv_curve
 
@@ -493,6 +499,7 @@ def retrieve_vector(conn, cur):
     for i in vector:
         print(i)
     conn.commit()
+    
     
 def send_mail(error, config, receiver_email = ''):
     """ Send an email with a specific message to a specific person and to admins.
@@ -525,6 +532,7 @@ def send_mail(error, config, receiver_email = ''):
         server.quit()
     except Exception as e:
         print(f"Error sending email: {e}")
+     
         
 def error_detect(conn, cur, config):
     """ This function detects error in the system such as: problems with the entire system and issues per module. 
@@ -618,6 +626,7 @@ def error_detect(conn, cur, config):
                          config, module['user_email']
                          )
 
+
 def data_tester(conn, cur):
     curve_insert = (
             "INSERT INTO weather (weather_time, temperature_air, relative_humidity, dew_point, relative_pressure, wind_speed, wind_speed_std, wind_direction, wind_direction_std, irradiance) "
@@ -642,6 +651,7 @@ def data_tester(conn, cur):
             )
     cur.execute(curve_insert)
     conn.commit()
+
 
 def db_close(conn):
     """ Close the connection with the PostgreSQL database
