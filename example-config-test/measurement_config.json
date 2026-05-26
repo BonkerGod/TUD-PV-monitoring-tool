@@ -15,20 +15,6 @@
       "disabled": false,
       "stopdate": null,
       "load_mode": "mpp"
-    },
-    {
-      "module_id": "My_solar_panel_2",
-      "tracer": "O002",
-      "interval_point": 10,
-      "interval_curve": 30,
-      "username": "Wessel_Oosterkamp",
-      "user_email": "wessel.oosterkamp@gmail.com",
-      "area": 1.7,
-      "technology": "Perovskite",
-      "manufacturer": "Longli",
-      "disabled": false,
-      "stopdate": null,
-      "load_mode": "mpp"
     }
   ],
 
