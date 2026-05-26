@@ -4,9 +4,15 @@ import pandas as pd
 
 
 def mysql_init():
+    """This function connects to the MySQL database
+
+    Returns:
+        conn: The MySQL database connection
+        cursor: The cursor of the MySQL database
+    """
     try:
         conn = mysql.connector.connect(
-            host="100.98.143.82",
+            host="100.98.143.82",   #IP address of the MySQL server
             user="OPET",
             password="npjust",
             database="pvmonitoring",
@@ -18,28 +24,48 @@ def mysql_init():
         return conn, cursor
     except:
         print('Failed to connect to mysql db')
-# cursor.execute("SELECT * FROM results;")
-# print(cursor.fetchone())
 
-# cursor.execute("SELECT * FROM weather ORDER BY RecTime DESC LIMIT 5 ;")
-# for row in cursor:
-#     print(row)
     
 def download_weather_last24hours(days, conn, cursor):
+    """ Retrieves the weather data from the past 24 hours.
+
+    Args:
+        days (int): should be 1, but can be changed so it isn't 24 hours
+        conn (_type_): The connection to the MySQL database
+        cursor (_type_): The connection to the MySQL database
+    Returns:
+        list: Return a list containing all measurements from the past 24 hours.
+    """
     cursor.execute("SELECT * FROM weather WHERE RecTime > %s;", (datetime.datetime.now() - datetime.timedelta(days=days),))
     weather_data = cursor.fetchall()
-    # for row in weather_data:
-    #     print(row)
-    
     return weather_data
 
 def weather_last(conn, cursor):
+    """Gives the measurement containing weather_id and the weather_time
+
+    Args:
+        conn (_type_): The connection to the MySQL database
+        cursor (_type_): The cursor for the MySQL database
+
+    Returns:
+        last (list): Last measurement containing the weather_id and the datetime.
+    """
     cursor.execute("SELECT idWeather, RecTime FROM weather ORDER BY RecTime DESC LIMIT 1")
     last = cursor.fetchone()
     return last
 
-#still finish this
+
 def weather_all(startdate, conn, cursor):
+    """ Filter for all the weather measurements since the startdate of the new database
+
+    Args:
+        startdate (datetime): Startdate of the database, example: datetime.date(2026, 5, 20)
+        conn (_type_): The connection to the MySQL database
+        cursor (_type_): The cursor for the MySQL database
+
+    Returns:
+        _type_: _description_
+    """
     cursor.execute("SELECT * FROM weather WHERE RecTime > %s;", (pd.to_datetime(startdate),))
     data = cursor.fetchall()
     return data
@@ -47,3 +73,4 @@ def weather_all(startdate, conn, cursor):
 def mysql_close(conn):
     conn.close()
     
+        
