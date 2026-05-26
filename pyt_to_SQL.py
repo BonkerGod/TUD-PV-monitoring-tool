@@ -58,6 +58,8 @@ def init():
         mysql_conn, mysql_cur = mysql_init()
     except:
         print('Weather database not connected succesfully')
+        mysql_conn = None
+        mysql_cur = cur
 
     # Create pgvector extension if it doesn't exist
     try:
@@ -102,7 +104,7 @@ def daily_loop():
     """
     conn, cur, mysql_conn, mysql_cur, config, data_path_base = init()
     while(1):
-        if datetime.datetime.now().hour == 0: #At midnight
+        if datetime.datetime.now().hour == 17: #At midnight
             try:
                 past_data_upload(conn, cur, mysql_conn, mysql_cur, config, data_path_base)
             except: print("Data could not be added, maybe the file is not yet created or there is an error")
@@ -111,7 +113,7 @@ def daily_loop():
                 error_detect(conn, cur, config)
             except Exception as e:
                 print(f"Error detection failed with error: {e}")
-        time.sleep(60*60*1) # Wait for an hour and check again.
+        time.sleep(60*1) # Wait for an hour and check again.
     db_close(conn)    
     
        
@@ -168,18 +170,24 @@ def add_data(date, conn, cur, mysql_conn, mysql_cur, config, data_path_base):
     )
     df = pd.read_csv(data_file_path, delimiter=",")
     
-    
-    df['weather_id'] = None # add weather_id column with None values, this is done because the weather data is not always available, so the weather_id will be added later when the weather data is available, and by adding the column with None values, the data can still be added to the database without having to worry about missing weather data.
-    newest = weather_last(mysql_conn, mysql_cur)
+    # Add weather_id column with None values, this is done because the weather data is not always available, so the weather_id will be added later when the weather data is available, .
+    # By adding the column with None values, the data can still be added to the database without having to worry about missing weather data.
+    df['weather_id'] = None 
     df['date_time']=pd.to_datetime(df['date_time'])
-    df['scheduled_time'] = pd.to_datetime(df['scheduled_time'])
-    UTC_PLUS_2 = datetime.timezone(datetime.timedelta(hours=2))
-    newest_time = pd.to_datetime(newest[1]).replace(tzinfo=UTC_PLUS_2)
-    if (df['date_time'] < newest_time + datetime.timedelta(minutes=5)).any():   #Only add data when there is a weather id from the previous 5 minutes.
-        df['weather_id']=newest[0]
+    df['scheduled_time'] = pd.to_datetime(df['scheduled_time'])    
+    try:
+        newest = weather_last(mysql_conn, mysql_cur)
+        UTC_PLUS_2 = datetime.timezone(datetime.timedelta(hours=2))
+        newest_time = pd.to_datetime(newest[1]).replace(tzinfo=UTC_PLUS_2)
+        if (df['date_time'] < newest_time + datetime.timedelta(minutes=5)).any():   #Only add data when there is a weather id from the previous 5 minutes.
+            df['weather_id']=newest[0]
+    except:
+        print('weather_id could not be linked')
+        conn.rollback()
     
     
     data = df.to_numpy()
+    print(data)
     point_insert = (
         "INSERT INTO pv_point (date_time, scheduled_time, module_name, mounted_on, v, i, status_integer, temperature_cell, axis_azimuth, axis_tilt, weather_id) "
         "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) "
@@ -188,6 +196,7 @@ def add_data(date, conn, cur, mysql_conn, mysql_cur, config, data_path_base):
     for d in data:
         cur.execute(point_insert, d)
     conn.commit()
+    print('point data added')
     
     # Curve data add
     #Open document
@@ -207,13 +216,17 @@ def add_data(date, conn, cur, mysql_conn, mysql_cur, config, data_path_base):
     
     #Assigning weather_id to the last weather measurement in the last 5 minutes.
     df['weather_id'] = None
-    newest = weather_last(mysql_conn, mysql_cur)
     df['date_time']=pd.to_datetime(df['date_time'])
     df['scheduled_time'] = pd.to_datetime(df['scheduled_time'])    
-    UTC_PLUS_2 = datetime.timezone(datetime.timedelta(hours=2))
-    newest_time = pd.to_datetime(newest[1]).replace(tzinfo=UTC_PLUS_2)
-    if (df['date_time'] < newest_time + datetime.timedelta(minutes=5)).any():   
-        df['weather_id']=newest[0]
+    try:
+        newest = weather_last(mysql_conn, mysql_cur)
+        UTC_PLUS_2 = datetime.timezone(datetime.timedelta(hours=2))
+        newest_time = pd.to_datetime(newest[1]).replace(tzinfo=UTC_PLUS_2)
+        if (df['date_time'] < newest_time + datetime.timedelta(minutes=5)).any():   
+            df['weather_id']=newest[0]
+    except:
+        print('weather_id could not be linked')
+        conn.rollback()
     
     # Insert the curve data into the database
     data = df.to_numpy()
@@ -225,6 +238,7 @@ def add_data(date, conn, cur, mysql_conn, mysql_cur, config, data_path_base):
     for d in data:
         cur.execute(curve_insert, d)
     conn.commit()
+    print('curve data added')
     
 def add_module_data(config, conn, cur):
     """ Adds the module data to the modules table
@@ -635,7 +649,10 @@ def db_close(conn):
     """
     conn.close()
 
-conn, cur, mysql_conn, mysql_cur, config, data_base_path = init()
-add_data("2026-05-20", conn, cur, mysql_conn, mysql_cur, config, data_base_path)
 
+conn, cur, mysql_conn, mysql_cur, config, data_path_base = init()
+delete_table('pv_point', conn, cur)
+create_table('pv_point', conn, cur)
+add_data('2026-05-26', conn, cur, mysql_conn, mysql_cur, config, data_path_base)
+print_table('pv_point', conn, cur)
 db_close(conn)
