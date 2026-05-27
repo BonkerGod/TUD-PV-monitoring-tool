@@ -23,6 +23,7 @@ Things that need to be installed on the server to run the system:
 * `pip install pandas`
 * `pip install serial`
 * `pip install mysql-connector-python`
+* `pip install setuptools`
 
 When all these programs are installed, and the database has been set up using the PostgreSQL installer, the program 'pyt_to_SQL.py' can be used to continue the setup. The tables for data storage can be created using the function `create_table(type, conn, cur)`. This needs to be done for the types: 'pv_point', 'pv_curve', 'weather', and 'modules'. Running the following code does that: 
 ```python
@@ -40,13 +41,14 @@ When you have completed all previous steps, you can start using the database by 
 
 ## File descriptions
 Here are some high-level descriptions of each document. To fully understand the code, you will have to look into the Python file for more specific explanations. 
+
 <details>
-    <summary>TUD-opet-supervisor.py</summary>
+    <summary><b>TUD-opet-supervisor.py</b></summary>
     <p>This document is the heart of the operation. It schedules functions in the code. It plans the measurements and plans the updates of the database.</p>
 </details>
 
 <details>
-    <summary>pyt_to_SQL.py</summary>
+    <summary><b>pyt_to_SQL.py</b></summary>
     <p>
       This document contains all the operations that update the PostgreSQL database. <br><br>
       Firstly, to do any operations with the database, a connection needs to be made. This is done using <code>init()</code>. After using the program, it needs to be shut down <code>db_close(conn)</code> <br>
@@ -58,7 +60,7 @@ Here are some high-level descriptions of each document. To fully understand the 
 </details>
 
 <details>
-    <summary>Weatherdb_to_pyth.py</summary>
+    <summary><b>Weatherdb_to_pyth.py</b></summary>
     <p>
       This document contains various ways of extracting information from the weather database that runs on MySQL. <br><br>
       Firstly, it again has to establish a connection with the MySQL database <code>mysql_init()</code> and at the end we use <code>mysql_close(conn)</code> <br>
@@ -67,5 +69,27 @@ Here are some high-level descriptions of each document. To fully understand the 
 </details>
 
 <details>
-  <summary></summary>
+  <summary><b>opet-supervisor-config.json</b></summary>
+    <p>This document contains the information on where the data, logs, and configurations can be found.</p>
+</details>
+
+<details>
+    <summary><b>test_log</b></summary>
+    <p>This folder contains the data from the measurements and stores the log files.</p>
+</details>
+
+<details>
+    <summary><b>example-config-test</b></summary>
+    <p>This folder contains all the settings that need to be set up when a new solar module is connected. <br>
+        In <code>measurement_config.json</code>, data about the solar module must be added. <br>
+        In <code>opet_bus_info.json</code>, the serial number of the USB to RS-485 adapter needs to be listed. This serial number can be found using <code>port_finder.py</code></p>. If you have multiple USB adapters, you need to do this multiple times and start at 'a', 'b', 'c',... <br>
+    Lastly, the <code>opet_info.json</code> needs to be set up. This contains the tracers that need to be named according to the following format 'O001', where the number increases with the tracer. The rest contains the bus that the tracer is on and the address of the OPET.
+</details>
+
+<details>
+    <summary><b>opet_supervisor_tools</b></summary>
+    <p>This folder contains documents that help the operation of the <code>TUD-opet-supervisor.py</code>
+        In <code>opet_supervisor_tools.py</code>, the code that performs the point and curve measurements can be found, and the program that writes the collected data to a CSV file. <br>
+        In <code>port_finder.py</code>, you can find the code that enables you to find the port of your USB adapter.
+    </p>
 </details>
