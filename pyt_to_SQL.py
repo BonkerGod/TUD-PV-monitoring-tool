@@ -15,26 +15,39 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from Weatherdb_to_pyth import download_weather_last24hours, mysql_init, mysql_close, weather_last, weather_all
+import logging
+
+logger = logging.getLogger(__name__)
 
 def init():
     """This program sets the entire program up. 
     It opens the config file, it loads the datapath and established the connection with the postgreSQL db and the MySQL db.
 
     Returns:
-        conn: The connection to the PostgreSQL database.
-        cur: The cursor for the PostgreSQL database.
-        mysql_conn: The connection to the MySQL database.
-        mysql_cur: The cursor for the MySQL database.
+        conn (_type_): The connection to the PostgreSQL database.
+        cur (_type_): The cursor for the PostgreSQL database.
+        mysql_conn (_type_): The connection to the MySQL database.
+        mysql_cur (_type_): The cursor for the MySQL database.
         config (dict): The measurement config.
-        data_path_base: The base location of the files. 
+        data_path_base (_type_): The base location of the files. 
     """
     # Open the documents with all the instructions.
     with open('opet-supervisor-config.json') as f:
         opet_supervisor_config = json.load(f)
     data_path_base = Path(opet_supervisor_config['data_path_base'])
     config_path = Path(opet_supervisor_config['config_path'])
+    log_path_base = Path(opet_supervisor_config['log_path_base'])
     with open(config_path / 'measurement_config.json') as f:
         config = json.load(f)
+
+    log_path_base.mkdir(parents=True, exist_ok=True)
+    logger = logging.getLogger(__name__)
+    logging.basicConfig(
+    filename=(log_path_base / 'opet-supervisor.log'),
+    encoding='utf-8',
+    level=logging.DEBUG,
+    format='%(asctime)s %(message)s'
+)
 
     # Make connection with the PostgreSQL database.
     DB_NAME = "postgres"
@@ -49,17 +62,21 @@ def init():
                                 host=DB_HOST,
                                 port=DB_PORT)
         print("Database connected succefully")
-    except:
+        logging.debug(f"Database connected succesfully")
+    except Exception as e:
         print("Database not connected succesfully")
+        logging.error(f"Database not connected succesfully. Error: {e}")
     cur = conn.cursor()
     
     # Make connection to the MySQL database.
     try:
         mysql_conn, mysql_cur = mysql_init()
-    except:
+        logging.debug(f"Weather database succesfully connected")
+    except Exception as e:
         print('Weather database not connected succesfully')
+        logging.error(f"Weather database not connected succesfully. Error: {e}")
         mysql_conn = None
-        mysql_cur = cur
+        mysql_cur = None
 
     # Create pgvector extension if it doesn't exist
     try:
@@ -69,6 +86,7 @@ def init():
     except Exception as e:
         print(f"Could not create pgvector extension: {e}")
         print("Make sure pgvector is installed in PostgreSQL")
+        
         
     return conn, cur, mysql_conn, mysql_cur, config, data_path_base
 
@@ -85,12 +103,14 @@ def update_loop():
             count_entries('pv_curve', conn, cur)
         except Exception as e: 
             print(f"Data could not be added, maybe the file is not yet created or there is an error: {e}")
+            logging.error(f"Data could not be added, maybe the file is not yet created or there is an error: {e}")
             conn.rollback()
         
         try:
             add_weather_data(download_weather_last24hours(1, mysql_conn, mysql_cur), conn, cur)
-        except:
-            print('Weather data could not be added')
+        except Exception as e:
+            print(f"Weather data could not be added. Error: {e}")
+            logging.error(f"Weather data could not be added. Error {e}")
             conn.rollback()
 
         time.sleep(10) # Wait for an 10s and check again.
@@ -103,17 +123,19 @@ def daily_loop():
     """
     conn, cur, mysql_conn, mysql_cur, config, data_path_base = init()
     while(1):
-        if datetime.datetime.now().hour == 0: #At midnight
+        if datetime.datetime.now().hour == 10: #At midnight
             try:
                 past_data_upload(conn, cur, mysql_conn, mysql_cur, config, data_path_base)
-            except: 
+            except Exception as e: 
                 print("Data could not be added, maybe the file is not yet created or there is an error")
+                logging.error(f"Past data could not be added. Error: {e}")
                 conn.rollback()
             
             try:
                 error_detect(conn, cur, config)
             except Exception as e:
                 print(f"Error detection failed with error: {e}")
+                logging.error(f"Error detection failed with error: {e}")
                 conn.rollback()
         time.sleep(60*1) # Wait for an hour and check again.
     db_close(conn)    
@@ -134,13 +156,15 @@ def past_data_upload(conn, cur, mysql_conn, mysql_cur, config, data_path_base):
     for date in (start_date + datetime.timedelta(days=n) for n in range((datetime.date.today() - start_date + datetime.timedelta(days=1)).days)):
         try:
             add_data(str(date), conn, cur, mysql_conn, mysql_cur , config, data_path_base)
-        except: 
+        except Exception as e: 
             print("Data could not be added, maybe the file is not yet created or there is an error")
+            logger.debug(f"Date could not be added on {date}. Error: {e}")
             conn.rollback()
     try:    
         add_weather_data(weather_all(start_date, mysql_conn, mysql_cur), conn, cur)
-    except:
+    except Exception as e:
         print('Could not add the weather data')
+        logger.error(f"Weather data could not be added. Error: {e}")
         conn.rollback()
              
 
@@ -276,7 +300,8 @@ def add_weather_data(weather_data, conn, cur):
     )
     df = pd.DataFrame(weather_data, columns=['weather_id', 'weather_time', 'temperature_air', 'relative_humidity', 'dew_point', 'relative_pressure', 'wind_speed', 'wind_speed_std', 'wind_direction', 'wind_direction_std', 'irradiance', 'IrrDirect', 'IrrDiffused', 'ETotal', 'EDirect', 'EDiffused'])
     df = df.drop(['IrrDirect', 'IrrDiffused', 'ETotal', 'EDirect', 'EDiffused'], axis=1) # drop the columns that are not needed.
-    for d in df:
+    result = df.to_numpy()
+    for d in result:
         cur.execute(weather_insert, d) # the first column is the weather_id which is automatically generated by the database and is not needed to be added.
     conn.commit()
 
@@ -550,8 +575,8 @@ def error_detect(conn, cur, config):
     last_entry_point = cur.fetchone()[0]
     cur.execute("SELECT date_time FROM pv_curve ORDER BY date_time DESC LIMIT 1")
     last_entry_curve = cur.fetchone()[0]
-    print(last_entry_curve)
-    print(datetime.datetime.now(zoneinfo.ZoneInfo("Europe/Amsterdam")))
+    #print(last_entry_curve)
+    #print(datetime.datetime.now(zoneinfo.ZoneInfo("Europe/Amsterdam")))
     
     # Check if curve and/or point measurements are being received
     if ((last_entry_point < (datetime.datetime.now(zoneinfo.ZoneInfo("Europe/Amsterdam")) - datetime.timedelta(days=1))) and 
@@ -663,9 +688,11 @@ def db_close(conn):
 
 
 # conn, cur, mysql_conn, mysql_cur, config, data_path_base = init()
-# delete_table('pv_point', conn, cur)
-# create_table('pv_point', conn, cur)
-# add_data('2026-05-26', conn, cur , mysql_conn, mysql_cur, config, data_path_base)
+# delete_table('weather', conn, cur)
+# create_table('weather', conn, cur)
+# # add_data('2026-05-26', conn, cur , mysql_conn, mysql_cur, config, data_path_base)
+# add_weather_data(download_weather_last24hours(1, mysql_conn, mysql_cur), conn, cur)
+# print_table('weather', conn, cur)
 # db_close(conn)
+update_loop()
 
-daily_loop()
