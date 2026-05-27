@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 import ast
-from OPET_control import OPET
+
 
 #Plots all point measurements from csv file
 def plot_points(data_path_point):
@@ -55,22 +55,22 @@ def plot_curve(data_path_curve):
     fig, ax = plt.subplots(figsize=(8, 6), constrained_layout=True)
 
     for _, row in df_curve.head(3).iterrows():
-        voltage_mV = [v * 1000 for v in row["v"]]
-        current_uA = [i * 1_000_000 for i in row["i"]]
+        voltage_V = [v for v in row["v"]]
+        current_A = [i for i in row["i"]]
 
         label = row["date_time"].strftime("%H:%M:%S")
 
         ax.plot(
-            voltage_mV,
-            current_uA,
+            voltage_V,
+            current_A,
             marker="o",
             linewidth=1,
             markersize=3,
             label=label,
         )
 
-    ax.set_xlabel("Voltage [mV]")
-    ax.set_ylabel("Current [µA]")
+    ax.set_xlabel("Voltage [V]")
+    ax.set_ylabel("Current [A]")
     ax.set_title("First 3 IV Curves")
     ax.grid(True, alpha=0.3)
     ax.legend(title="Measurement time")
@@ -83,8 +83,4 @@ plot_points(data_path_point)
 
 data_path_curve = "test_log/data/2026-05-20/config_2026-04-30T15-00-00/opet_results_curve_2026-05-20.csv"
 plot_curve(data_path_curve)
-
-#Checking status integers
-print(OPET.parse_system_status_integer(1)) #Point
-print(OPET.parse_system_iv_status_integer(0)) #Curve 
 
