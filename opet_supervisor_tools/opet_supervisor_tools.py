@@ -1,4 +1,3 @@
-from time import sleep
 import csv
 from measurement_scheduling_tools import present
 from OPET_control import OPETBus, OPET, OPETTimeoutError, UnexpectedReplyError
@@ -10,12 +9,32 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def measurement_loop(bus, jobs, jobs_in_progress, results, bus_info, load_info, maximum_wait, minimum_wait, shutdown):
-    '''In an infinite loop, do the jobs in `dict` that are assigned to `bus`
-    and store the `results`.'''
+def measurement_loop(bus, jobs, jobs_in_progress, results, bus_info, load_info, maximum_wait, minimum_wait, shutdown_event):
+    """ Run scheduled measurement jobs for one OPET bus. This loop handles jobs assigned
+        to one bus and stores completed measurements in the shared results dictionary.
+    
+    Args:
+        bus (str): Identifier of the OPET bus
+        jobs (DictProxy): Shared dictionary containing information of all scheduled jobs
+        jobs_in_progress (DictProxy): Shared dictionary containing the curve jobs that are in progress
+        results (DictProxy): Shared dictionary containg the results for the writer
+        bus_info (dict): Dictionary containing the adapter serial number connected to the bus
+        load_info (dict): Dictionary containing to which bus each OPET is connected to 
+        maximum_wait (float): Maximum number of seconds into the future that
+            it will wait for a job before returning to the main loop.
+        minimum_wait (float): Minimum delay before returning the main loop 
+        shutdown_event (multiprocessing.Event): In case of shutting down this event is set
+    """
+
     def initialize_bus():
-        # Set up the OPET bus serial communication, returning a list of
-        # individual OPETs. Returns None if something goes wrong.
+        """Set up the OPET bus serial communication
+
+        Returns:
+            Tuple : a list of individual OPETs and
+                the serial port. Returns None, None if something goes wrong.
+
+        """
+
         try:
             serial_port_name = device_name(bus_info[bus]['adapter_serial_number'])[0]
             serial_port = Serial(serial_port_name, baudrate=200000, timeout=1)
@@ -50,13 +69,13 @@ def measurement_loop(bus, jobs, jobs_in_progress, results, bus_info, load_info, 
         opets, serial_port = initialize_bus()
 
         # Do jobs as they are scheduled and become due
-        while not shutdown.is_set():
+        while not shutdown_event.is_set():
             if opets is None:
                 # Attempt to set up the bus
                 opets, serial_port = initialize_bus()
                 # If it failed, wait before retrying
                 if opets is None:
-                    shutdown.wait(5)
+                    shutdown_event.wait(5)
                 # Return to the top of the loop
                 continue
             
@@ -120,8 +139,8 @@ def measurement_loop(bus, jobs, jobs_in_progress, results, bus_info, load_info, 
                     continue
 
                 # Delay until the right moment
-                if shutdown.wait(max(0, seconds_until_target)):
-                    break #If shutdown is set, break the loop
+                if shutdown_event.wait(max(0, seconds_until_target)):
+                    break # If shutdown is set, break the loop
 
                 # Check if this OPET is available:
                 if not opets[job['opet_address']].available:
@@ -135,9 +154,9 @@ def measurement_loop(bus, jobs, jobs_in_progress, results, bus_info, load_info, 
                     continue
 
                 # Handle the job types differently
-                #Set load mode, also enable output if disable is false
+                # Set load mode, also enable output if disable is false
                 if job['job_type'] == 'set_load_mode':
-                    #mppt
+                    # mppt
                     if job["load_mode"] == 'mpp':
                         try:
                             opets[job['opet_address']].mode = 'mppt'
@@ -149,7 +168,7 @@ def measurement_loop(bus, jobs, jobs_in_progress, results, bus_info, load_info, 
                         except Exception as e:
                             logger.error(f'bus {bus}: job {job_id}: Unexpected error in `set_load_mode` on {job["opet_name"]}; {e}')  
 
-                    #voc
+                    # voc
                     elif job["load_mode"] == 'voc':
                         try:
                             opets[job['opet_address']].mode = 'voc'
@@ -161,7 +180,7 @@ def measurement_loop(bus, jobs, jobs_in_progress, results, bus_info, load_info, 
                         except Exception as e:
                             logger.error(f'bus {bus}: job {job_id}: Unexpected error in `set_load_mode` on {job["opet_name"]}; {e}')  
 
-                    #isc
+                    # isc
                     elif job["load_mode"] == 'isc':
                         try:
                             opets[job['opet_address']].mode = 'isc'
@@ -173,7 +192,7 @@ def measurement_loop(bus, jobs, jobs_in_progress, results, bus_info, load_info, 
                         except Exception as e:
                             logger.error(f'bus {bus}: job {job_id}: Unexpected error in `set_load_mode` on {job["opet_name"]}; {e}')  
 
-                    #disable output
+                    # disable output
                     elif job["load_mode"] == 'disable':
                         try:
                             opets[job['opet_address']].output_enabled = False
@@ -181,10 +200,10 @@ def measurement_loop(bus, jobs, jobs_in_progress, results, bus_info, load_info, 
                             logger.error(f'bus {bus}: job {job_id}: OPETTimeoutError in disable OPET on {job["opet_name"]}; Got an empty reply on the OPET bus')
                         except UnexpectedReplyError:
                             logger.error(f'bus {bus}: job {job_id}: UnexpectedReplyError in `set_load_mode` on {job["opet_name"]}; Got an unexpected reply the OPET bus')  
-                        except Exception:
-                            logger.error(f'bus {bus}: job {job_id}: Unexpected error in `set_load_mode` on {job["opet_name"]};')  
+                        except Exception as e:
+                            logger.error(f'bus {bus}: job {job_id}: Unexpected error in `set_load_mode` on {job["opet_name"]}; {e}')  
 
-                #Do point measurement
+                # Do point measurement
                 elif job['job_type'] == 'point':
                     # Point measurements are requested and recorded in immediate
                     # succession
@@ -241,8 +260,8 @@ def measurement_loop(bus, jobs, jobs_in_progress, results, bus_info, load_info, 
                         logger.error(f'bus {bus}: job {job_id}: OPETTimeoutError in start_iv_curve property on load {job["opet_name"]}; Got an empty reply on the OPET bus')
                     except UnexpectedReplyError:
                         logger.error(f'bus {bus}: job {job_id}: UnexpectedReplyError in start_iv_curve property on load {job["opet_name"]}; Got an unexpected reply the OPET bus')  
-                    except Exception:
-                        logger.error(f'bus {bus}: job {job_id}: Unexpected error in start_iv_curve property on load {job["opet_name"]};')  
+                    except Exception as e:
+                        logger.error(f'bus {bus}: job {job_id}: Unexpected error in start_iv_curve property on load {job["opet_name"]}; {e}')  
 
             # Now check whether the jobs in progress are complete, reading back
             # results as they become available
@@ -320,7 +339,7 @@ def measurement_loop(bus, jobs, jobs_in_progress, results, bus_info, load_info, 
                     # We popped this job out of the dict, now we put it back
                     jobs_in_progress[job_id] = job
                     continue
-            shutdown.wait(minimum_wait)
+            shutdown_event.wait(minimum_wait)
 
     except Exception:
         logger.exception(f'bus {bus}: Exception in measurement_loop')
@@ -334,7 +353,17 @@ def measurement_loop(bus, jobs, jobs_in_progress, results, bus_info, load_info, 
                 logger.exception(f'bus {bus}: failed to close serial port')
 
 
-def writer_loop(results, data_path_base, TZ_LOCAL, minimum_wait, shutdown):
+def writer_loop(results, data_path_base, tz_local, minimum_wait, shutdown_event):
+    """Writer loop that writes the contents of results into the .csv file
+
+    Args:
+        results (DictProxy): contains all the recent results for storing
+        dath_path (Path): Path to where the data should be stored
+        TZ_LOCAL (ZoneInfo): Timezone information
+        MINIMUM_WAIT (float): Infinite loops with nothing to do will delay this much before checking again
+        shutdown_event (multiprocessing.Event): In case of shutting down this event is set
+    """
+
     headers = {
         'point': [
             'date_time',  
@@ -364,14 +393,14 @@ def writer_loop(results, data_path_base, TZ_LOCAL, minimum_wait, shutdown):
     }
 
     try:
-        while not shutdown.is_set() or results: #Write until no more results and shutdown is set
+        while not shutdown_event.is_set() or results: # Write until no more results and shutdown is set
             while results:
                 try: 
                     result = results.pop(next(iter(results.keys())))
                 except KeyError:
                     continue
 
-                measurement_date = result['date_time'].astimezone(TZ_LOCAL).date().isoformat()
+                measurement_date = result['date_time'].astimezone(tz_local).date().isoformat()
                 data_path = data_path_base / measurement_date / result['data_destination']
                 data_file_path = (
                     data_path / (
@@ -383,8 +412,8 @@ def writer_loop(results, data_path_base, TZ_LOCAL, minimum_wait, shutdown):
                 )
 
                 # Convert datetimes to ISO 8601 strings
-                result['date_time'] = result['date_time'].astimezone(TZ_LOCAL).isoformat()
-                result['scheduled_time'] = result['scheduled_time'].astimezone(TZ_LOCAL).isoformat()
+                result['date_time'] = result['date_time'].astimezone(tz_local).isoformat()
+                result['scheduled_time'] = result['scheduled_time'].astimezone(tz_local).isoformat()
 
 
                 # Create the log file directory, if necessary
@@ -401,11 +430,10 @@ def writer_loop(results, data_path_base, TZ_LOCAL, minimum_wait, shutdown):
                     if need_headers:
                         writer.writeheader()
                     writer.writerow(result)
-            shutdown.wait(minimum_wait)
-    except Exception:
-        logger.exception('writer_loop: exception error')
+            shutdown_event.wait(minimum_wait)
+    except Exception as e:
+        logger.exception(f'writer_loop: exception error; {e}')
         raise       
-
 
 
 

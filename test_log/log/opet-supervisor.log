@@ -406,3 +406,65 @@ NoneType: None
 2026-05-26 10:31:32,053 bus a: job 13: curve measurement (complete) 0:00:02.053383 late
 2026-05-26 10:31:32,059 shutting down child processes
 2026-05-26 10:31:32,703 bus a: serial port closed
+2026-05-27 10:45:31,724 opet-supervisor started
+2026-05-27 10:45:31,924 opet-supervisor started
+2026-05-27 10:45:31,965 Traceback (most recent call last):
+  File "c:\Users\Juste\Git_clones\TUD-PV-monitoring-tool\TUD-opet-supervisor.py", line 103, in <module>
+    target=dailyloop,
+           ^^^^^^^^^
+NameError: name 'dailyloop' is not defined
+NoneType: None
+2026-05-27 10:47:05,490 opet-supervisor started
+2026-05-27 10:47:05,667 opet-supervisor started
+2026-05-27 10:47:05,703 Traceback (most recent call last):
+  File "c:\Users\Juste\Git_clones\TUD-PV-monitoring-tool\TUD-opet-supervisor.py", line 103, in <module>
+    target=dailyloop,
+           ^^^^^^^^^
+NameError: name 'dailyloop' is not defined
+NoneType: None
+2026-05-27 10:47:18,024 opet-supervisor started
+2026-05-27 10:47:18,197 opet-supervisor started
+2026-05-27 10:47:18,231 Traceback (most recent call last):
+  File "c:\Users\Juste\Git_clones\TUD-PV-monitoring-tool\TUD-opet-supervisor.py", line 103, in <module>
+    target=dailyloop,
+           ^^^^^^^^^
+NameError: name 'dailyloop' is not defined
+NoneType: None
+2026-05-27 10:47:24,165 opet-supervisor started
+2026-05-27 10:47:24,336 opet-supervisor started
+2026-05-27 10:47:24,373 Traceback (most recent call last):
+  File "c:\Users\Juste\Git_clones\TUD-PV-monitoring-tool\TUD-opet-supervisor.py", line 103, in <module>
+    target=dailyloop,
+           ^^^^^^^^^
+NameError: name 'dailyloop' is not defined
+NoneType: None
+2026-05-27 10:59:07,822 opet-supervisor started
+2026-05-27 10:59:08,027 opet-supervisor started
+2026-05-27 10:59:08,068 Traceback (most recent call last):
+  File "c:\Users\Juste\Git_clones\TUD-PV-monitoring-tool\TUD-opet-supervisor.py", line 103, in <module>
+    target=dailyloop,
+           ^^^^^^^^^
+NameError: name 'dailyloop' is not defined
+NoneType: None
+2026-05-27 11:17:12,599 opet-supervisor started
+2026-05-27 11:17:12,788 opet-supervisor started
+2026-05-27 11:17:12,840 Traceback (most recent call last):
+  File "c:\Users\Juste\Git_clones\TUD-PV-monitoring-tool\TUD-opet-supervisor.py", line 75, in <module>
+    buses_all = set([
+                    ^
+  File "c:\Users\Juste\Git_clones\TUD-PV-monitoring-tool\TUD-opet-supervisor.py", line 76, in <listcomp>
+    load_info_datum['bus']
+    ~~~~~~~~~~~~~~~^^^^^^^
+TypeError: tuple indices must be integers or slices, not str
+NoneType: None
+2026-05-27 11:17:56,323 opet-supervisor started
+2026-05-27 11:17:56,536 opet-supervisor started
+2026-05-27 11:17:56,702 opet-supervisor started
+2026-05-27 11:17:56,727 opet-supervisor started
+2026-05-27 11:17:56,729 Couldn't find the serial port for bus a
+2026-05-27 11:17:56,733 Couldn't find the serial port for bus a
+2026-05-27 11:18:01,748 Couldn't find the serial port for bus a
+2026-05-27 11:18:06,767 Couldn't find the serial port for bus a
+2026-05-27 11:18:11,775 Couldn't find the serial port for bus a
+2026-05-27 11:18:16,790 Couldn't find the serial port for bus a
+2026-05-27 11:18:18,164 Keyboard interrupt, shutting down child processes
