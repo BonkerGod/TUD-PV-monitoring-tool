@@ -59,12 +59,12 @@ def weather_all(startdate, conn, cursor):
     """ Filter for all the weather measurements since the startdate of the new database
 
     Args:
-        startdate (datetime): Startdate of the database, example: datetime.date(2026, 5, 20)
+        startdate (_datetime_): Startdate of the database, example: datetime.date(2026, 5, 20)
         conn (_type_): The connection to the MySQL database
         cursor (_type_): The cursor for the MySQL database
 
     Returns:
-        _type_: _description_
+        data (_list_): All the measurements since the start date
     """
     cursor.execute("SELECT * FROM weather WHERE RecTime > %s;", (pd.to_datetime(startdate),))
     data = cursor.fetchall()
@@ -73,4 +73,3 @@ def weather_all(startdate, conn, cursor):
 def mysql_close(conn):
     conn.close()
     
-        
