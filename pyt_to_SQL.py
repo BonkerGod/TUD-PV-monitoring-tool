@@ -169,15 +169,15 @@ def past_data_upload(conn, cur, mysql_conn, mysql_cur, config, data_path_base):
              
 
 def add_data(date, conn, cur, mysql_conn, mysql_cur, config, data_path_base):
-    """ Adds the data on a specifc date to the 
+    """ Adds the data on a specifc date to the database
 
     Args:
-        date (string): The date for which the data has to be added, example: "2026-05-20"
+        date (_string_): The date for which the data has to be added, example: "2026-05-20"
         conn (_type_): The connection to the PostgreSQL database
         cur (_type_): The cursor for the PostgreSQL database
         mysql_conn (_type_): The connection to the MySQL database
         mysql_cur (_type_): The cursor for the MySQL database
-        config (dict): The measurement config
+        config (_dict_): The measurement config
         data_path_base (_type_): The base location of the files. 
     """
     print(date)
