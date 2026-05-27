@@ -80,17 +80,16 @@ Here are some high-level descriptions of each document. To fully understand the 
     <p>This folder contains the data from the measurements and stores the log files.</p>
 </details>
 
-### example-config-test
 <details>
-    <summary><b>example-config-test</b></summary>
-    <p>This folder contains all the settings that need to be set up when a new solar module is connected. <br>
+    <summary><b>example-config-test</b></summary> 
+    <p> This folder contains all the settings that need to be set up when a new solar module is connected. <br>
         In <code>measurement_config.json</code>, data about the solar module must be added. <br>
         In <code>opet_bus_info.json</code>, the serial number of the USB to RS-485 adapter needs to be listed. This serial number can be found using <code>port_finder.py</code></p>. If you have multiple USB adapters, you need to do this multiple times and start at 'a', 'b', 'c',... <br>
     Lastly, the <code>opet_info.json</code> needs to be set up. This contains the tracers that need to be named according to the following format 'O001', where the number increases with the tracer. The rest contains the bus that the tracer is on and the address of the OPET.
 </details>
 
 <details>
-    <summary><b>opet_supervisor_tools</b></summary>
+    <summary><b>opet_supervisor_tools</b></summary> 
     <p>This folder contains documents that help the operation of the <code>TUD-opet-supervisor.py</code>
         In <code>opet_supervisor_tools.py</code>, the code that performs the point and curve measurements can be found, and the program that writes the collected data to a CSV file. <br>
         In <code>port_finder.py</code>, you can find the code that enables you to find the port of your USB adapter.
