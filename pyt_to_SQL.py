@@ -123,7 +123,7 @@ def daily_loop():
     """
     conn, cur, mysql_conn, mysql_cur, config, data_path_base = init()
     while(1):
-        if datetime.datetime.now().hour == 10: #At midnight
+        if datetime.datetime.now().hour == 0: #At midnight
             try:
                 past_data_upload(conn, cur, mysql_conn, mysql_cur, config, data_path_base)
             except Exception as e: 
@@ -137,7 +137,7 @@ def daily_loop():
                 print(f"Error detection failed with error: {e}")
                 logging.error(f"Error detection failed with error: {e}")
                 conn.rollback()
-        time.sleep(60*1) # Wait for an hour and check again.
+        time.sleep(60*60*1) # Wait for an hour and check again.
     db_close(conn)    
     
        
@@ -690,13 +690,13 @@ def db_close(conn):
     conn.close()
 
 
-conn, cur, mysql_conn, mysql_cur, config, data_path_base = init()
+# conn, cur, mysql_conn, mysql_cur, config, data_path_base = init()
 # delete_table('weather', conn, cur)
 # create_table('weather', conn, cur)
 # # add_data('2026-05-26', conn, cur , mysql_conn, mysql_cur, config, data_path_base)
 # add_weather_data(download_weather_last24hours(1, mysql_conn, mysql_cur), conn, cur)
 # print_table('weather', conn, cur)
-download_table('test1.csv', 'pv_point', "2026-05-25 16:00:50-07:00", "2026-12-20 16:00:50-07:00", ["My_solar_panel_1"], conn, cur)
-db_close(conn)
+# download_table('test1.csv', 'pv_point', "2026-05-25 16:00:50-07:00", "2026-12-20 16:00:50-07:00", ["My_solar_panel_1"], conn, cur)
+# db_close(conn)
 #daily_loop()
 
