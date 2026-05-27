@@ -1,6 +1,5 @@
 import multiprocessing
 import datetime
-from time import sleep
 from measurement_scheduling_tools import datetime_range, present, next_occurrence
 import json
 from pathlib import Path
@@ -11,42 +10,42 @@ import sys
 import traceback
 from zoneinfo import ZoneInfo
 
-
-
-#Constants
+# Constants
 # Measurements more than this far into the future will be handled on a
 # subsequent loop
-maximum_wait = 0.1  # s
+MAXIMUM_WAIT = 0.1  # s
 # Infinite loops with nothing to do will delay this much before checking again
-minimum_wait = 0.01  # s
+MINIMUM_WAIT = 0.01  # s
 # Measurements are scheduled only this far into the future
-schedule_horizon = 32  # s
+SCHEDULE_HORIZON = 32  # s
 # The schedule is updated this often
-schedule_interval = 30  # s
+SCHEDULE_INTERVAL = 30  # s
 
 TZ_LOCAL = ZoneInfo("Europe/Amsterdam")
 
-#Load from .json files
+# Load from .json files
 with open('opet-supervisor-config.json') as f:
     opet_supervisor_config = json.load(f)
 
-config_path = Path(opet_supervisor_config['config_path'])
-data_path_base = Path(opet_supervisor_config['data_path_base'])
-log_path_base = Path(opet_supervisor_config['log_path_base'])
+CONFIG_PATH = Path(opet_supervisor_config['config_path'])
+DATA_PATH_BASE = Path(opet_supervisor_config['data_path_base'])
+LOG_PATH_BASE = Path(opet_supervisor_config['log_path_base'])
 
-with open(config_path / 'opet_info.json') as f:
+with open(CONFIG_PATH / 'opet_info.json') as f:
     load_info = json.load(f)
 
-
-with open(config_path / 'opet_bus_info.json') as f:
+with open(CONFIG_PATH / 'opet_bus_info.json') as f:
     bus_info = json.load(f)
 
-#Setup logging
-log_path_base.mkdir(parents=True, exist_ok=True)
+# Setup logging
+LOG_PATH_BASE.mkdir(parents=True, exist_ok=True)
 logger = logging.getLogger(__name__)
 logging.basicConfig(
-    filename=(log_path_base / 'opet-supervisor.log'),
-    encoding='utf-8',
+    filename = (
+        LOG_PATH_BASE 
+        / f'opet-supervisor-{datetime.date.today().isoformat()}.log'
+    ),
+    encoding = 'utf-8',
     level=logging.DEBUG,
     format='%(asctime)s %(message)s'
 )
@@ -73,21 +72,30 @@ if __name__ == '__main__':
         jobs_in_progress = manager.dict({})
         job_id = 0
 
-        shutdown = manager.Event()
-
+        shutdown_event = manager.Event()
         # All possible buses. Each bus will get a process
-        buses_all = set([
-            load_info_datum['bus']
-            for load_name, load_info_datum
-            in load_info.items()
-        ])
+        buses_all = {
+            load_info_datum["bus"]
+            for load_info_datum in load_info.values()
+        }
+
         # Create a process for each bus
         processes = [
             multiprocessing.Process(
                 target=measurement_loop,
-                args=(bus, jobs, jobs_in_progress, results, bus_info, load_info, maximum_wait, minimum_wait, shutdown),
+                args=(
+                    bus, 
+                    jobs,
+                    jobs_in_progress,
+                    results, 
+                    bus_info, 
+                    load_info, 
+                    MAXIMUM_WAIT, 
+                    MINIMUM_WAIT, 
+                    shutdown_event
+                ),
                 name=f'measurement-bus-{bus}',
-            )       
+            )
             for bus
             in buses_all
         ]
@@ -96,11 +104,18 @@ if __name__ == '__main__':
         processes.append(
             multiprocessing.Process(
                 target=writer_loop,
-                args=(results, data_path_base, TZ_LOCAL, minimum_wait,shutdown),
+                args=(
+                    results,
+                    DATA_PATH_BASE, 
+                    TZ_LOCAL, 
+                    MINIMUM_WAIT,
+                    shutdown_event
+                    ),
                 name='writer',
             )
         )
 
+        # Process for daily loop
         processes.append(
             multiprocessing.Process(
                 target=daily_loop,
@@ -108,6 +123,7 @@ if __name__ == '__main__':
             )
         )       
 
+        # Process for update loop database
         processes.append(
             multiprocessing.Process(
                 target=update_loop,
@@ -120,21 +136,21 @@ if __name__ == '__main__':
 
         schedule_update_time = next_occurrence(
             present(),
-            datetime.timedelta(seconds=schedule_interval)
+            datetime.timedelta(seconds=SCHEDULE_INTERVAL)
         )
         schedule_never_updated = True
         try:
-            while not shutdown.is_set():
+            while not shutdown_event.is_set():
                 if schedule_never_updated:
                     schedule_never_updated = False
                 else:
-                    while present() < schedule_update_time and not shutdown.is_set():
-                        shutdown.wait(minimum_wait)
-                    schedule_update_time += datetime.timedelta(seconds=schedule_interval)
+                    while present() < schedule_update_time and not shutdown_event.is_set():
+                        shutdown_event.wait(MINIMUM_WAIT)
+                    schedule_update_time += datetime.timedelta(seconds=SCHEDULE_INTERVAL)
 
-                #Check if processes are still active and restart inactive ones
+                # Check if processes are still active and restart inactive ones
                 for i, process in enumerate(processes):
-                    if shutdown.is_set():
+                    if shutdown_event.is_set():
                         break
                     
                     if process.is_alive():
@@ -145,20 +161,37 @@ if __name__ == '__main__':
 
                     old_name = process.name
                     
-                    #make new process based on name
+
+                    # Make new process based on name
                     if old_name.startswith('measurement-bus-'):
                         bus = old_name.removeprefix('measurement-bus-')
 
                         new_process = multiprocessing.Process(
                             target=measurement_loop,
-                            args=(bus,jobs,jobs_in_progress,results,bus_info,load_info,maximum_wait,minimum_wait,shutdown),
+                            args=(
+                                bus,
+                                jobs,
+                                jobs_in_progress,
+                                results,
+                                bus_info,
+                                load_info,
+                                MAXIMUM_WAIT,
+                                MINIMUM_WAIT,
+                                shutdown_event
+                            ),
                             name=old_name,
                         )
 
                     elif old_name == 'writer':
                         new_process = multiprocessing.Process(
                             target=writer_loop,
-                            args=(results,data_path_base,TZ_LOCAL,minimum_wait,shutdown),
+                            args=(
+                                results,
+                                DATA_PATH_BASE,
+                                TZ_LOCAL,
+                                MINIMUM_WAIT,
+                                shutdown_event
+                            ),
                             name='writer',
                         )
 
@@ -182,7 +215,7 @@ if __name__ == '__main__':
                     logger.info(f'restarted {new_process.name}')
 
                 # Reload the configuration
-                with open(config_path / 'measurement_config.json') as f:
+                with open(CONFIG_PATH / 'measurement_config.json') as f:
                     config = json.load(f)
 
                 # OPETs are tracers that start with 'O'; these are the modules for
@@ -194,8 +227,14 @@ if __name__ == '__main__':
 
                 # Add set_load_mode jobs
                 for module in modules:
-                    #module is enabled, and stopdate has yet not passed
-                    if not module.get('disabled', False) and (module.get('stopdate') is None or datetime.datetime.strptime(module["stopdate"], "%Y-%m-%d").date() >= datetime.datetime.now().date()):  
+                    # check if module is enabled, and stopdate has yet not passed
+                    module_enabled = not module.get('disabled', False)
+                    module_not_expired = (
+                        module.get('stopdate') is None
+                        or datetime.datetime.strptime(module["stopdate"], "%Y-%m-%d").date() 
+                        >= datetime.datetime.now().date())
+                    
+                    if module_enabled and module_not_expired:  
                         if module.get('load_mode'):
                             scheduled_time = present() + datetime.timedelta(seconds=3)
                             jobs[job_id] = {
@@ -215,7 +254,7 @@ if __name__ == '__main__':
                             print(f'manager: {job_id} (set_load_mode: {module["load_mode"]}) scheduled for {scheduled_time.astimezone(TZ_LOCAL)}')
                             job_id += 1
 
-                    else: #Module should be disabled
+                    else: # Module should be disabled
                         scheduled_time = present()
                         jobs[job_id] = {
                             'scheduled_time': scheduled_time,
@@ -234,16 +273,16 @@ if __name__ == '__main__':
                         print(f'manager: {job_id} (set_load_mode: disabled) scheduled for {scheduled_time.astimezone(TZ_LOCAL)}')
                         job_id += 1                       
 
-                #Only schedule modules which are enabled
+                # Only schedule modules which are enabled
                 modules = [
                     x for x in modules
                     if not x.get('disabled', False)
                 ]
 
-                #Only schedule modules which are not due
+                # Only schedule modules which are not due
                 modules = [
                     x for x in modules
-                    if x["stopdate"] == None or 
+                    if x.get("stopdate") is None or 
                     datetime.datetime.strptime(x["stopdate"], "%Y-%m-%d").date() >= datetime.datetime.now().date()
                 ]      
 
@@ -252,7 +291,7 @@ if __name__ == '__main__':
                     schedule_start = max([job['scheduled_time'] for job in jobs.values()])
                 else:
                     schedule_start = present()
-                schedule_end = present() + datetime.timedelta(seconds=schedule_horizon)
+                schedule_end = present() + datetime.timedelta(seconds=SCHEDULE_HORIZON)
                 for module in modules:
                     # Schedule point measurements
                     point_interval = datetime.timedelta(
@@ -337,20 +376,20 @@ if __name__ == '__main__':
                 print(f'manager: {len(jobs)} jobs are scheduled')
                 print(f'manager: {jobs.keys()}')
         
-        #Handle Exceptions
-        except Exception:
-            logger.exception('shutting down child processes')
-            shutdown.set()   
+        # Handle Exceptions
         except KeyboardInterrupt:
-            logger.info('shutting down child processes')
-            shutdown.set()               
+            logger.error('Keyboard interrupt, shutting down child processes')
+            shutdown_event.set()  
+        except Exception:
+            logger.error('shutting down child processes')
+            shutdown_event.set()   
         finally:
-            shutdown.set()            
-            #Wait for processes to finish 
+            shutdown_event.set()            
+            # Wait for processes to finish 
             for process in processes:
                 process.join(timeout=10)  
             
-            #Otherwise terminate remaining processes
+            # Otherwise terminate remaining processes
             for process in processes:  
                 if process.is_alive():
                     process.terminate()
