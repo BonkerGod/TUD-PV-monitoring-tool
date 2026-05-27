@@ -37,6 +37,8 @@ db_close(conn)
 
 > [!TIP]
 > These functions are stored in 'pyt_to_SQL.py'; it is advised to run this code in a different file, so you do not accidentally destroy the code. Do this by adding `from pyt_to_SQL import init, create_table, db_close` at the top of your file.
+
+The next step is to configure the JSON files properly, to see how to do this click [here](#example-config-test). 
 When you have completed all previous steps, you can start using the database by running 'TUD-opet-supervisor.py'.
 
 ## File descriptions
@@ -78,6 +80,7 @@ Here are some high-level descriptions of each document. To fully understand the 
     <p>This folder contains the data from the measurements and stores the log files.</p>
 </details>
 
+### example-config-test
 <details>
     <summary><b>example-config-test</b></summary>
     <p>This folder contains all the settings that need to be set up when a new solar module is connected. <br>
@@ -93,3 +96,15 @@ Here are some high-level descriptions of each document. To fully understand the 
         In <code>port_finder.py</code>, you can find the code that enables you to find the port of your USB adapter.
     </p>
 </details>
+
+<details>
+    <summary><b>OPET_control</b></summary>
+    <p>This folder contains the <code>OPET_control.py</code>. This piece of code acts as the translation layer between the OPETs and the <code>TUD-opet-supervisor.py</code>. 
+    </p>
+</details>
+
+<details>
+    <summary><b>user_tools</b></summary>
+    <p>This folder contains programs that can be used by the users to setup or extract data. <code>plot_csv.py</code> plots a couple of measurements. </p>
+</details>
+
