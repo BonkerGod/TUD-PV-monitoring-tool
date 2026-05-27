@@ -4,8 +4,8 @@ from measurement_scheduling_tools import datetime_range, present, next_occurrenc
 import json
 from pathlib import Path
 from opet_supervisor_tools import measurement_loop, writer_loop
-from pyt_to_SQL import dailyloop, updateloop
-import logging  
+from pyt_to_SQL import daily_loop, update_loop
+import logging
 import sys
 import traceback
 from zoneinfo import ZoneInfo
@@ -118,16 +118,16 @@ if __name__ == '__main__':
         # Process for daily loop
         processes.append(
             multiprocessing.Process(
-                target=dailyloop,
-                name='dailyloop'
+                target=daily_loop,
+                name='daily_loop'
             )
         )       
 
         # Process for update loop database
         processes.append(
             multiprocessing.Process(
-                target=updateloop,
-                name='updateloop'
+                target=update_loop,
+                name='update_loop'
             )
         )        
 
@@ -195,15 +195,15 @@ if __name__ == '__main__':
                             name='writer',
                         )
 
-                    elif old_name == 'dailyloop':
+                    elif old_name == 'daily_loop':
                         new_process = multiprocessing.Process(
-                            target=dailyloop,
-                            name='dailyloop'
+                            target=daily_loop,
+                            name='daily_loop'
                         )
-                    elif old_name == 'updateloop':
+                    elif old_name == 'update_loop':
                         new_process = multiprocessing.Process(
-                            target=updateloop,
-                            name='updateloop'
+                            target=update_loop,
+                            name='update_loop'
                         )                       
                     else:
                         logger.error(f'unknown child process name {old_name}; cannot restart')
