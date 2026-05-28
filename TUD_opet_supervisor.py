@@ -1,14 +1,19 @@
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent
+sys.path.insert(0, str(ROOT / "TUD-opet-control"))
+
 import multiprocessing
 import datetime
 from measurement_scheduling_tools import datetime_range, present, next_occurrence
 import json
-from pathlib import Path
 from supervisor_tools import measurement_loop, writer_loop
 #from pyt_to_SQL import daily_loop, update_loop
 import logging
-import sys
 import traceback
 from zoneinfo import ZoneInfo
+
 
 # Constants
 # Measurements more than this far into the future will be handled on a
