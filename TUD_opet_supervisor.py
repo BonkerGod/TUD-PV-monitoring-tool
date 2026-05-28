@@ -14,7 +14,6 @@ import logging
 import traceback
 from zoneinfo import ZoneInfo
 
-
 # Constants
 # Measurements more than this far into the future will be handled on a
 # subsequent loop
@@ -43,6 +42,10 @@ with open(CONFIG_PATH / 'opet_info.json') as f:
 
 with open(CONFIG_PATH / 'opet_bus_info.json') as f:
     bus_info = json.load(f)
+
+with open(CONFIG_PATH / 'measurement_config.json') as f:
+    config = json.load(f)
+
 
 # Setup logging
 LOG_PATH_BASE.mkdir(parents=True, exist_ok=True)
@@ -224,11 +227,14 @@ if __name__ == '__main__':
                     logger.info(f'restarted {new_process.name}')
 
                 # Reload the configuration
-                with open(CONFIG_PATH / 'measurement_config.json') as f:
-                    config = json.load(f)
+                try:
+                    with open(CONFIG_PATH / 'measurement_config.json') as f:
+                        new_config = json.load(f)
+                except Exception:
+                    logger.exception('could not open the measurement config file ')
+                    new_config = config
 
-                # OPETs are tracers that start with 'O'; these are the modules for
-                # OPETs only, ignoring other tracers
+                config = new_config
 
                 #Log errror if measurement is not setup correctly
                 for module in config['modules']:
@@ -243,7 +249,8 @@ if __name__ == '__main__':
                     if not mounted_on == "Egis-tracker" and not mounted_on == "Fixed-rack":
                         module['mounted_on'] = 'Unknown-rack'
                         logger.error(f'The mounted_on key of {module.get("module_name")} must be Fixed-rack or Egis-tracker')
-
+                
+                # OPETs are tracers that start with 'O'; these are the modules for OPETs only, ignoring other tracers
                 modules = [
                     x for x in config['modules']
                     if x['tracer'].startswith('O')
@@ -276,7 +283,7 @@ if __name__ == '__main__':
                                     'load_mode': module['load_mode'],
                                     'disabled':  module['disabled']
                                 }
-                                print(f'manager: {job_id} (set_load_mode: {module["load_mode"]}) scheduled for {scheduled_time.astimezone(TZ_LOCAL)}')
+                                logger.debug(f'manager: {job_id} (set_load_mode: {module["load_mode"]}) scheduled for {scheduled_time.astimezone(TZ_LOCAL)}')
                                 job_id += 1
                             else:
                                 logger.error(f'Could not set load_mode job due to missing key at Tracer {module.get("tracer")}')
@@ -297,7 +304,7 @@ if __name__ == '__main__':
                                 'load_mode': 'disable',
                                 'disabled':  module['disabled']
                             }
-                            print(f'manager: {job_id} (set_load_mode: disabled) scheduled for {scheduled_time.astimezone(TZ_LOCAL)}')
+                            logger.debug(f'manager: {job_id} (set_load_mode: disabled) scheduled for {scheduled_time.astimezone(TZ_LOCAL)}')
                             job_id += 1     
                     except Exception:
                         logger.exception("Exception in scheduling set_load job")                                         
@@ -368,7 +375,7 @@ if __name__ == '__main__':
                                 'job_type': 'point',
                                 'data_destination': config['data_destination']
                             }
-                            print(f'manager: {job_id} (point) scheduled for {scheduled_time.astimezone(TZ_LOCAL)}')
+                            logger.debug(f'manager: {job_id} (point) scheduled for {scheduled_time.astimezone(TZ_LOCAL)}')
                             job_id += 1
 
                     # Schedule curve measurements
@@ -411,7 +418,7 @@ if __name__ == '__main__':
                                 'job_type': 'curve',
                                 'data_destination': config['data_destination']
                             }
-                            print(f'manager: {job_id} (curve) scheduled for {scheduled_time.astimezone(TZ_LOCAL)}')
+                            logger.debug(f'manager: {job_id} (curve) scheduled for {scheduled_time.astimezone(TZ_LOCAL)}')
                             job_id += 1
 
                 # Remove jobs that have been waiting too long
@@ -423,8 +430,8 @@ if __name__ == '__main__':
                         except KeyError:
                             pass
     
-                print(f'manager: {len(jobs)} jobs are scheduled')
-                print(f'manager: {jobs.keys()}')
+                logger.debug(f'manager: {len(jobs)} jobs are scheduled')
+                logger.debug(f'manager: {jobs.keys()}')
 
 
         # Handle Exceptions
