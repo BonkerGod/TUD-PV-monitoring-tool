@@ -20,6 +20,8 @@ MINIMUM_WAIT = 0.01  # s
 SCHEDULE_HORIZON = 32  # s
 # The schedule is updated this often
 SCHEDULE_INTERVAL = 30  # s
+#Maximum time a job may exist
+MAX_JOB_TIME = MAXIMUM_JOB_AGE = datetime.timedelta(minutes=5)
 
 TZ_LOCAL = ZoneInfo("Europe/Amsterdam")
 
@@ -92,7 +94,8 @@ if __name__ == '__main__':
                     load_info, 
                     MAXIMUM_WAIT, 
                     MINIMUM_WAIT, 
-                    shutdown_event
+                    shutdown_event,
+                    MAX_JOB_TIME
                 ),
                 name=f'measurement-bus-{bus}',
             )
@@ -177,7 +180,8 @@ if __name__ == '__main__':
                                 load_info,
                                 MAXIMUM_WAIT,
                                 MINIMUM_WAIT,
-                                shutdown_event
+                                shutdown_event,
+                                MAX_JOB_TIME
                             ),
                             name=old_name,
                         )
@@ -231,7 +235,7 @@ if __name__ == '__main__':
                         logger.error(f'{module.get("module_name")} does not have an expected tracer assigned')
                         module['tracer'] = 'XXXX'
 
-                    if not mounted_on == "Egis-tracker" or not mounted_on == "Fixed-rack":
+                    if not mounted_on == "Egis-tracker" and not mounted_on == "Fixed-rack":
                         module['mounted_on'] = 'Unknown-rack'
                         logger.error(f'The mounted_on key of {module.get("module_name")} must be Fixed-rack or Egis-tracker')
 
@@ -365,9 +369,9 @@ if __name__ == '__main__':
                     # Schedule curve measurements
                     curve_interval = module.get('interval_curve')
 
-                    if curve_interval is None or type(point_interval) is not int:
+                    if curve_interval is None or type(curve_interval) is not int:
                         logger.error(f'Could not schedule curve measurement since interval_curve is not set for module {module.get("module_name")}')
-                    
+
                     else:
                         curve_interval = datetime.timedelta(seconds=module.get('interval_curve'))
 
@@ -404,9 +408,20 @@ if __name__ == '__main__':
                             }
                             print(f'manager: {job_id} (curve) scheduled for {scheduled_time.astimezone(TZ_LOCAL)}')
                             job_id += 1
-                    print(f'manager: {len(jobs)} jobs are scheduled')
-                    print(f'manager: {jobs.keys()}')
-        
+
+                # Remove jobs that have been waiting too long
+                for old_job_id, old_job in list(jobs.items()):
+                    if present() - old_job["scheduled_time"] > MAX_JOB_TIME:
+                        logger.error(f'Removed job {old_job_id}: {old_job["job_type"]} for {old_job.get("opet_name")}: too old')
+                        try:
+                            jobs.pop(old_job_id)
+                        except KeyError:
+                            pass
+    
+                print(f'manager: {len(jobs)} jobs are scheduled')
+                print(f'manager: {jobs.keys()}')
+
+
         # Handle Exceptions
         except KeyboardInterrupt:
             logger.error('Keyboard interrupt, shutting down child processes')

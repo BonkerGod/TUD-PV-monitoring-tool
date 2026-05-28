@@ -9,7 +9,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def measurement_loop(bus, jobs, jobs_in_progress, results, bus_info, load_info, maximum_wait, minimum_wait, shutdown_event):
+def measurement_loop(bus, jobs, jobs_in_progress, results, bus_info, load_info, maximum_wait, minimum_wait, shutdown_event, max_job_time):
     """ Run scheduled measurement jobs for one OPET bus. This loop handles jobs assigned
         to one bus and stores completed measurements in the shared results dictionary.
     
@@ -24,6 +24,7 @@ def measurement_loop(bus, jobs, jobs_in_progress, results, bus_info, load_info, 
             it will wait for a job before returning to the main loop.
         minimum_wait (float): Minimum delay before returning the main loop 
         shutdown_event (multiprocessing.Event): In case of shutting down this event is set
+        max_job_time (datetime.timedelta): Maximum time a job should live after the schedule time
     """
 
     def initialize_bus():
@@ -100,23 +101,12 @@ def measurement_loop(bus, jobs, jobs_in_progress, results, bus_info, load_info, 
                 try:
                     job = jobs[job_id]
                 except KeyError:
-                    logger.warning(f'bus {bus}: job {job_id}: job disappeared before processing')
+                    logger.error(f'bus {bus}: job {job_id}: job disappeared before processing')
                     this_bus_job_ids.pop(0)
                     continue            
 
 
-                # Skip this job if it has reached or passed the expiration time
-                if present() >= job['expiration_time']:
-                    logger.debug(f'bus {bus}: job {job_id}: job expired (skipping)')
-                    # Pop this job from the shared jobs dict and this bus's id list
-                    this_bus_job_ids.pop(0)
-                    try:
-                        jobs.pop(job_id)
-                    except KeyError:
-                        pass
 
-                    # Return to the top of the loop
-                    continue
                 
                 # Determine how far into the future this job should be scheduled
                 seconds_until_target = (
