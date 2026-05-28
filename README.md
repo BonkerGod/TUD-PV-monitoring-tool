@@ -82,7 +82,7 @@ Here are some high-level descriptions of each document. To fully understand the 
 
 <details>
     <summary><b>config</b></summary> 
-    <p> This folder contains all the settings that need to be set up when a new solar module is connected. An example of a config can be found in <code>example_config</code> <br>
+    <p> This folder contains all the settings that need to be set up when a new solar module is connected. An example of a config can be found in the folder <code>example_config</code>. <br>
         In <code>measurement_config.json</code>, data about the solar module must be added. <br>
         The following fields need to be filled in for each solar module
         <ul>
