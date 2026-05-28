@@ -50,6 +50,65 @@ Here are some high-level descriptions of each document. To fully understand the 
 </details>
 
 <details>
+  <summary><b>opet_supervisor_config.json</b></summary>
+    <p>This document contains the information on where the data, logs, and configurations can be found.</p>
+</details>
+
+<details>
+    <summary><b>test_log</b></summary>
+    <p>This folder contains the data from the measurements and stores the log files.</p>
+</details>
+
+<details>
+    <summary><b>config</b></summary> 
+    <p> This folder contains all the settings that need to be set up when a new solar module is connected. An example of a config can be found in the folder <code>example_config</code>. <br>
+        In <code>measurement_config.json</code>, data about the solar module must be added. <br>
+        The following fields need to be filled in for each solar module
+        <ul>
+            <li>module_name (string)(This one needs to be unique for every different module and it must be filled in otherwise the system will not work.</li>
+            <li>mounted_on (string)</li>
+            <li>tracer (string)</li>
+            <li>interval_point (int)</li>
+            <li>interval_curve (int)</li>
+            <li>username (string)</li>
+            <li>user_email (string)</li>
+            <li>area ($m^2$) (float)</li>
+            <li>technology (string)</li>
+            <li>manufacturer (string)</li>
+            <li>disabled (boolean)</li>
+            <li>stopdate ('yyyy-mm-dd' or Null)</li>
+            <li>load_mode (string)</li>
+        </ul>
+        Also, the mounted mechanisms have to be set up. The name of the mounting is the selector in which the <code>axis_azimuth</code> and the <code>axis_tilt</code> are stored for each mounting.
+        The <code>data_destination</code> has to be configured. This is where the output of the OPET measurements gets stored. <br>
+        Lastly, the admins' email addresses have to be configured. If you have multiple emails, they need to be in a single string. This enables the error detection to send every email that is being sent by <code>error_detect()</code> to the admin/maintainer of the system. <br><br>
+        In <code>opet_bus_info.json</code>, the serial number of the USB to RS-485 adapter needs to be listed. This serial number can be found using <code>port_finder.py</code>. If you have multiple USB adapters, you need to do this multiple times and start at 'a', 'b', 'c',... <br><br>
+    Lastly, the <code>opet_info.json</code> needs to be set up. This contains the tracers that need to be named according to the following format 'O001', where the number increases with the tracer. The rest contains the bus that the tracer is on and the address of the OPET.
+    </p>
+</details>
+
+<details>
+    <summary><b>OPET_control</b></summary>
+    <p>This folder contains the <code>OPET_control.py</code>. This piece of code acts as the translation layer between the OPETs and the <code>TUD-opet-supervisor.py</code>. This control mechanism is pulled from <a href='https://github.com/NatLabRockies/opet-control?tab=readme-ov-file'>opet-control</a>. We have made some slight changes, but it is mostly the same. The most important addition is that we also measure the solar cell temperature. To get further insight into how this translation layer works, look into <a href='https://github.com/NatLabRockies/opet-firmware'>opet-firmware</a>.
+    </p>
+</details>
+
+<details>
+    <summary><b>user_tools</b></summary>
+    <p>This folder contains programs that can be used by the users to set up or extract data. <code>plot_csv.py</code> plots a couple of measurements. </p>
+    In <code>port_finder.py</code>, you can find the code that enables you to find the port of your USB adapter.  
+</details>
+
+### supervisor_tools
+This folder contains documents that help the operation of the <code>TUD-opet-supervisor.py</code>
+<details>
+    <summary><b>supervisor_tools.py</b></summary> 
+    <p>
+        In <code>opet_supervisor_tools.py</code>, the code that performs the point and curve measurements can be found, and the program that writes the collected data to a CSV file. <br>
+    </p>
+</details>
+    
+<details>
     <summary><b>pyt_to_SQL.py</b></summary>
     <p>
       This document contains all the operations that update the PostgreSQL database. <br><br>
@@ -68,62 +127,5 @@ Here are some high-level descriptions of each document. To fully understand the 
       Firstly, it again has to establish a connection with the MySQL database <code>mysql_init()</code> and at the end we use <code>mysql_close(conn)</code> <br>
       The other function can collect all the weather data from a specific start date <code>weather_all(...)</code>, collect the last measurement <code>weather_last(...)</code>, or collect the data from the last 24 hours <code>download_weather_last24hours(...)</code>. 
     </p>
-</details>
-
-<details>
-  <summary><b>opet_supervisor_config.json</b></summary>
-    <p>This document contains the information on where the data, logs, and configurations can be found.</p>
-</details>
-
-<details>
-    <summary><b>test_log</b></summary>
-    <p>This folder contains the data from the measurements and stores the log files.</p>
-</details>
-
-<details>
-    <summary><b>config</b></summary> 
-    <p> This folder contains all the settings that need to be set up when a new solar module is connected. An example of a config can be found in the folder <code>example_config</code>. <br>
-        In <code>measurement_config.json</code>, data about the solar module must be added. <br>
-        The following fields need to be filled in for each solar module
-        <ul>
-            <li>module_name (This one needs to be unique for every different module and it must be filled in otherwise the system will not work.</li>
-            <li>mounted_on</li>
-            <li>tracer</li>
-            <li>interval_point</li>
-            <li>interval_curve</li>
-            <li>username</li>
-            <li>user_email</li>
-            <li>area ($m^2$)</li>
-            <li>technology</li>
-            <li>manufacturer</li>
-            <li>disabled</li>
-            <li>stopdate</li>
-            <li>load_mode</li>
-        </ul>
-        Also, the mounted mechanisms have to be set up. The name of the mounting is the selector in which the <code>axis_azimuth</code> and the <code>axis_tilt</code> are stored for each mounting.
-        The <code>data_destination</code> has to be configured. This is where the output of the OPET measurements gets stored. <br>
-        Lastly, the admins' email addresses have to be configured. If you have multiple emails, they need to be in a single string. This enables the error detection to send every email that is being sent by <code>error_detect()</code> to the admin/maintainer of the system. <br><br>
-        In <code>opet_bus_info.json</code>, the serial number of the USB to RS-485 adapter needs to be listed. This serial number can be found using <code>port_finder.py</code>. If you have multiple USB adapters, you need to do this multiple times and start at 'a', 'b', 'c',... <br><br>
-    Lastly, the <code>opet_info.json</code> needs to be set up. This contains the tracers that need to be named according to the following format 'O001', where the number increases with the tracer. The rest contains the bus that the tracer is on and the address of the OPET.
-    </p>
-</details>
-
-<details>
-    <summary><b>opet_supervisor_tools</b></summary> 
-    <p>This folder contains documents that help the operation of the <code>TUD-opet-supervisor.py</code>
-        In <code>opet_supervisor_tools.py</code>, the code that performs the point and curve measurements can be found, and the program that writes the collected data to a CSV file. <br>
-        In <code>port_finder.py</code>, you can find the code that enables you to find the port of your USB adapter.
-    </p>
-</details>
-
-<details>
-    <summary><b>OPET_control</b></summary>
-    <p>This folder contains the <code>OPET_control.py</code>. This piece of code acts as the translation layer between the OPETs and the <code>TUD-opet-supervisor.py</code>. This control mechanism is pulled from <a href='https://github.com/NatLabRockies/opet-control?tab=readme-ov-file'>opet-control</a>. We have made some slight changes, but it is mostly the same. The most important addition is that we also measure the solar cell temperature. To get further insight into how this translation layer works, look into <a href='https://github.com/NatLabRockies/opet-firmware'>opet-firmware</a>.
-    </p>
-</details>
-
-<details>
-    <summary><b>user_tools</b></summary>
-    <p>This folder contains programs that can be used by the users to setup or extract data. <code>plot_csv.py</code> plots a couple of measurements. </p>
 </details>
 
