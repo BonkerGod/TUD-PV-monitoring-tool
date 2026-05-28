@@ -1,6 +1,9 @@
 import mysql.connector
 import datetime
 import pandas as pd
+import numpy as np
+from scipy.interpolate import interp1d
+from zoneinfo import ZoneInfo
 
 
 def mysql_init():
@@ -69,7 +72,24 @@ def weather_all(startdate, conn, cursor):
     cursor.execute("SELECT * FROM weather WHERE RecTime > %s;", (pd.to_datetime(startdate),))
     data = cursor.fetchall()
     return data
+
+# def weather_sync(opet_date_time, conn, cursor):
+#     cursor.execute("SELECT idWeather, RecTime FROM weather ORDER BY ABS(TIMESTAMPDIFF(SECOND, RecTime, %s)) ASC limit 1", (opet_date_time,))
+#     data = cursor.fetchone()
+#     data = np.array(data)
+#     data[1]=data[1].replace(tzinfo=ZoneInfo('Europe/Amsterdam'))
+#     if abs(opet_date_time-data[1])  < datetime.timedelta(minutes = 5):
+#         weatherid=data[0]
+#     else:
+#         weatherid= 0 
+        
+#     return weatherid
     
 def mysql_close(conn):
     conn.close()
+    
+# conn, cur = mysql_init()
+# data=weather_sync(datetime.datetime(2022, 5, 9, 20, 21, 10, tzinfo=ZoneInfo('Europe/Amsterdam')), conn, cur)
+# print(data)
+# mysql_close(conn)
     
