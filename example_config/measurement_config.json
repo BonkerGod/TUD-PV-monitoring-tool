@@ -2,8 +2,8 @@
   "modules":
   [
     {
-      "module_name": "My_solar_panel_1",
-      "mounted_on": "Egis-tracker",
+      "module_name": "My_solar_panel_1", 
+      "mounted_on": "Egis-tracker", 
       "tracer": "O001",
       "interval_point": 10,
       "interval_curve": 30,
@@ -31,6 +31,11 @@
       "axis_tilt": 30
       
     },
-  "data_destination": "config_2026-04-30T15-00-00",
+  "Unknown-rack":
+    {
+      "axis_azimuth": null,
+      "axis_tilt": null
+    },
+  "data_destination": "config_2026-05-28",
   "admins_email": "woosterkamp@tudelft.nl,wessel.oosterkamp.spam@gmail.com" 
 }
