@@ -282,7 +282,7 @@ def add_module_data(config, conn, cur):
             "VALUES (%s, %s, %s, %s, %s, %s, %s) "
             "ON CONFLICT (module_name) DO NOTHING" # If there is already a module with the same name, the data will not be added.
         )
-        cur.execute(module_insert, (module['module_name'], module['tracer'], module['username'], module['user_email'], module['area'], module['technology'], module['manufacturer']))
+        cur.execute(module_insert, (module['module_name'], module.get('tracer'), module.get('username'), module.get('user_email'), module.get('area'), module.get('technology'), module.get('manufacturer')))
 
 
 def add_weather_data(weather_data, conn, cur):
@@ -578,8 +578,6 @@ def error_detect(conn, cur, config):
     last_entry_point = cur.fetchone()[0]
     cur.execute("SELECT date_time FROM pv_curve ORDER BY date_time DESC LIMIT 1")
     last_entry_curve = cur.fetchone()[0]
-    #print(last_entry_curve)
-    #print(datetime.datetime.now(zoneinfo.ZoneInfo("Europe/Amsterdam")))
     
     # Check if curve and/or point measurements are being received
     if ((last_entry_point < (datetime.datetime.now(zoneinfo.ZoneInfo("Europe/Amsterdam")) - datetime.timedelta(days=1))) and 
@@ -616,14 +614,14 @@ def error_detect(conn, cur, config):
             if last_24h[i][1] != 1:
                 errorcount += 1
         if errorcount > 0: # if there is at least one error in the last 24 hours, send an email
-            if module['disabled'] == False:
+            if module.get('disabled', False) == False:
                 send_mail(module['module_name']+' Has had an error in the past 24 hours, please check the system. \n'
                          +str(errorcount)+' of '+str(len(last_24h))
-                         +' measurements have had an error in the past 24 hours', config, module['user_email']
+                         +' measurements have had an error in the past 24 hours', config, module.get('user_email', '')
                          )
         
         # Check whether the gets collected from the individual modules
-        if module['disabled'] == False:
+        if module.get('disabled', False) == False:
             cur.execute("SELECT date_time FROM pv_point WHERE module_name = %s ORDER BY date_time DESC LIMIT 1", (module['module_name'],))
             last_entry_point = cur.fetchone()[0]
             cur.execute("SELECT date_time FROM pv_curve WHERE module_name = %s ORDER BY date_time DESC LIMIT 1", (module['module_name'],))
@@ -631,34 +629,34 @@ def error_detect(conn, cur, config):
             if (last_entry_point < (datetime.datetime.now(zoneinfo.ZoneInfo("Europe/Amsterdam")) - datetime.timedelta(days=1)) 
                 and last_entry_curve < (datetime.datetime.now(zoneinfo.ZoneInfo("Europe/Amsterdam")) - datetime.timedelta(days=1)) 
                 and point_measurements == True and curve_measurements == True):
-                send_mail(module['module_name']+' on tracer:'+module['tracer']
+                send_mail(module['module_name']+' on tracer: '+module.get('tracer', 'unknown tracer')
                          + ' has not received data from both point and curve measurements in the past 24 hours \n' 
                          + 'Most recent data from point measurements: ' 
                          + str(last_entry_point)
                          + '\nMost recent data from curve measurements: ' 
                          + str(last_entry_curve), 
-                         config, module['user_email']
+                         config, module.get('user_email', '')
                          )
             elif (last_entry_point < (datetime.datetime.now(zoneinfo.ZoneInfo("Europe/Amsterdam")) - datetime.timedelta(days=1)) and 
                   point_measurements == True):
-                send_mail(module['module_name']+' on tracer:'+module['tracer']
+                send_mail(module['module_name']+' on tracer: '+module.get('tracer', 'unknown tracer')
                          + ' has not received data from point measurements in the past 24 hours \nMost recent data from point measurements: ' 
                          + str(last_entry_point), 
-                         config, module['user_email']
+                         config, module.get('user_email', '')
                          )
             elif (last_entry_curve < (datetime.datetime.now(zoneinfo.ZoneInfo("Europe/Amsterdam")) - datetime.timedelta(days=1)) and 
                   curve_measurements == True):
-                send_mail(module['module_name']+' on tracer:'+module['tracer'] 
+                send_mail(module['module_name']+' on tracer: '+module.get('tracer', 'unknown tracer') 
                          + ' has not received data from curve measurements in the past 24 hours\nMost recent data from curve measurements: ' 
                          + str(last_entry_curve), 
-                         config, module['user_email']
+                         config, module.get('user_email', '')
                          )
 
 
 def data_tester(conn, cur):
     curve_insert = (
-            "INSERT INTO weather (weather_time, temperature_air, relative_humidity, dew_point, relative_pressure, wind_speed, wind_speed_std, wind_direction, wind_direction_std, irradiance) "
-            "VALUES ('2026-05-18T10:05:50.028240+02:00', 23, 53, 10, 4, 10, 3, 360, 35, 400) "
+            "INSERT INTO weather (weather_id, weather_time, temperature_air, relative_humidity, dew_point, relative_pressure, wind_speed, wind_speed_std, wind_direction, wind_direction_std, irradiance) "
+            "VALUES (1, '2026-05-18T10:05:50.028240+02:00', 23, 53, 10, 4, 10, 3, 360, 35, 400) "
             "ON CONFLICT (weather_time) DO NOTHING"
             )
     cur.execute(curve_insert)
@@ -673,11 +671,11 @@ def data_tester(conn, cur):
     conn.commit()
     
     curve_insert = (
-            "INSERT INTO pv_point_test (date_time, scheduled_time, module_name, mounted_on, v, i, status_integer, axis_azimuth, axis_tilt, weather_id) "
-            "VALUES ('2026-05-19T10:05:50.028240+02:00','2026-05-18T10:05:50+02:00','My_solar_panel_1','Egis-tracker',-0.000303534,8.00177e-07,1,180,30,5) "
+            "INSERT INTO pv_point (date_time, scheduled_time, module_name, mounted_on, v, i, status_integer, axis_azimuth, axis_tilt, weather_id) "
+            "VALUES ('2026-05-19T10:05:50.028240+02:00','2026-05-18T10:05:50+02:00','My_solar_panel_1','Egis-tracker',-0.000303534,8.00177e-07,1,%s,%s,1) "
             "ON CONFLICT (date_time, module_name) DO NOTHING"
             )
-    cur.execute(curve_insert)
+    cur.execute(curve_insert, (180, 30))
     conn.commit()
 
 
@@ -693,10 +691,13 @@ def db_close(conn):
 # conn, cur, mysql_conn, mysql_cur, config, data_path_base = init()
 # delete_table('weather', conn, cur)
 # create_table('weather', conn, cur)
-# # add_data('2026-05-26', conn, cur , mysql_conn, mysql_cur, config, data_path_base)
-# add_weather_data(download_weather_last24hours(1, mysql_conn, mysql_cur), conn, cur)
-# print_table('weather', conn, cur)
+# delete_table('pv_point', conn, cur)
+# create_table('pv_point', conn, cur)
+# data_tester(conn, cur)
 # download_table('test1.csv', 'pv_point', "2026-05-25 16:00:50-07:00", "2026-12-20 16:00:50-07:00", ["My_solar_panel_1"], conn, cur)
+# add_module_data(config, conn, cur)
+# print_table('pv_point', conn, cur)
+# error_detect(conn, cur, config)
 # db_close(conn)
 #daily_loop()
 
