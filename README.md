@@ -7,9 +7,9 @@ The system is set up as can be seen in the picture below. First, the OPET, i.e.,
 ![system](images/Database_setup.jpeg)
 
 ## Database structure
-The database contains 4 tables: 'pv_point', 'pv_curve', 'weather', and 'modules'. These tables get linked via some variables. The 'pv_point' and 'pv_curve' tables get linked to the 'modules' table via the variable 'module_name'. This means that if a module is not added to the modules list, data for that module cannot be collected. To add a module to the list, you need to add it to the 'measurement_config.json'. The 'pv_point' and 'pv_curve' tables get linked to the 'weather' table via the 'weather_id'. The system checks whether there were any weather measurements in the past 5 minutes and assigns the most recent weather_id of the weather measurement to the point/curve measurement.
-> [!Caution]
->  All the fields of the 'measurement_config.json' must be filled in; otherwise, the system will break down. To leave space blank fill in:"".
+The database contains 4 tables: 'pv_point', 'pv_curve', 'weather', and 'modules'. These tables get linked via some variables. The 'pv_point' and 'pv_curve' tables get linked to the 'modules' table via the variable 'module_name'. This means that if a module is not added to the modules list, data for that module cannot be collected. To add a module to the list, you need to add it to the `measurement_config.json`. The 'pv_point' and 'pv_curve' tables get linked to the 'weather' table via the 'weather_id'. The system checks whether there were any weather measurements in the past 5 minutes and assigns the most recent weather_id of the weather measurement to the point/curve measurement.
+> [!Warning]
+>  Only the 'module_name' field of the `measurement_config.json` must be filled in; otherwise, the system will break down. It is very much recommended to fill in all possible settings in the `measurement_config.json`.
 
 ![database](images/Database_structure.svg)
 
@@ -25,7 +25,7 @@ Things that need to be installed on the server to run the system:
 * `pip install mysql-connector-python`
 * `pip install setuptools`
 
-When all these programs are installed, and the database has been set up using the PostgreSQL installer, the program 'pyt_to_SQL.py' can be used to continue the setup. The tables for data storage can be created using the function `create_table(type, conn, cur)`. This needs to be done for the types: 'pv_point', 'pv_curve', 'weather', and 'modules'. Running the following code does that: 
+When all these programs are installed, and the database has been set up using the PostgreSQL installer, the program `pyt_to_SQL.py` can be used to continue the setup. The tables for data storage can be created using the function `create_table(type, conn, cur)`. This needs to be done for the types: 'pv_point', 'pv_curve', 'weather', and 'modules'. Running the following code does that: 
 ```python
 conn, cur, mysql_conn, mysql_cur, config, data_path_base = init()
 create_table('pv_point', conn, cur)
@@ -45,7 +45,7 @@ When you have completed all previous steps, you can start using the database by 
 Here are some high-level descriptions of each document. To fully understand the code, you will have to look into the Python file for more specific explanations. 
 
 <details>
-    <summary><b>TUD-opet-supervisor.py</b></summary>
+    <summary><b>TUD_opet_supervisor.py</b></summary>
     <p>This document is the heart of the operation. It schedules functions in the code. It plans the measurements and plans the updates of the database.</p>
 </details>
 
@@ -71,7 +71,7 @@ Here are some high-level descriptions of each document. To fully understand the 
 </details>
 
 <details>
-  <summary><b>opet-supervisor-config.json</b></summary>
+  <summary><b>opet_supervisor_config.json</b></summary>
     <p>This document contains the information on where the data, logs, and configurations can be found.</p>
 </details>
 
@@ -81,8 +81,8 @@ Here are some high-level descriptions of each document. To fully understand the 
 </details>
 
 <details>
-    <summary><b>example-config-test</b></summary> 
-    <p> This folder contains all the settings that need to be set up when a new solar module is connected. <br>
+    <summary><b>config</b></summary> 
+    <p> This folder contains all the settings that need to be set up when a new solar module is connected. An example of a config can be found in <code>example_config</code> <br>
         In <code>measurement_config.json</code>, data about the solar module must be added. <br>
         The following fields need to be filled in for each solar module
         <ul>
