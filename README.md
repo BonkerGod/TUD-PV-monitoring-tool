@@ -86,7 +86,7 @@ Here are some high-level descriptions of each document. To fully understand the 
         In <code>measurement_config.json</code>, data about the solar module must be added. <br>
         The following fields need to be filled in for each solar module
         <ul>
-            <li>module_name</li>
+            <li>module_name (This one needs to be unique for every different module and it must be filled in otherwise the system will not work.</li>
             <li>mounted_on</li>
             <li>tracer</li>
             <li>interval_point</li>
