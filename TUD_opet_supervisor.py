@@ -1,18 +1,14 @@
-import sys
-from pathlib import Path
-
-ROOT = Path(__file__).resolve().parent
-sys.path.insert(0, str(ROOT / "TUD-opet-control"))
-
 import multiprocessing
 import datetime
-from measurement_scheduling_tools import datetime_range, present, next_occurrence
+from helper_packages.measurement_scheduling_tools import datetime_range, present, next_occurrence
 import json
 from supervisor_tools import measurement_loop, writer_loop
 #from pyt_to_SQL import daily_loop, update_loop
 import logging
 import traceback
 from zoneinfo import ZoneInfo
+import sys
+from pathlib import Path
 
 # Constants
 # Measurements more than this far into the future will be handled on a
@@ -231,7 +227,7 @@ if __name__ == '__main__':
                     with open(CONFIG_PATH / 'measurement_config.json') as f:
                         new_config = json.load(f)
                 except Exception:
-                    logger.exception('could not open the measurement config file ')
+                    logger.exception('Could not open the measurement config file')
                     new_config = config
 
                 config = new_config
