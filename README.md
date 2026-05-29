@@ -7,7 +7,8 @@ The system is set up as can be seen in the picture below. First, the OPET, i.e.,
 ![system](images/Database_setup.jpeg)
 
 ## Database structure
-The database contains 4 tables: 'pv_point', 'pv_curve', 'weather', and 'modules'. These tables get linked via some variables. The 'pv_point' and 'pv_curve' tables get linked to the 'modules' table via the variable 'module_name'. This means that if a module is not added to the modules list, data for that module cannot be collected. To add a module to the list, you need to add it to the `measurement_config.json`. The 'pv_point' and 'pv_curve' tables get linked to the 'weather' table via the 'weather_id'. The system checks whether there were any weather measurements in the past 5 minutes and assigns the most recent weather_id of the weather measurement to the point/curve measurement.
+The database contains 4 tables: 'pv_point', 'pv_curve', 'weather', and 'modules'. These tables get linked via some variables. The 'pv_point' and 'pv_curve' tables get linked to the 'modules' table via the variable 'module_name'. This means that if a module is not added to the modules list, data for that module cannot be collected. To add a module to the list, you need to add it to the `measurement_config.json`. The 'pv_point' and 'pv_curve' tables get linked to the 'weather' table via the 'weather_id'. The system checks whether there were any weather measurements in the past 5 minutes and assigns the closest in time weather_id of the weather measurement to the point/curve measurement. If the weather_id of the OPET measurements is 0, it means that the weather data did not have a suitable fit. If the data is Null/None, it means that no weather_id has been assigned yet. 
+
 > [!Warning]
 >  Only the 'module_name' field of the `measurement_config.json` must be filled in; otherwise, the system will break down. It is very much recommended to fill in all possible settings in the `measurement_config.json`.
 
@@ -40,6 +41,13 @@ db_close(conn)
 
 The next step is to configure the JSON files properly. To see this open the foldable example-config-test under the header [File descriptions](#file-descriptions). 
 When you have completed all previous steps, you can start using the database by running 'TUD-opet-supervisor.py'.
+
+## Users
+In order to use the database, you first need to add your solar module to `measurement_config.json`. It is important that you do this securely and make sure to take a look at the example. Once the data is set, it gets uploaded to the database, and once it has been uploaded, you cannot change it anymore. See in the file the description of the config for more details.
+If you want to stop a measurement, you either need to set disabled to TRUE in the `measurement_config.json` or just completely remove the module from that file.
+
+Data can be extracted using `download.py` which can be found in the user_tools. This command either the 'pv_point' or 'pv_curve' data with the weather data. You also need to set a start and stop date, which acts as a filter for your data. Lastly, you need to select the solar modules you want to have. The data that you get is not perfectly on a single timestamp, because the OPET measurements take place at a different time compared to the weather measurements. This data gets synced based on the closest measurement within a 5-minute time difference compared to the opet data. 
+
 
 ## File descriptions
 Here are some high-level descriptions of each document. To fully understand the code, you will have to look into the Python file for more specific explanations. 
