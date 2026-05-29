@@ -46,19 +46,19 @@ def init():
                                 host=DB_HOST,
                                 port=DB_PORT)
         print("Database connected succefully")
-        logging.debug(f"Database connected succesfully")
+        logger.debug(f"Database connected succesfully")
     except Exception as e:
         print("Database not connected succesfully")
-        logging.error(f"Database not connected succesfully. Error: {e}")
+        logger.error(f"Database not connected succesfully. Error: {e}")
     cur = conn.cursor()
     
     # Make connection to the MySQL database.
     try:
         mysql_conn, mysql_cur = mysql_init()
-        logging.debug(f"Weather database succesfully connected")
+        logger.debug(f"Weather database succesfully connected")
     except Exception as e:
         print('Weather database not connected succesfully')
-        logging.error(f"Weather database not connected succesfully. Error: {e}")
+        logger.error(f"Weather database not connected succesfully. Error: {e}")
         mysql_conn = None
         mysql_cur = None
 
@@ -794,24 +794,25 @@ def data_tester(conn, cur):
     conn.commit()
 
 
-def db_close(conn):
+def db_close(conn, mysql_conn):
     """ Close the connection with the PostgreSQL database
 
     Args:
         conn (_type_): The connection to the PostgreSQL database
     """
     conn.close()
+    mysql_close(mysql_conn)
 
 
 
-# conn, cur, mysql_conn, mysql_cur= init()
-# config, data_path_base, = loadconfig()
+conn, cur, mysql_conn, mysql_cur= init()
+config, data_path_base, = loadconfig()
 # delete_table('weather', conn, cur)
 # create_table('weather', conn, cur)
 #delete_table('pv_point', conn, cur)
 #create_table('pv_point', conn, cur)
 #data_tester(conn, cur)
-# download_table('test1.csv', 'pv_point', "2026-05-25 16:00:50-07:00", "2026-12-20 16:00:50-07:00", ["My_solar_panel_1"], conn, cur)
+download_table('test1.csv', 'pv_point', "2026-05-25 16:00:50-07:00", "2026-12-29 16:00:50-07:00", ["My_solar_panel_1"], conn, cur)
 # add_module_data(config, conn, cur)
 #add_data('2026-05-26', conn, cur, mysql_conn, mysql_cur, config, data_path_base)
 #add_weather_data(download_weather_last24hours(1000, mysql_conn, mysql_cur), conn, cur)
@@ -825,6 +826,6 @@ def db_close(conn):
 # print_table('pv_curve', conn, cur)
 # update_weather_id('2026-05-26', conn, cur)
 # print_table('pv_curve',conn, cur)
-# db_close(conn)
-daily_loop()
+db_close(conn, mysql_conn)
+
 
