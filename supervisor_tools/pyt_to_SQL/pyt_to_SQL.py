@@ -133,7 +133,7 @@ def daily_loop():
     conn, cur, mysql_conn, mysql_cur= init()
     while(1):
         config, data_path_base = loadconfig()
-        if datetime.datetime.now().hour == 11: #At midnight
+        if datetime.datetime.now().hour == 14: #At midnight
             try:
                 past_data_upload(conn, cur, mysql_conn, mysql_cur, config, data_path_base)
             except Exception as e: 

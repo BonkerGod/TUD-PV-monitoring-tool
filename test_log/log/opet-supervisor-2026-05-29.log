@@ -405,3 +405,383 @@ NoneType: None
 2026-05-29 14:11:47,978 ERROR Weather data could not be added. Error 'NoneType' object has no attribute 'execute'
 2026-05-29 14:11:47,979 DEBUG Succesfully updated the weather_id
 2026-05-29 14:11:51,301 ERROR Keyboard interrupt, shutting down child processes
+2026-05-29 14:17:59,663 DEBUG opet-supervisor started
+2026-05-29 14:18:00,609 DEBUG opet-supervisor started
+2026-05-29 14:18:00,633 DEBUG manager: 0 (set_load_mode: mpp) scheduled for 2026-05-29 14:18:03.633123+02:00
+2026-05-29 14:18:00,633 DEBUG manager: 1 (point) scheduled for 2026-05-29 14:18:30+02:00
+2026-05-29 14:18:00,634 DEBUG manager: 2 jobs are scheduled
+2026-05-29 14:18:00,634 DEBUG manager: [0, 1]
+2026-05-29 14:18:01,617 DEBUG opet-supervisor started
+2026-05-29 14:18:01,618 DEBUG opet-supervisor started
+2026-05-29 14:18:01,630 ERROR Couldn't find the serial port for bus a
+2026-05-29 14:18:01,633 ERROR Couldn't find the serial port for bus a
+2026-05-29 14:18:01,683 DEBUG Database connected succesfully
+2026-05-29 14:18:06,646 ERROR Couldn't find the serial port for bus a
+2026-05-29 14:18:11,650 ERROR Couldn't find the serial port for bus a
+2026-05-29 14:18:16,662 ERROR Couldn't find the serial port for bus a
+2026-05-29 14:18:21,671 ERROR Couldn't find the serial port for bus a
+2026-05-29 14:18:22,743 ERROR Weather database not connected succesfully. Error: cannot unpack non-iterable NoneType object
+2026-05-29 14:18:22,760 ERROR Weather database not connected succesfully. Error: cannot unpack non-iterable NoneType object
+2026-05-29 14:18:22,774 DEBUG Duplicate module_name
+2026-05-29 14:18:22,824 ERROR Weather data could not be added. Error 'NoneType' object has no attribute 'execute'
+2026-05-29 14:18:22,826 DEBUG Succesfully updated the weather_id
+2026-05-29 14:18:26,686 ERROR Couldn't find the serial port for bus a
+2026-05-29 14:18:30,008 DEBUG manager: 2 (set_load_mode: mpp) scheduled for 2026-05-29 14:18:33.007887+02:00
+2026-05-29 14:18:30,008 DEBUG manager: 3 (point) scheduled for 2026-05-29 14:19:00+02:00
+2026-05-29 14:18:30,008 DEBUG manager: 4 (curve) scheduled for 2026-05-29 14:19:00+02:00
+2026-05-29 14:18:30,009 DEBUG manager: 5 jobs are scheduled
+2026-05-29 14:18:30,009 DEBUG manager: [0, 1, 2, 3, 4]
+2026-05-29 14:18:31,704 ERROR Couldn't find the serial port for bus a
+2026-05-29 14:18:32,827 DEBUG Duplicate module_name
+2026-05-29 14:18:32,850 ERROR Weather data could not be added. Error 'NoneType' object has no attribute 'execute'
+2026-05-29 14:18:32,850 DEBUG Succesfully updated the weather_id
+2026-05-29 14:18:36,710 ERROR Couldn't find the serial port for bus a
+2026-05-29 14:18:41,722 ERROR Couldn't find the serial port for bus a
+2026-05-29 14:18:42,852 DEBUG Duplicate module_name
+2026-05-29 14:18:42,873 ERROR Weather data could not be added. Error 'NoneType' object has no attribute 'execute'
+2026-05-29 14:18:42,874 DEBUG Succesfully updated the weather_id
+2026-05-29 14:18:46,726 ERROR Couldn't find the serial port for bus a
+2026-05-29 14:18:51,733 ERROR Couldn't find the serial port for bus a
+2026-05-29 14:18:52,875 DEBUG Duplicate module_name
+2026-05-29 14:18:52,901 ERROR Weather data could not be added. Error 'NoneType' object has no attribute 'execute'
+2026-05-29 14:18:52,902 DEBUG Succesfully updated the weather_id
+2026-05-29 14:18:56,751 ERROR Couldn't find the serial port for bus a
+2026-05-29 14:19:00,005 DEBUG manager: 5 (set_load_mode: mpp) scheduled for 2026-05-29 14:19:03.005390+02:00
+2026-05-29 14:19:00,006 DEBUG manager: 6 (point) scheduled for 2026-05-29 14:19:30+02:00
+2026-05-29 14:19:00,007 DEBUG manager: 7 jobs are scheduled
+2026-05-29 14:19:00,008 DEBUG manager: [0, 1, 2, 3, 4, 5, 6]
+2026-05-29 14:19:01,766 ERROR Couldn't find the serial port for bus a
+2026-05-29 14:19:02,905 DEBUG Duplicate module_name
+2026-05-29 14:19:02,928 ERROR Weather data could not be added. Error 'NoneType' object has no attribute 'execute'
+2026-05-29 14:19:02,929 DEBUG Succesfully updated the weather_id
+2026-05-29 14:19:06,775 ERROR Couldn't find the serial port for bus a
+2026-05-29 14:19:11,784 ERROR Couldn't find the serial port for bus a
+2026-05-29 14:19:12,932 DEBUG Duplicate module_name
+2026-05-29 14:19:12,962 ERROR Weather data could not be added. Error 'NoneType' object has no attribute 'execute'
+2026-05-29 14:19:12,963 DEBUG Succesfully updated the weather_id
+2026-05-29 14:19:16,795 ERROR Couldn't find the serial port for bus a
+2026-05-29 14:19:21,809 ERROR Couldn't find the serial port for bus a
+2026-05-29 14:19:22,965 DEBUG Duplicate module_name
+2026-05-29 14:19:22,993 ERROR Weather data could not be added. Error 'NoneType' object has no attribute 'execute'
+2026-05-29 14:19:22,994 DEBUG Succesfully updated the weather_id
+2026-05-29 14:19:26,812 ERROR Couldn't find the serial port for bus a
+2026-05-29 14:19:30,008 DEBUG manager: 7 (set_load_mode: mpp) scheduled for 2026-05-29 14:19:33.008027+02:00
+2026-05-29 14:19:30,009 DEBUG manager: 8 (point) scheduled for 2026-05-29 14:20:00+02:00
+2026-05-29 14:19:30,009 DEBUG manager: 9 (curve) scheduled for 2026-05-29 14:20:00+02:00
+2026-05-29 14:19:30,010 DEBUG manager: 10 jobs are scheduled
+2026-05-29 14:19:30,011 DEBUG manager: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+2026-05-29 14:19:31,813 ERROR Couldn't find the serial port for bus a
+2026-05-29 14:19:32,996 DEBUG Duplicate module_name
+2026-05-29 14:19:33,028 ERROR Weather data could not be added. Error 'NoneType' object has no attribute 'execute'
+2026-05-29 14:19:33,029 DEBUG Succesfully updated the weather_id
+2026-05-29 14:19:37,863 ERROR bus a: job 0: OPETTimeoutError in `set_load_mode` on O001; Got an empty reply on the OPET bus
+2026-05-29 14:19:38,876 ERROR bus a: job 1: OPETTimeoutError in `sample` property on load O001; Got an empty reply on the OPET bus
+2026-05-29 14:19:39,885 ERROR bus a: job 2: OPETTimeoutError in `set_load_mode` on O001; Got an empty reply on the OPET bus
+2026-05-29 14:19:40,900 ERROR bus a: job 3: OPETTimeoutError in `sample` property on load O001; Got an empty reply on the OPET bus
+2026-05-29 14:19:41,907 ERROR bus a: job 4: OPETTimeoutError in start_iv_curve property on load O001; Got an empty reply on the OPET bus
+2026-05-29 14:19:42,922 ERROR bus a: job 5: OPETTimeoutError in `set_load_mode` on O001; Got an empty reply on the OPET bus
+2026-05-29 14:19:43,030 DEBUG Duplicate module_name
+2026-05-29 14:19:43,054 ERROR Weather data could not be added. Error 'NoneType' object has no attribute 'execute'
+2026-05-29 14:19:43,055 DEBUG Succesfully updated the weather_id
+2026-05-29 14:19:43,927 ERROR bus a: job 6: OPETTimeoutError in `sample` property on load O001; Got an empty reply on the OPET bus
+2026-05-29 14:19:44,935 ERROR bus a: job 7: OPETTimeoutError in `set_load_mode` on O001; Got an empty reply on the OPET bus
+2026-05-29 14:19:53,057 DEBUG Duplicate module_name
+2026-05-29 14:19:53,087 ERROR Weather data could not be added. Error 'NoneType' object has no attribute 'execute'
+2026-05-29 14:19:53,088 DEBUG Succesfully updated the weather_id
+2026-05-29 14:20:00,011 DEBUG manager: 10 (set_load_mode: mpp) scheduled for 2026-05-29 14:20:03.011626+02:00
+2026-05-29 14:20:00,012 DEBUG manager: 11 (point) scheduled for 2026-05-29 14:20:30+02:00
+2026-05-29 14:20:00,012 DEBUG manager: 3 jobs are scheduled
+2026-05-29 14:20:00,012 DEBUG manager: [9, 10, 11]
+2026-05-29 14:20:00,032 DEBUG bus a: job 8: (-0.00747681, 8.04523e-05), 0:00:00.032872 late
+2026-05-29 14:20:00,047 DEBUG bus a: job 9: curve measurement (not started) 9, 0:00:00.047876 late
+2026-05-29 14:20:03,090 DEBUG Duplicate module_name
+2026-05-29 14:20:03,141 ERROR Weather data could not be added. Error 'NoneType' object has no attribute 'execute'
+2026-05-29 14:20:03,142 DEBUG Succesfully updated the weather_id
+2026-05-29 14:20:13,143 DEBUG Duplicate module_name
+2026-05-29 14:20:13,166 ERROR Weather data could not be added. Error 'NoneType' object has no attribute 'execute'
+2026-05-29 14:20:13,167 DEBUG Succesfully updated the weather_id
+2026-05-29 14:20:23,169 DEBUG Duplicate module_name
+2026-05-29 14:20:23,199 ERROR Weather data could not be added. Error 'NoneType' object has no attribute 'execute'
+2026-05-29 14:20:23,199 DEBUG Succesfully updated the weather_id
+2026-05-29 14:20:30,015 DEBUG manager: 12 (set_load_mode: mpp) scheduled for 2026-05-29 14:20:33.015565+02:00
+2026-05-29 14:20:30,016 DEBUG manager: 13 (point) scheduled for 2026-05-29 14:21:00+02:00
+2026-05-29 14:20:30,016 DEBUG manager: 14 (curve) scheduled for 2026-05-29 14:21:00+02:00
+2026-05-29 14:20:30,016 DEBUG manager: 3 jobs are scheduled
+2026-05-29 14:20:30,016 DEBUG manager: [12, 13, 14]
+2026-05-29 14:20:30,038 DEBUG bus a: job 11: (-0.00031144, 7.82966e-07), 0:00:00.038832 late
+2026-05-29 14:20:33,202 DEBUG Duplicate module_name
+2026-05-29 14:20:33,231 ERROR Weather data could not be added. Error 'NoneType' object has no attribute 'execute'
+2026-05-29 14:20:33,232 DEBUG Succesfully updated the weather_id
+2026-05-29 14:20:38,742 ERROR Keyboard interrupt, shutting down child processes
+2026-05-29 14:20:38,861 INFO bus a: serial port closed
+2026-05-29 14:21:01,093 DEBUG opet-supervisor started
+2026-05-29 14:21:01,989 DEBUG opet-supervisor started
+2026-05-29 14:21:02,011 DEBUG manager: 0 (set_load_mode: mpp) scheduled for 2026-05-29 14:21:05.011253+02:00
+2026-05-29 14:21:02,012 DEBUG manager: 1 (point) scheduled for 2026-05-29 14:21:30+02:00
+2026-05-29 14:21:02,012 DEBUG manager: 2 jobs are scheduled
+2026-05-29 14:21:02,012 DEBUG manager: [0, 1]
+2026-05-29 14:21:02,971 DEBUG opet-supervisor started
+2026-05-29 14:21:02,973 DEBUG opet-supervisor started
+2026-05-29 14:21:02,974 DEBUG opet-supervisor started
+2026-05-29 14:21:03,013 DEBUG Database connected succesfully
+2026-05-29 14:21:03,017 DEBUG Database connected succesfully
+2026-05-29 14:21:24,070 ERROR Weather database not connected succesfully. Error: cannot unpack non-iterable NoneType object
+2026-05-29 14:21:24,074 DEBUG Duplicate module_name
+2026-05-29 14:21:24,075 ERROR Date could not be added on 2026-05-22. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-22\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-22.csv'
+2026-05-29 14:21:24,077 DEBUG weather_id succesfully updated
+2026-05-29 14:21:24,078 DEBUG Duplicate module_name
+2026-05-29 14:21:24,078 ERROR Date could not be added on 2026-05-23. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-23\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-23.csv'
+2026-05-29 14:21:24,079 DEBUG weather_id succesfully updated
+2026-05-29 14:21:24,079 DEBUG Duplicate module_name
+2026-05-29 14:21:24,080 ERROR Date could not be added on 2026-05-24. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-24\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-24.csv'
+2026-05-29 14:21:24,080 DEBUG weather_id succesfully updated
+2026-05-29 14:21:24,081 DEBUG Duplicate module_name
+2026-05-29 14:21:24,081 ERROR Date could not be added on 2026-05-25. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-25\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-25.csv'
+2026-05-29 14:21:24,082 DEBUG weather_id succesfully updated
+2026-05-29 14:21:24,082 DEBUG Duplicate module_name
+2026-05-29 14:21:24,106 ERROR Weather data could not be added. Error 'NoneType' object has no attribute 'execute'
+2026-05-29 14:21:24,107 DEBUG Succesfully updated the weather_id
+2026-05-29 14:21:24,109 DEBUG weather_id succesfully updated
+2026-05-29 14:21:24,109 DEBUG Duplicate module_name
+2026-05-29 14:21:24,110 ERROR Date could not be added on 2026-05-27. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-27\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-27.csv'
+2026-05-29 14:21:24,110 DEBUG weather_id succesfully updated
+2026-05-29 14:21:24,111 DEBUG Duplicate module_name
+2026-05-29 14:21:24,111 ERROR Date could not be added on 2026-05-28. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-28\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-28.csv'
+2026-05-29 14:21:24,111 DEBUG weather_id succesfully updated
+2026-05-29 14:21:24,112 DEBUG Duplicate module_name
+2026-05-29 14:21:24,135 DEBUG weather_id succesfully updated
+2026-05-29 14:21:24,135 ERROR Weather data could not be added. Error: 'NoneType' object has no attribute 'execute'
+2026-05-29 14:21:24,138 DEBUG Email address is correct
+2026-05-29 14:21:28,321 DEBUG Email has been send
+2026-05-29 14:21:30,015 DEBUG manager: 2 (set_load_mode: mpp) scheduled for 2026-05-29 14:21:33.015749+02:00
+2026-05-29 14:21:30,016 DEBUG manager: 3 (point) scheduled for 2026-05-29 14:22:00+02:00
+2026-05-29 14:21:30,016 DEBUG manager: 4 (curve) scheduled for 2026-05-29 14:22:00+02:00
+2026-05-29 14:21:30,016 DEBUG manager: 3 jobs are scheduled
+2026-05-29 14:21:30,016 DEBUG manager: [2, 3, 4]
+2026-05-29 14:21:30,039 DEBUG bus a: job 1: (-0.000299753, 8.00531e-07), 0:00:00.039187 late
+2026-05-29 14:21:34,109 DEBUG Duplicate module_name
+2026-05-29 14:21:34,142 ERROR Weather data could not be added. Error 'NoneType' object has no attribute 'execute'
+2026-05-29 14:21:34,143 DEBUG Succesfully updated the weather_id
+2026-05-29 14:21:44,145 DEBUG Duplicate module_name
+2026-05-29 14:21:44,168 ERROR Weather data could not be added. Error 'NoneType' object has no attribute 'execute'
+2026-05-29 14:21:44,169 DEBUG Succesfully updated the weather_id
+2026-05-29 14:21:54,170 DEBUG Duplicate module_name
+2026-05-29 14:21:54,193 ERROR Weather data could not be added. Error 'NoneType' object has no attribute 'execute'
+2026-05-29 14:21:54,194 DEBUG Succesfully updated the weather_id
+2026-05-29 14:22:00,011 DEBUG manager: 5 (set_load_mode: mpp) scheduled for 2026-05-29 14:22:03.010614+02:00
+2026-05-29 14:22:00,012 DEBUG manager: 6 (point) scheduled for 2026-05-29 14:22:30+02:00
+2026-05-29 14:22:00,012 DEBUG manager: 3 jobs are scheduled
+2026-05-29 14:22:00,013 DEBUG manager: [4, 5, 6]
+2026-05-29 14:22:00,035 DEBUG bus a: job 3: (-0.000300097, 8.01058e-07), 0:00:00.035765 late
+2026-05-29 14:22:00,051 DEBUG bus a: job 4: curve measurement (start) 4, 0:00:00.051308 late
+2026-05-29 14:22:02,258 DEBUG bus a: job 4: curve measurement (complete) 0:00:02.258778 late
+2026-05-29 14:22:04,197 DEBUG Duplicate module_name
+2026-05-29 14:22:04,252 ERROR Weather data could not be added. Error 'NoneType' object has no attribute 'execute'
+2026-05-29 14:22:04,254 DEBUG Succesfully updated the weather_id
+2026-05-29 14:22:14,256 DEBUG Duplicate module_name
+2026-05-29 14:22:14,283 ERROR Weather data could not be added. Error 'NoneType' object has no attribute 'execute'
+2026-05-29 14:22:14,283 DEBUG Succesfully updated the weather_id
+2026-05-29 14:22:24,286 DEBUG Duplicate module_name
+2026-05-29 14:22:24,330 ERROR Weather data could not be added. Error 'NoneType' object has no attribute 'execute'
+2026-05-29 14:22:24,331 DEBUG Succesfully updated the weather_id
+2026-05-29 14:22:28,323 DEBUG Duplicate module_name
+2026-05-29 14:22:28,324 ERROR Date could not be added on 2026-05-22. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-22\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-22.csv'
+2026-05-29 14:22:28,325 DEBUG weather_id succesfully updated
+2026-05-29 14:22:28,325 DEBUG Duplicate module_name
+2026-05-29 14:22:28,325 ERROR Date could not be added on 2026-05-23. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-23\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-23.csv'
+2026-05-29 14:22:28,326 DEBUG weather_id succesfully updated
+2026-05-29 14:22:28,326 DEBUG Duplicate module_name
+2026-05-29 14:22:28,327 ERROR Date could not be added on 2026-05-24. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-24\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-24.csv'
+2026-05-29 14:22:28,327 DEBUG weather_id succesfully updated
+2026-05-29 14:22:28,328 DEBUG Duplicate module_name
+2026-05-29 14:22:28,328 ERROR Date could not be added on 2026-05-25. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-25\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-25.csv'
+2026-05-29 14:22:28,328 DEBUG weather_id succesfully updated
+2026-05-29 14:22:28,329 DEBUG Duplicate module_name
+2026-05-29 14:22:28,350 DEBUG weather_id succesfully updated
+2026-05-29 14:22:28,350 DEBUG Duplicate module_name
+2026-05-29 14:22:28,351 ERROR Date could not be added on 2026-05-27. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-27\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-27.csv'
+2026-05-29 14:22:28,351 DEBUG weather_id succesfully updated
+2026-05-29 14:22:28,351 DEBUG Duplicate module_name
+2026-05-29 14:22:28,352 ERROR Date could not be added on 2026-05-28. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-28\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-28.csv'
+2026-05-29 14:22:28,352 DEBUG weather_id succesfully updated
+2026-05-29 14:22:28,352 DEBUG Duplicate module_name
+2026-05-29 14:22:28,377 DEBUG weather_id succesfully updated
+2026-05-29 14:22:28,377 ERROR Weather data could not be added. Error: 'NoneType' object has no attribute 'execute'
+2026-05-29 14:22:28,377 DEBUG Email address is correct
+2026-05-29 14:22:29,758 DEBUG Email has been send
+2026-05-29 14:22:30,006 DEBUG manager: 7 (set_load_mode: mpp) scheduled for 2026-05-29 14:22:33.006801+02:00
+2026-05-29 14:22:30,007 DEBUG manager: 8 (point) scheduled for 2026-05-29 14:23:00+02:00
+2026-05-29 14:22:30,007 DEBUG manager: 9 (curve) scheduled for 2026-05-29 14:23:00+02:00
+2026-05-29 14:22:30,007 DEBUG manager: 3 jobs are scheduled
+2026-05-29 14:22:30,007 DEBUG manager: [7, 8, 9]
+2026-05-29 14:22:30,031 DEBUG bus a: job 6: (-0.000309723, 7.84987e-07), 0:00:00.031151 late
+2026-05-29 14:22:34,334 DEBUG Duplicate module_name
+2026-05-29 14:22:34,373 ERROR Weather data could not be added. Error 'NoneType' object has no attribute 'execute'
+2026-05-29 14:22:34,373 DEBUG Succesfully updated the weather_id
+2026-05-29 14:22:44,375 DEBUG Duplicate module_name
+2026-05-29 14:22:44,398 ERROR Weather data could not be added. Error 'NoneType' object has no attribute 'execute'
+2026-05-29 14:22:44,399 DEBUG Succesfully updated the weather_id
+2026-05-29 14:22:54,402 DEBUG Duplicate module_name
+2026-05-29 14:22:54,432 ERROR Weather data could not be added. Error 'NoneType' object has no attribute 'execute'
+2026-05-29 14:22:54,433 DEBUG Succesfully updated the weather_id
+2026-05-29 14:23:00,017 DEBUG manager: 10 (set_load_mode: mpp) scheduled for 2026-05-29 14:23:03.017436+02:00
+2026-05-29 14:23:00,018 DEBUG manager: 11 (point) scheduled for 2026-05-29 14:23:30+02:00
+2026-05-29 14:23:00,018 DEBUG manager: 3 jobs are scheduled
+2026-05-29 14:23:00,018 DEBUG manager: [9, 10, 11]
+2026-05-29 14:23:00,040 DEBUG bus a: job 8: (-0.000307315, 7.93767e-07), 0:00:00.040723 late
+2026-05-29 14:23:00,056 DEBUG bus a: job 9: curve measurement (start) 9, 0:00:00.056374 late
+2026-05-29 14:23:02,263 DEBUG bus a: job 9: curve measurement (complete) 0:00:02.263758 late
+2026-05-29 14:23:04,436 DEBUG Duplicate module_name
+2026-05-29 14:23:04,473 ERROR Weather data could not be added. Error 'NoneType' object has no attribute 'execute'
+2026-05-29 14:23:04,474 DEBUG Succesfully updated the weather_id
+2026-05-29 14:23:14,476 DEBUG Duplicate module_name
+2026-05-29 14:23:14,502 ERROR Weather data could not be added. Error 'NoneType' object has no attribute 'execute'
+2026-05-29 14:23:14,503 DEBUG Succesfully updated the weather_id
+2026-05-29 14:23:24,506 DEBUG Duplicate module_name
+2026-05-29 14:23:24,532 ERROR Weather data could not be added. Error 'NoneType' object has no attribute 'execute'
+2026-05-29 14:23:24,533 DEBUG Succesfully updated the weather_id
+2026-05-29 14:23:29,761 DEBUG Duplicate module_name
+2026-05-29 14:23:29,762 ERROR Date could not be added on 2026-05-22. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-22\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-22.csv'
+2026-05-29 14:23:29,763 DEBUG weather_id succesfully updated
+2026-05-29 14:23:29,764 DEBUG Duplicate module_name
+2026-05-29 14:23:29,764 ERROR Date could not be added on 2026-05-23. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-23\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-23.csv'
+2026-05-29 14:23:29,765 DEBUG weather_id succesfully updated
+2026-05-29 14:23:29,765 DEBUG Duplicate module_name
+2026-05-29 14:23:29,765 ERROR Date could not be added on 2026-05-24. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-24\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-24.csv'
+2026-05-29 14:23:29,766 DEBUG weather_id succesfully updated
+2026-05-29 14:23:29,766 DEBUG Duplicate module_name
+2026-05-29 14:23:29,766 ERROR Date could not be added on 2026-05-25. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-25\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-25.csv'
+2026-05-29 14:23:29,767 DEBUG weather_id succesfully updated
+2026-05-29 14:23:29,767 DEBUG Duplicate module_name
+2026-05-29 14:23:29,788 DEBUG weather_id succesfully updated
+2026-05-29 14:23:29,788 DEBUG Duplicate module_name
+2026-05-29 14:23:29,789 ERROR Date could not be added on 2026-05-27. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-27\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-27.csv'
+2026-05-29 14:23:29,789 DEBUG weather_id succesfully updated
+2026-05-29 14:23:29,789 DEBUG Duplicate module_name
+2026-05-29 14:23:29,790 ERROR Date could not be added on 2026-05-28. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-28\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-28.csv'
+2026-05-29 14:23:29,790 DEBUG weather_id succesfully updated
+2026-05-29 14:23:29,790 DEBUG Duplicate module_name
+2026-05-29 14:23:29,816 DEBUG weather_id succesfully updated
+2026-05-29 14:23:29,816 ERROR Weather data could not be added. Error: 'NoneType' object has no attribute 'execute'
+2026-05-29 14:23:29,816 DEBUG Email address is correct
+2026-05-29 14:23:30,007 DEBUG manager: 12 (set_load_mode: mpp) scheduled for 2026-05-29 14:23:33.006960+02:00
+2026-05-29 14:23:30,007 DEBUG manager: 13 (point) scheduled for 2026-05-29 14:24:00+02:00
+2026-05-29 14:23:30,007 DEBUG manager: 14 (curve) scheduled for 2026-05-29 14:24:00+02:00
+2026-05-29 14:23:30,007 DEBUG manager: 3 jobs are scheduled
+2026-05-29 14:23:30,007 DEBUG manager: [12, 13, 14]
+2026-05-29 14:23:30,032 DEBUG bus a: job 11: (-0.000301814, 7.87013e-07), 0:00:00.032139 late
+2026-05-29 14:23:31,241 DEBUG Email has been send
+2026-05-29 14:23:34,535 DEBUG Duplicate module_name
+2026-05-29 14:23:34,577 ERROR Weather data could not be added. Error 'NoneType' object has no attribute 'execute'
+2026-05-29 14:23:34,578 DEBUG Succesfully updated the weather_id
+2026-05-29 14:23:39,099 ERROR Keyboard interrupt, shutting down child processes
+2026-05-29 14:23:39,201 INFO bus a: serial port closed
+2026-05-29 14:34:05,403 DEBUG opet-supervisor started
+2026-05-29 14:34:06,321 DEBUG opet-supervisor started
+2026-05-29 14:34:06,345 DEBUG manager: 0 (set_load_mode: mpp) scheduled for 2026-05-29 14:34:09.345142+02:00
+2026-05-29 14:34:06,346 DEBUG manager: 1 (point) scheduled for 2026-05-29 14:34:30+02:00
+2026-05-29 14:34:06,346 DEBUG manager: 2 jobs are scheduled
+2026-05-29 14:34:06,346 DEBUG manager: [0, 1]
+2026-05-29 14:34:07,541 DEBUG opet-supervisor started
+2026-05-29 14:34:07,568 DEBUG opet-supervisor started
+2026-05-29 14:34:07,573 DEBUG opet-supervisor started
+2026-05-29 14:34:07,573 DEBUG opet-supervisor started
+2026-05-29 14:34:07,629 DEBUG Database connected succesfully
+2026-05-29 14:34:28,695 ERROR Weather database not connected succesfully. Error: cannot unpack non-iterable NoneType object
+2026-05-29 14:34:28,714 DEBUG Duplicate module_name
+2026-05-29 14:34:28,716 ERROR Date could not be added on 2026-05-22. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-22\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-22.csv'
+2026-05-29 14:34:28,722 DEBUG weather_id succesfully updated
+2026-05-29 14:34:28,722 DEBUG Duplicate module_name
+2026-05-29 14:34:28,722 ERROR Date could not be added on 2026-05-23. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-23\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-23.csv'
+2026-05-29 14:34:28,723 DEBUG weather_id succesfully updated
+2026-05-29 14:34:28,723 DEBUG Duplicate module_name
+2026-05-29 14:34:28,724 ERROR Date could not be added on 2026-05-24. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-24\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-24.csv'
+2026-05-29 14:34:28,724 DEBUG weather_id succesfully updated
+2026-05-29 14:34:28,725 DEBUG Duplicate module_name
+2026-05-29 14:34:28,725 ERROR Date could not be added on 2026-05-25. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-25\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-25.csv'
+2026-05-29 14:34:28,725 DEBUG weather_id succesfully updated
+2026-05-29 14:34:28,726 DEBUG Duplicate module_name
+2026-05-29 14:34:28,825 DEBUG weather_id succesfully updated
+2026-05-29 14:34:28,825 DEBUG Duplicate module_name
+2026-05-29 14:34:28,825 ERROR Date could not be added on 2026-05-27. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-27\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-27.csv'
+2026-05-29 14:34:28,826 DEBUG weather_id succesfully updated
+2026-05-29 14:34:28,826 DEBUG Duplicate module_name
+2026-05-29 14:34:28,827 ERROR Date could not be added on 2026-05-28. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-28\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-28.csv'
+2026-05-29 14:34:28,827 DEBUG weather_id succesfully updated
+2026-05-29 14:34:28,827 DEBUG Duplicate module_name
+2026-05-29 14:34:28,828 ERROR Weather data could not be added. Error 'NoneType' object has no attribute 'execute'
+2026-05-29 14:34:29,557 DEBUG weather_id succesfully updated
+2026-05-29 14:34:29,557 ERROR Weather data could not be added. Error: 'NoneType' object has no attribute 'execute'
+2026-05-29 14:34:29,559 DEBUG Email address is correct
+2026-05-29 14:34:29,566 DEBUG Succesfully updated the weather_id
+2026-05-29 14:34:30,002 DEBUG manager: 2 (set_load_mode: mpp) scheduled for 2026-05-29 14:34:33.001861+02:00
+2026-05-29 14:34:30,002 DEBUG manager: 3 (point) scheduled for 2026-05-29 14:35:00+02:00
+2026-05-29 14:34:30,002 DEBUG manager: 4 (curve) scheduled for 2026-05-29 14:35:00+02:00
+2026-05-29 14:34:30,003 DEBUG manager: 3 jobs are scheduled
+2026-05-29 14:34:30,003 DEBUG manager: [2, 3, 4]
+2026-05-29 14:34:30,028 DEBUG bus a: job 1: (-0.000310751, 7.75243e-07), 0:00:00.028875 late
+2026-05-29 14:34:31,308 DEBUG Email has been send
+2026-05-29 14:34:39,567 DEBUG Duplicate module_name
+2026-05-29 14:34:39,612 ERROR Weather data could not be added. Error 'NoneType' object has no attribute 'execute'
+2026-05-29 14:34:39,613 DEBUG Succesfully updated the weather_id
+2026-05-29 14:34:49,616 DEBUG Duplicate module_name
+2026-05-29 14:34:49,641 ERROR Weather data could not be added. Error 'NoneType' object has no attribute 'execute'
+2026-05-29 14:34:49,642 DEBUG Succesfully updated the weather_id
+2026-05-29 14:34:59,644 DEBUG Duplicate module_name
+2026-05-29 14:34:59,675 ERROR Weather data could not be added. Error 'NoneType' object has no attribute 'execute'
+2026-05-29 14:34:59,676 DEBUG Succesfully updated the weather_id
+2026-05-29 14:35:00,003 DEBUG manager: 5 (set_load_mode: mpp) scheduled for 2026-05-29 14:35:03.003137+02:00
+2026-05-29 14:35:00,003 DEBUG manager: 6 (point) scheduled for 2026-05-29 14:35:30+02:00
+2026-05-29 14:35:00,004 DEBUG manager: 3 jobs are scheduled
+2026-05-29 14:35:00,004 DEBUG manager: [4, 5, 6]
+2026-05-29 14:35:00,029 DEBUG bus a: job 3: (-0.00031522, 7.95778e-07), 0:00:00.029741 late
+2026-05-29 14:35:00,043 DEBUG bus a: job 4: curve measurement (start) 4, 0:00:00.043908 late
+2026-05-29 14:35:02,251 DEBUG bus a: job 4: curve measurement (complete) 0:00:02.251161 late
+2026-05-29 14:35:09,678 DEBUG Duplicate module_name
+2026-05-29 14:35:09,727 ERROR Weather data could not be added. Error 'NoneType' object has no attribute 'execute'
+2026-05-29 14:35:09,728 DEBUG Succesfully updated the weather_id
+2026-05-29 14:35:19,729 DEBUG Duplicate module_name
+2026-05-29 14:35:19,765 ERROR Weather data could not be added. Error 'NoneType' object has no attribute 'execute'
+2026-05-29 14:35:19,766 DEBUG Succesfully updated the weather_id
+2026-05-29 14:35:29,768 DEBUG Duplicate module_name
+2026-05-29 14:35:29,795 ERROR Weather data could not be added. Error 'NoneType' object has no attribute 'execute'
+2026-05-29 14:35:29,796 DEBUG Succesfully updated the weather_id
+2026-05-29 14:35:30,007 DEBUG manager: 7 (set_load_mode: mpp) scheduled for 2026-05-29 14:35:33.007212+02:00
+2026-05-29 14:35:30,007 DEBUG manager: 8 (point) scheduled for 2026-05-29 14:36:00+02:00
+2026-05-29 14:35:30,008 DEBUG manager: 9 (curve) scheduled for 2026-05-29 14:36:00+02:00
+2026-05-29 14:35:30,008 DEBUG manager: 3 jobs are scheduled
+2026-05-29 14:35:30,008 DEBUG manager: [7, 8, 9]
+2026-05-29 14:35:30,029 DEBUG bus a: job 6: (-0.000306971, 7.91046e-07), 0:00:00.029844 late
+2026-05-29 14:35:31,312 DEBUG Duplicate module_name
+2026-05-29 14:35:31,312 ERROR Date could not be added on 2026-05-22. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-22\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-22.csv'
+2026-05-29 14:35:31,313 DEBUG weather_id succesfully updated
+2026-05-29 14:35:31,313 DEBUG Duplicate module_name
+2026-05-29 14:35:31,314 ERROR Date could not be added on 2026-05-23. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-23\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-23.csv'
+2026-05-29 14:35:31,314 DEBUG weather_id succesfully updated
+2026-05-29 14:35:31,315 DEBUG Duplicate module_name
+2026-05-29 14:35:31,315 ERROR Date could not be added on 2026-05-24. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-24\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-24.csv'
+2026-05-29 14:35:31,315 DEBUG weather_id succesfully updated
+2026-05-29 14:35:31,316 DEBUG Duplicate module_name
+2026-05-29 14:35:31,316 ERROR Date could not be added on 2026-05-25. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-25\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-25.csv'
+2026-05-29 14:35:31,317 DEBUG weather_id succesfully updated
+2026-05-29 14:35:31,317 DEBUG Duplicate module_name
+2026-05-29 14:35:31,349 DEBUG weather_id succesfully updated
+2026-05-29 14:35:31,350 DEBUG Duplicate module_name
+2026-05-29 14:35:31,350 ERROR Date could not be added on 2026-05-27. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-27\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-27.csv'
+2026-05-29 14:35:31,351 DEBUG weather_id succesfully updated
+2026-05-29 14:35:31,352 DEBUG Duplicate module_name
+2026-05-29 14:35:31,352 ERROR Date could not be added on 2026-05-28. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-28\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-28.csv'
+2026-05-29 14:35:31,354 DEBUG weather_id succesfully updated
+2026-05-29 14:35:31,355 DEBUG Duplicate module_name
+2026-05-29 14:35:31,417 DEBUG weather_id succesfully updated
+2026-05-29 14:35:31,417 ERROR Weather data could not be added. Error: 'NoneType' object has no attribute 'execute'
+2026-05-29 14:35:31,418 DEBUG Email address is correct
+2026-05-29 14:35:32,952 DEBUG Email has been send
+2026-05-29 14:35:39,797 DEBUG Duplicate module_name
+2026-05-29 14:35:39,824 ERROR Weather data could not be added. Error 'NoneType' object has no attribute 'execute'
+2026-05-29 14:35:39,825 DEBUG Succesfully updated the weather_id
+2026-05-29 14:35:49,826 DEBUG Duplicate module_name
+2026-05-29 14:35:49,856 ERROR Weather data could not be added. Error 'NoneType' object has no attribute 'execute'
+2026-05-29 14:35:49,857 DEBUG Succesfully updated the weather_id
+2026-05-29 14:35:52,421 ERROR Keyboard interrupt, shutting down child processes
+2026-05-29 14:35:52,537 INFO bus a: serial port closed

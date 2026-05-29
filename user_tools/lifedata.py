@@ -1,4 +1,9 @@
-from supervisor_tools.pyt_to_SQL.pyt_to_SQL import init, db_close
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "supervisor_tools"))
+
+from pyt_to_SQL import init, db_close
 import time
 
 def last_measurement(conn, cur):

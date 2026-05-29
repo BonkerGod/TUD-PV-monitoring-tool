@@ -1,0 +1,2 @@
+2026-05-29 14:30:23,570 Database connected succesfully
+2026-05-29 14:30:44,662 Weather database not connected succesfully. Error: cannot unpack non-iterable NoneType object
