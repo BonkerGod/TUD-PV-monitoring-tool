@@ -3,7 +3,7 @@ import datetime
 from helper_packages.measurement_scheduling_tools import datetime_range, present, next_occurrence
 import json
 from supervisor_tools import measurement_loop, writer_loop
-#from pyt_to_SQL import daily_loop, update_loop
+from pyt_to_SQL import daily_loop, update_loop
 import logging
 import traceback
 from zoneinfo import ZoneInfo
@@ -122,21 +122,21 @@ if __name__ == '__main__':
             )
         )
 
-#        # Process for daily loop
-#        processes.append(
-#            multiprocessing.Process(
-#                target=daily_loop,
-#                name='daily_loop'
-#            )
-#        )       
-#
-#        # Process for update loop database
-#        processes.append(
-#            multiprocessing.Process(
-#                target=update_loop,
-#                name='update_loop'
-#            )
-#        )        
+        # Process for daily loop
+        processes.append(
+            multiprocessing.Process(
+                target=daily_loop,
+                name='daily_loop'
+            )
+        )       
+
+        # Process for update loop database
+        processes.append(
+            multiprocessing.Process(
+                target=update_loop,
+                name='update_loop'
+            )
+        )        
 
         for process in processes:
             process.start()
@@ -203,16 +203,16 @@ if __name__ == '__main__':
                             name='writer',
                         )
 
-#                    elif old_name == 'daily_loop':
-#                        new_process = multiprocessing.Process(
-#                            target=daily_loop,
-#                            name='daily_loop'
-#                        )
-#                    elif old_name == 'update_loop':
-#                        new_process = multiprocessing.Process(
-#                            target=update_loop,
-#                            name='update_loop'
-#                        )                       
+                    elif old_name == 'daily_loop':
+                        new_process = multiprocessing.Process(
+                            target=daily_loop,
+                            name='daily_loop'
+                        )
+                    elif old_name == 'update_loop':
+                        new_process = multiprocessing.Process(
+                            target=update_loop,
+                            name='update_loop'
+                        )                       
                     else:
                         logger.error(f'unknown child process name {old_name}; cannot restart')
                         continue
