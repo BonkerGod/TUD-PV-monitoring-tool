@@ -8,9 +8,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 import ast
-from dateutil import parser
 import pgvector.psycopg2
-from sqlalchemy import create_engine
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
