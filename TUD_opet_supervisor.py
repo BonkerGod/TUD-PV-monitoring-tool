@@ -2,8 +2,8 @@ import multiprocessing
 import datetime
 from helper_packages.measurement_scheduling_tools import datetime_range, present, next_occurrence
 import json
-from supervisor_tools import measurement_loop, writer_loop
-from pyt_to_SQL import daily_loop, update_loop
+from supervisor_tools.pyt_to_SQL import daily_loop, update_loop
+from supervisor_tools.oept_supervisor_tools import measurement_loop, writer_loop
 import logging
 import traceback
 from zoneinfo import ZoneInfo

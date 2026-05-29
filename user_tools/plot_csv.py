@@ -1,5 +1,7 @@
 import sys
-sys.path.insert(0, str("../TUD-opet-control"))
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "TUD-opet-control"))
 
 import pandas as pd
 import matplotlib.pyplot as plt

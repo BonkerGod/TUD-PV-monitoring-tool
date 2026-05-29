@@ -297,3 +297,111 @@
 2026-05-29 12:20:23,452 ERROR Couldn't find the serial port for bus a
 2026-05-29 12:20:23,474 DEBUG opet-supervisor started
 2026-05-29 12:20:27,392 ERROR Keyboard interrupt, shutting down child processes
+2026-05-29 14:09:25,767 DEBUG opet-supervisor started
+2026-05-29 14:09:27,163 DEBUG opet-supervisor started
+2026-05-29 14:09:27,203 DEBUG manager: 0 (set_load_mode: mpp) scheduled for 2026-05-29 14:09:30.203188+02:00
+2026-05-29 14:09:27,204 DEBUG manager: 1 jobs are scheduled
+2026-05-29 14:09:27,204 DEBUG manager: [0]
+2026-05-29 14:09:28,652 DEBUG opet-supervisor started
+2026-05-29 14:09:28,675 DEBUG opet-supervisor started
+2026-05-29 14:09:28,675 DEBUG opet-supervisor started
+2026-05-29 14:09:28,689 DEBUG opet-supervisor started
+2026-05-29 14:09:28,705 ERROR Couldn't find the serial port for bus a
+2026-05-29 14:09:28,710 ERROR Couldn't find the serial port for bus a
+2026-05-29 14:09:28,776 DEBUG Database connected succesfully
+2026-05-29 14:09:30,010 DEBUG manager: 1 (set_load_mode: mpp) scheduled for 2026-05-29 14:09:33.010712+02:00
+2026-05-29 14:09:30,011 DEBUG manager: 2 (point) scheduled for 2026-05-29 14:10:00+02:00
+2026-05-29 14:09:30,012 DEBUG manager: 3 (curve) scheduled for 2026-05-29 14:10:00+02:00
+2026-05-29 14:09:30,012 DEBUG manager: 4 jobs are scheduled
+2026-05-29 14:09:30,013 DEBUG manager: [0, 1, 2, 3]
+2026-05-29 14:09:33,726 ERROR Couldn't find the serial port for bus a
+2026-05-29 14:09:38,730 ERROR Couldn't find the serial port for bus a
+2026-05-29 14:09:43,739 ERROR Couldn't find the serial port for bus a
+2026-05-29 14:09:46,370 ERROR Keyboard interrupt, shutting down child processes
+2026-05-29 14:09:49,855 ERROR Weather database not connected succesfully. Error: cannot unpack non-iterable NoneType object
+2026-05-29 14:09:49,907 ERROR Duplicate module_name
+2026-05-29 14:09:50,073 ERROR Weather data could not be added. Error 'NoneType' object has no attribute 'execute'
+2026-05-29 14:09:57,145 DEBUG Succesfully updated the weather_id
+2026-05-29 14:09:58,980 ERROR Traceback (most recent call last):
+  File "c:\Users\wesse\OneDrive\Documenten\Tu Delft\EE3P1\Database\TUD-PV-monitoring-tool\TUD_opet_supervisor.py", line 444, in <module>
+    process.join(timeout=10)
+    ~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Program Files\Python314\Lib\multiprocessing\process.py", line 156, in join
+    res = self._popen.wait(timeout)
+  File "C:\Program Files\Python314\Lib\multiprocessing\popen_spawn_win32.py", line 114, in wait
+    res = _winapi.WaitForSingleObject(int(self._handle), msecs)
+KeyboardInterrupt
+NoneType: None
+2026-05-29 14:10:13,645 DEBUG opet-supervisor started
+2026-05-29 14:10:14,851 DEBUG opet-supervisor started
+2026-05-29 14:10:14,884 DEBUG manager: 0 (set_load_mode: mpp) scheduled for 2026-05-29 14:10:17.884062+02:00
+2026-05-29 14:10:14,885 DEBUG manager: 1 (point) scheduled for 2026-05-29 14:10:30+02:00
+2026-05-29 14:10:14,886 DEBUG manager: 2 jobs are scheduled
+2026-05-29 14:10:14,886 DEBUG manager: [0, 1]
+2026-05-29 14:10:16,364 DEBUG opet-supervisor started
+2026-05-29 14:10:16,365 DEBUG opet-supervisor started
+2026-05-29 14:10:16,369 DEBUG opet-supervisor started
+2026-05-29 14:10:16,374 DEBUG opet-supervisor started
+2026-05-29 14:10:16,379 ERROR Couldn't find the serial port for bus a
+2026-05-29 14:10:16,384 ERROR Couldn't find the serial port for bus a
+2026-05-29 14:10:16,413 DEBUG Database connected succesfully
+2026-05-29 14:10:16,421 DEBUG Database connected succesfully
+2026-05-29 14:10:21,389 ERROR Couldn't find the serial port for bus a
+2026-05-29 14:10:26,396 ERROR Couldn't find the serial port for bus a
+2026-05-29 14:10:30,013 DEBUG manager: 2 (set_load_mode: mpp) scheduled for 2026-05-29 14:10:33.013320+02:00
+2026-05-29 14:10:30,014 DEBUG manager: 3 (point) scheduled for 2026-05-29 14:11:00+02:00
+2026-05-29 14:10:30,014 DEBUG manager: 4 (curve) scheduled for 2026-05-29 14:11:00+02:00
+2026-05-29 14:10:30,014 DEBUG manager: 5 jobs are scheduled
+2026-05-29 14:10:30,015 DEBUG manager: [0, 1, 2, 3, 4]
+2026-05-29 14:10:31,409 ERROR Couldn't find the serial port for bus a
+2026-05-29 14:10:36,425 ERROR Couldn't find the serial port for bus a
+2026-05-29 14:10:37,495 ERROR Weather database not connected succesfully. Error: cannot unpack non-iterable NoneType object
+2026-05-29 14:10:37,495 ERROR Weather database not connected succesfully. Error: cannot unpack non-iterable NoneType object
+2026-05-29 14:10:37,502 ERROR Duplicate module_name
+2026-05-29 14:10:37,564 ERROR Weather data could not be added. Error 'NoneType' object has no attribute 'execute'
+2026-05-29 14:10:37,566 DEBUG Succesfully updated the weather_id
+2026-05-29 14:10:41,432 ERROR Couldn't find the serial port for bus a
+2026-05-29 14:10:46,447 ERROR Couldn't find the serial port for bus a
+2026-05-29 14:10:47,570 ERROR Duplicate module_name
+2026-05-29 14:10:47,623 ERROR Weather data could not be added. Error 'NoneType' object has no attribute 'execute'
+2026-05-29 14:10:47,625 DEBUG Succesfully updated the weather_id
+2026-05-29 14:10:51,458 ERROR Couldn't find the serial port for bus a
+2026-05-29 14:10:56,462 ERROR Couldn't find the serial port for bus a
+2026-05-29 14:10:57,627 ERROR Duplicate module_name
+2026-05-29 14:10:57,675 ERROR Weather data could not be added. Error 'NoneType' object has no attribute 'execute'
+2026-05-29 14:10:57,676 DEBUG Succesfully updated the weather_id
+2026-05-29 14:11:00,002 DEBUG manager: 5 (set_load_mode: mpp) scheduled for 2026-05-29 14:11:03.002680+02:00
+2026-05-29 14:11:00,003 DEBUG manager: 6 (point) scheduled for 2026-05-29 14:11:30+02:00
+2026-05-29 14:11:00,004 DEBUG manager: 7 jobs are scheduled
+2026-05-29 14:11:00,004 DEBUG manager: [0, 1, 2, 3, 4, 5, 6]
+2026-05-29 14:11:01,463 ERROR Couldn't find the serial port for bus a
+2026-05-29 14:11:06,468 ERROR Couldn't find the serial port for bus a
+2026-05-29 14:11:07,679 ERROR Duplicate module_name
+2026-05-29 14:11:07,739 ERROR Weather data could not be added. Error 'NoneType' object has no attribute 'execute'
+2026-05-29 14:11:07,741 DEBUG Succesfully updated the weather_id
+2026-05-29 14:11:11,484 ERROR Couldn't find the serial port for bus a
+2026-05-29 14:11:16,505 ERROR Couldn't find the serial port for bus a
+2026-05-29 14:11:17,744 ERROR Duplicate module_name
+2026-05-29 14:11:17,808 ERROR Weather data could not be added. Error 'NoneType' object has no attribute 'execute'
+2026-05-29 14:11:17,809 DEBUG Succesfully updated the weather_id
+2026-05-29 14:11:21,507 ERROR Couldn't find the serial port for bus a
+2026-05-29 14:11:26,517 ERROR Couldn't find the serial port for bus a
+2026-05-29 14:11:27,812 ERROR Duplicate module_name
+2026-05-29 14:11:27,868 ERROR Weather data could not be added. Error 'NoneType' object has no attribute 'execute'
+2026-05-29 14:11:27,870 DEBUG Succesfully updated the weather_id
+2026-05-29 14:11:30,007 DEBUG manager: 7 (set_load_mode: mpp) scheduled for 2026-05-29 14:11:33.006775+02:00
+2026-05-29 14:11:30,008 DEBUG manager: 8 (point) scheduled for 2026-05-29 14:12:00+02:00
+2026-05-29 14:11:30,009 DEBUG manager: 9 (curve) scheduled for 2026-05-29 14:12:00+02:00
+2026-05-29 14:11:30,010 DEBUG manager: 10 jobs are scheduled
+2026-05-29 14:11:30,011 DEBUG manager: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+2026-05-29 14:11:31,537 ERROR Couldn't find the serial port for bus a
+2026-05-29 14:11:36,540 ERROR Couldn't find the serial port for bus a
+2026-05-29 14:11:37,873 ERROR Duplicate module_name
+2026-05-29 14:11:37,929 ERROR Weather data could not be added. Error 'NoneType' object has no attribute 'execute'
+2026-05-29 14:11:37,931 DEBUG Succesfully updated the weather_id
+2026-05-29 14:11:41,547 ERROR Couldn't find the serial port for bus a
+2026-05-29 14:11:46,551 ERROR Couldn't find the serial port for bus a
+2026-05-29 14:11:47,934 ERROR Duplicate module_name
+2026-05-29 14:11:47,978 ERROR Weather data could not be added. Error 'NoneType' object has no attribute 'execute'
+2026-05-29 14:11:47,979 DEBUG Succesfully updated the weather_id
+2026-05-29 14:11:51,301 ERROR Keyboard interrupt, shutting down child processes

@@ -14,7 +14,7 @@ from sqlalchemy import create_engine
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-from Weatherdb_to_pyth import download_weather_last24hours, mysql_init, mysql_close, weather_last, weather_all
+from .Weatherdb_to_pyth import download_weather_last24hours, mysql_init, mysql_close, weather_last, weather_all
 import logging
 
 logger = logging.getLogger(__name__)
@@ -314,7 +314,7 @@ def add_module_data(config, conn, cur):
                 logger.debug(f"Updated the tracer, username and user_email")
             elif module['module_name'] == module_db[0]:
                 #print('Module_name already exists')
-                logger.error('Duplicate module_name')
+                logger.debug('Duplicate module_name')
         except:
             logger.debug("Data could not be updated")
             logger.debug(f"Added a new module")

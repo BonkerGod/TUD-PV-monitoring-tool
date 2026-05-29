@@ -2,8 +2,8 @@ import csv
 import sys
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "helper_packages"))
-sys.path.insert(0, str("../TUD-opet-control"))
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "helper_packages"))
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "TUD-opet-control"))
 
 from measurement_scheduling_tools import present
 from OPET_control import OPETBus, OPET, OPETTimeoutError, UnexpectedReplyError
