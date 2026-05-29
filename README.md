@@ -28,6 +28,7 @@ Things that need to be installed on the server to run the system:
 * `pip install pip install psycopg2 pgvector`
 * `pip install scipy`
 * `pip install matplotlib`
+* `pip install pyserial`
 
 When all these programs are installed, and the database has been set up using the PostgreSQL installer, the program `pyt_to_SQL.py` can be used to continue the setup. The tables for data storage can be created using the function `create_table(type, conn, cur)`. This needs to be done for the types: 'pv_point', 'pv_curve', 'weather', and 'modules'. Running the following code does that: 
 ```python
