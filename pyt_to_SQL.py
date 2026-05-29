@@ -31,24 +31,8 @@ def init():
         config (dict): The measurement config.
         data_path_base (_type_): The base location of the files. 
     """
-    # Open the documents with all the instructions.
-    with open('opet-supervisor-config.json') as f:
-        opet_supervisor_config = json.load(f)
-    data_path_base = Path(opet_supervisor_config['data_path_base'])
-    config_path = Path(opet_supervisor_config['config_path'])
-    log_path_base = Path(opet_supervisor_config['log_path_base'])
-    with open(config_path / 'measurement_config.json') as f:
-        config = json.load(f)
-
-    log_path_base.mkdir(parents=True, exist_ok=True)
-    logger = logging.getLogger(__name__)
-    logging.basicConfig(
-    filename=(log_path_base / 'opet-supervisor.log'),
-    encoding='utf-8',
-    level=logging.DEBUG,
-    format='%(asctime)s %(message)s'
-)
-
+    
+    config, data_path_base = loadconfig()
     # Make connection with the PostgreSQL database.
     DB_NAME = "postgres"
     DB_USER = "postgres"
@@ -88,13 +72,33 @@ def init():
         print("Make sure pgvector is installed in PostgreSQL")
         
         
-    return conn, cur, mysql_conn, mysql_cur, config, data_path_base
+    return conn, cur, mysql_conn, mysql_cur
 
+def loadconfig():
+        # Open the documents with all the instructions.
+    with open('opet-supervisor-config.json') as f:
+        opet_supervisor_config = json.load(f)
+    data_path_base = Path(opet_supervisor_config['data_path_base'])
+    config_path = Path(opet_supervisor_config['config_path'])
+    log_path_base = Path(opet_supervisor_config['log_path_base'])
+    with open(config_path / 'measurement_config.json') as f:
+        config = json.load(f)
+
+    log_path_base.mkdir(parents=True, exist_ok=True)
+    logger = logging.getLogger(__name__)
+    logging.basicConfig(
+    filename=(log_path_base / 'opet-supervisor.log'),
+    encoding='utf-8',
+    level=logging.DEBUG,
+    format='%(asctime)s %(message)s'
+)
+    return config, data_path_base
 
 def update_loop():
     """ This loop adds newly collected data to the database every 10s."""
-    conn, cur, mysql_conn, mysql_cur, config, data_path_base = init()
+    conn, cur, mysql_conn, mysql_cur= init()
     while(1):
+        config, data_path_base = loadconfig()
         #print(str(datetime.date.today()))
         date = str(datetime.date.today())
         try:
@@ -103,21 +107,21 @@ def update_loop():
             count_entries('pv_curve', conn, cur)
         except Exception as e: 
             print(f"Data could not be added, maybe the file is not yet created or there is an error: {e}")
-            logging.error(f"Data could not be added, maybe the file is not yet created or there is an error: {e}")
+            logger.error(f"Data could not be added, maybe the file is not yet created or there is an error: {e}")
             conn.rollback()
         
         try:
             add_weather_data(download_weather_last24hours(1, mysql_conn, mysql_cur), conn, cur)
         except Exception as e:
             print(f"Weather data could not be added. Error: {e}")
-            logging.error(f"Weather data could not be added. Error {e}")
+            logger.error(f"Weather data could not be added. Error {e}")
             conn.rollback()
 
         try:
             update_weather_id(date, conn, cur)
             logger.debug(f"Succesfully updated the weather_id")
         except Exception as e:
-            logging.error(f"Weather_id could not be updated. Error {e}")
+            logger.error(f"Weather_id could not be updated. Error {e}")
         time.sleep(10) # Wait for an 10s and check again.
     db_close(conn)
 
@@ -126,9 +130,10 @@ def daily_loop():
     """ This loop uploads past data at midnight so that data that was missed still gets uploaded.
         It also checks for errors in the system.
     """
-    conn, cur, mysql_conn, mysql_cur, config, data_path_base = init()
+    conn, cur, mysql_conn, mysql_cur= init()
     while(1):
-        if datetime.datetime.now().hour == 0: #At midnight
+        config, data_path_base = loadconfig()
+        if datetime.datetime.now().hour == 11: #At midnight
             try:
                 past_data_upload(conn, cur, mysql_conn, mysql_cur, config, data_path_base)
             except Exception as e: 
@@ -142,12 +147,12 @@ def daily_loop():
                 print(f"Error detection failed with error: {e}")
                 logging.error(f"Error detection failed with error: {e}")
                 conn.rollback()
-        time.sleep(60*60*1) # Wait for an hour and check again.
+        time.sleep(60*1) # Wait for an hour and check again.
     db_close(conn)    
     
        
 def past_data_upload(conn, cur, mysql_conn, mysql_cur, config, data_path_base):
-    """ This function adds all the data to the database from the past starting a the start_date.
+    """ This function adds all the data to the database from a lookback number of days back.
 
     Args:
         conn (_type_): The connection to the PostgreSQL database.
@@ -296,8 +301,25 @@ def add_module_data(config, conn, cur):
             "VALUES (%s, %s, %s, %s, %s, %s, %s) "
             "ON CONFLICT (module_name) DO NOTHING" # If there is already a module with the same name, the data will not be added.
         )
-        cur.execute(module_insert, (module['module_name'], module.get('tracer'), module.get('username'), module.get('user_email'), module.get('area'), module.get('technology'), module.get('manufacturer')))
+        query = "SELECT * FROM modules WHERE module_name = %s"
+        cur.execute(query, (module['module_name'],))
+        module_db = cur.fetchone()
+        #print(module_db)
         conn.commit()
+        try:
+            if (module['module_name'] == module_db[0] and module.get('area') == module_db[4] and 
+            module.get('technology') == module_db[5] and module.get('manufacturer') == module_db[6]):
+                cur.execute("UPDATE modules SET tracer = %s, username= %s, user_email = %s", (module.get('tracer'), module.get('username'), module.get('user_email')))
+                conn.commit()
+                logger.debug(f"Updated the tracer, username and user_email")
+            elif module['module_name'] == module_db[0]:
+                #print('Module_name already exists')
+                logger.error('Duplicate module_name')
+        except:
+            logger.debug("Data could not be updated")
+            logger.debug(f"Added a new module")
+            cur.execute(module_insert, (module['module_name'], module.get('tracer'), module.get('username'), module.get('user_email'), module.get('area'), module.get('technology'), module.get('manufacturer')))
+            conn.commit()
 
 
 def add_weather_data(weather_data, conn, cur):
@@ -335,11 +357,12 @@ def update_weather_id(date, conn, cur):
         mysql_conn (_type_): The connection to the MySQL database.
         mysql_cur (_type_): The cursor for the MySQL datbase.
     """
-    query1 = "SELECT date_time FROM pv_point WHERE date_time>%s AND date_time<%s AND weather_id IS NULL"
+    #Syncing for the pv_point measurements
+    query1_point = "SELECT date_time FROM pv_point WHERE date_time>%s AND date_time<%s AND weather_id IS NULL"
     naive_date = (datetime.datetime.strptime(date, "%Y-%m-%d"))
     aware_date= naive_date.replace(tzinfo=zoneinfo.ZoneInfo('Europe/Amsterdam'))
     aware_date2 = aware_date+datetime.timedelta(days=1)
-    cur.execute(query1, (aware_date, aware_date2))
+    cur.execute(query1_point, (aware_date, aware_date2))
     datetimes = cur.fetchall()
     conn.commit()
     
@@ -350,8 +373,27 @@ def update_weather_id(date, conn, cur):
         if now-time>datetime.timedelta(minutes = 5):
             print(time)
             weatherid = weather_sync(time, conn, cur)
-            query2 = "UPDATE pv_point SET weather_id = %s WHERE date_time=%s" #Use the local weatherdb for speed.
-            cur.execute(query2, (weatherid, time))
+            query2_point = "UPDATE pv_point SET weather_id = %s WHERE date_time=%s" #Use the local weatherdb for speed.
+            cur.execute(query2_point, (weatherid, time))
+            conn.commit()
+            
+    query1_curve = "SELECT date_time FROM pv_curve WHERE date_time>%s AND date_time<%s AND weather_id IS NULL"
+    naive_date = (datetime.datetime.strptime(date, "%Y-%m-%d"))
+    aware_date= naive_date.replace(tzinfo=zoneinfo.ZoneInfo('Europe/Amsterdam'))
+    aware_date2 = aware_date+datetime.timedelta(days=1)
+    cur.execute(query1_curve, (aware_date, aware_date2))
+    datetimes = cur.fetchall()
+    conn.commit()
+    
+    for time in datetimes:
+        time = time[0]
+        now = datetime.datetime.now(tz=zoneinfo.ZoneInfo('Europe/Amsterdam'))
+        print(now)
+        if now-time>datetime.timedelta(minutes = 5):
+            print(time)
+            weatherid = weather_sync(time, conn, cur)
+            query2_curve = "UPDATE pv_curve SET weather_id = %s WHERE date_time=%s" #Use the local weatherdb for speed.
+            cur.execute(query2_curve, (weatherid, time))
             conn.commit()
 
 
@@ -603,13 +645,23 @@ def send_mail(error, config, receiver_email = ''):
     sender_email = 'wessel.oosterkamp@gmail.com'
     password = 'puxp gwhx zrsa cczv'
     admin = config['admins_email']
-    users = receiver_email + ',' + admin
+    if receiver_email == '':
+        logging.debug(f'No useremail to send to')
+        users= receiver_email + ',' + admin
+    elif '@' in receiver_email and '.' in receiver_email:
+        users = receiver_email + ',' + admin
+        logging.debug(f"Email address is correct")
+    else:
+        receiver_email = ''
+        users = receiver_email + ',' + admin
+        logging.error(f"Emailaddress is not an emailaddress.")
     message = MIMEMultipart()
     message['From'] = sender_email
     message['To'] = users 
     message['Subject'] = 'There is a problem with the PV monitoring system'
     body = 'Error: ' + str(error)
     message.attach(MIMEText(body, 'plain'))
+    
     
     try:
         server = smtplib.SMTP(smpt_server, port)
@@ -719,7 +771,7 @@ def error_detect(conn, cur, config):
 def data_tester(conn, cur):
     curve_insert = (
             "INSERT INTO weather (weather_id, weather_time, temperature_air, relative_humidity, dew_point, relative_pressure, wind_speed, wind_speed_std, wind_direction, wind_direction_std, irradiance) "
-            "VALUES (1, '2026-05-18T10:05:50.028240+02:00', 23, 53, 10, 4, 10, 3, 360, 35, 400) "
+            "VALUES (1, '2026-05-26T10:35:00.028240+02:00', 23, 53, 10, 4, 10, 3, 360, 35, 400) "
             "ON CONFLICT (weather_time) DO NOTHING"
             )
     cur.execute(curve_insert)
@@ -751,13 +803,14 @@ def db_close(conn):
     conn.close()
 
 
-#update_loop()
-conn, cur, mysql_conn, mysql_cur, config, data_path_base = init()
+
+# conn, cur, mysql_conn, mysql_cur= init()
+# config, data_path_base, = loadconfig()
 # delete_table('weather', conn, cur)
 # create_table('weather', conn, cur)
-# delete_table('pv_point', conn, cur)
-# create_table('pv_point', conn, cur)
-# data_tester(conn, cur)
+#delete_table('pv_point', conn, cur)
+#create_table('pv_point', conn, cur)
+#data_tester(conn, cur)
 # download_table('test1.csv', 'pv_point', "2026-05-25 16:00:50-07:00", "2026-12-20 16:00:50-07:00", ["My_solar_panel_1"], conn, cur)
 # add_module_data(config, conn, cur)
 #add_data('2026-05-26', conn, cur, mysql_conn, mysql_cur, config, data_path_base)
@@ -767,10 +820,11 @@ conn, cur, mysql_conn, mysql_cur, config, data_path_base = init()
 # data=weather_sync(datetime.datetime(2024, 2, 28, 10, 40,50, tzinfo=zoneinfo.ZoneInfo('Europe/Amsterdam')), conn, cur)
 # print(data)
 #update_weather_id('2026-05-26', conn, cur)
-# print_table('pv_point', conn, cur)
+#print_table('pv_point', conn, cur)
 # past_data_upload(conn, cur ,mysql_conn, mysql_cur, config, data_path_base)
-#print_table('weather', conn, cur)
-print_table('pv_point', conn, cur)
-db_close(conn)
-
+# print_table('pv_curve', conn, cur)
+# update_weather_id('2026-05-26', conn, cur)
+# print_table('pv_curve',conn, cur)
+# db_close(conn)
+daily_loop()
 
