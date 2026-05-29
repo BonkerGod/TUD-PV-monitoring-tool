@@ -37,5 +37,6 @@
       "axis_tilt": null
     },
   "data_destination": "config_2026-04-30T15-00-00",
-  "admins_email": "woosterkamp@tudelft.nl,wessel.oosterkamp.spam@gmail.com" 
+  "admins_email": "woosterkamp@tudelft.nl,wessel.oosterkamp.spam@gmail.com" ,
+  "lookback": 7
 }
