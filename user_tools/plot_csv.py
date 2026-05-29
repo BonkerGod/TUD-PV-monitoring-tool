@@ -9,7 +9,6 @@ import matplotlib.dates as mdates
 import ast
 import sys
 from pathlib import Path
-from OPET_control import OPETBus, OPET, OPETTimeoutError, UnexpectedReplyError
 
 #Plots all point measurements from csv file
 def plot_points(data_path_point):
@@ -84,7 +83,6 @@ def plot_curve(data_path_curve):
 
     plt.show(block=True)
 
-print(OPET.parse_system_status_integer(1))
 
 #Set relative data path for your measurement 
 data_path_point = "test_log/data/2026-05-20/config_2026-04-30T15-00-00/opet_results_point_2026-05-20.csv"

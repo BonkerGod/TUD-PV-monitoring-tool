@@ -1,5 +1,9 @@
 import sys
 from pathlib import Path
+from matplotlib.animation import FuncAnimation
+import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
+import zoneinfo
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "supervisor_tools"))
 
@@ -11,9 +15,71 @@ def last_measurement(conn, cur):
     column = cur.fetchone()
     print(column)
     conn.commit()
+    return column
     
 conn, cur, mysql_conn, mysql_cur = init()
-while(1):
-    last_measurement(conn, cur)
-    time.sleep(3)
+
+import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
+from matplotlib.animation import FuncAnimation
+import zoneinfo
+import datetime
+
+fig, ax1 = plt.subplots()
+ax2 = ax1.twinx()
+
+# Format x-axis for clock time
+ax1.xaxis.set_major_formatter(
+    mdates.DateFormatter('%H:%M:%S', tz=zoneinfo.ZoneInfo('Europe/Amsterdam'))
+)
+fig.autofmt_xdate()
+
+times = []
+voltages = []
+currents = []
+
+voltage_line, = ax1.plot([], [], 'g-', label="Voltage")
+current_line, = ax2.plot([], [], 'b-', label="Current")
+
+ax1.set_xlabel("Time")
+ax1.set_ylabel("Voltage (V)", color='g')
+ax2.set_ylabel("Current (A)", color='b')
+
+# Combined legend
+lines = [voltage_line, current_line]
+labels = [l.get_label() for l in lines]
+ax1.legend(lines, labels, loc='upper left')
+
+def update(frame):
+    measurement = last_measurement(conn, cur)
+
+    times.append(measurement[0])      # datetime object
+    voltages.append(measurement[4])   # voltage
+    currents.append(measurement[5])   # current
+
+    voltage_line.set_data(times, voltages)
+    current_line.set_data(times, currents)
+
+    # Relim and autoscale only the Y-axes to keep views tight to the data
+    ax1.relim()
+    ax1.autoscale_view(scalex=False, scaley=True)
+    ax2.relim()
+    ax2.autoscale_view(scalex=False, scaley=True)
+
+    # Set a scrolling x-axis window showing the last 60 seconds
+    window_duration = datetime.timedelta(seconds=600)
+    ax1.set_xlim(times[-1] - window_duration, times[-1])
+
+    return voltage_line, current_line
+
+anim = FuncAnimation(
+    fig,
+    update,
+    interval=3000,
+    cache_frame_data=False
+)
+
+plt.show()
+
+
 db_close(conn, mysql_conn)
