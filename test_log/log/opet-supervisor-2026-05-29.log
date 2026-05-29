@@ -1,0 +1,299 @@
+2026-05-29 09:51:45,096 DEBUG opet-supervisor started
+2026-05-29 09:51:45,390 DEBUG opet-supervisor started
+2026-05-29 09:51:45,505 DEBUG manager: 0 (set_load_mode: mpp) scheduled for 2026-05-29 09:51:48.505166+02:00
+2026-05-29 09:51:45,506 DEBUG manager: 1 (point) scheduled for 2026-05-29 09:51:50+02:00
+2026-05-29 09:51:45,506 DEBUG manager: 2 (point) scheduled for 2026-05-29 09:52:00+02:00
+2026-05-29 09:51:45,507 DEBUG manager: 3 (point) scheduled for 2026-05-29 09:52:10+02:00
+2026-05-29 09:51:45,507 DEBUG manager: 4 (curve) scheduled for 2026-05-29 09:52:00+02:00
+2026-05-29 09:51:45,508 DEBUG manager: 5 jobs are scheduled
+2026-05-29 09:51:45,508 DEBUG manager: [0, 1, 2, 3, 4]
+2026-05-29 09:51:45,745 DEBUG opet-supervisor started
+2026-05-29 09:51:45,806 DEBUG opet-supervisor started
+2026-05-29 09:51:50,045 DEBUG bus a: job 1: (-0.000308003, 8.01936e-05), 0:00:00.045986 late
+2026-05-29 09:52:00,007 DEBUG manager: 5 (set_load_mode: mpp) scheduled for 2026-05-29 09:52:03.006714+02:00
+2026-05-29 09:52:00,008 DEBUG manager: 6 (point) scheduled for 2026-05-29 09:52:20+02:00
+2026-05-29 09:52:00,008 DEBUG manager: 7 (point) scheduled for 2026-05-29 09:52:30+02:00
+2026-05-29 09:52:00,009 DEBUG manager: 5 jobs are scheduled
+2026-05-29 09:52:00,009 DEBUG manager: [3, 4, 5, 6, 7]
+2026-05-29 09:52:00,030 DEBUG bus a: job 2: (-0.000313504, 7.77698e-07), 0:00:00.030461 late
+2026-05-29 09:52:00,045 DEBUG bus a: job 4: curve measurement (start) 4, 0:00:00.045463 late
+2026-05-29 09:52:02,236 DEBUG bus a: job 4: curve measurement (complete) 0:00:02.236039 late
+2026-05-29 09:52:10,045 DEBUG bus a: job 3: (-0.000303534, 7.94296e-07), 0:00:00.045922 late
+2026-05-29 09:52:20,030 DEBUG bus a: job 6: (-0.000306282, 7.89993e-07), 0:00:00.030636 late
+2026-05-29 09:52:30,012 DEBUG manager: 8 (set_load_mode: mpp) scheduled for 2026-05-29 09:52:33.012592+02:00
+2026-05-29 09:52:30,013 DEBUG manager: 9 (point) scheduled for 2026-05-29 09:52:40+02:00
+2026-05-29 09:52:30,014 DEBUG manager: 10 (point) scheduled for 2026-05-29 09:52:50+02:00
+2026-05-29 09:52:30,015 DEBUG manager: 11 (point) scheduled for 2026-05-29 09:53:00+02:00
+2026-05-29 09:52:30,015 DEBUG manager: 12 (curve) scheduled for 2026-05-29 09:53:00+02:00
+2026-05-29 09:52:30,016 DEBUG manager: 5 jobs are scheduled
+2026-05-29 09:52:30,016 DEBUG manager: [8, 9, 10, 11, 12]
+2026-05-29 09:52:30,037 DEBUG bus a: job 7: (-0.000312816, 7.84545e-07), 0:00:00.036584 late
+2026-05-29 09:52:40,048 DEBUG bus a: job 9: (-0.000306627, 7.9324e-07), 0:00:00.048256 late
+2026-05-29 09:52:50,046 DEBUG bus a: job 10: (-0.000307315, 7.84726e-07), 0:00:00.046744 late
+2026-05-29 09:53:00,002 DEBUG manager: 13 (set_load_mode: mpp) scheduled for 2026-05-29 09:53:03.001281+02:00
+2026-05-29 09:53:00,002 DEBUG manager: 14 (point) scheduled for 2026-05-29 09:53:10+02:00
+2026-05-29 09:53:00,002 DEBUG manager: 15 (point) scheduled for 2026-05-29 09:53:20+02:00
+2026-05-29 09:53:00,003 DEBUG manager: 16 (point) scheduled for 2026-05-29 09:53:30+02:00
+2026-05-29 09:53:00,003 DEBUG manager: 5 jobs are scheduled
+2026-05-29 09:53:00,004 DEBUG manager: [12, 13, 14, 15, 16]
+2026-05-29 09:53:00,026 DEBUG bus a: job 11: (-0.00030319, 8.04214e-07), 0:00:00.026603 late
+2026-05-29 09:53:00,040 DEBUG bus a: job 12: curve measurement (start) 12, 0:00:00.040820 late
+2026-05-29 09:53:02,248 DEBUG bus a: job 12: curve measurement (complete) 0:00:02.248553 late
+2026-05-29 09:53:10,046 DEBUG bus a: job 14: (-0.000312128, 7.8481e-07), 0:00:00.046089 late
+2026-05-29 09:53:20,047 DEBUG bus a: job 15: (-0.000309379, 7.96836e-07), 0:00:00.047133 late
+2026-05-29 09:53:30,002 DEBUG manager: 17 (set_load_mode: mpp) scheduled for 2026-05-29 09:53:33.002608+02:00
+2026-05-29 09:53:30,003 DEBUG manager: 18 (point) scheduled for 2026-05-29 09:53:40+02:00
+2026-05-29 09:53:30,004 DEBUG manager: 19 (point) scheduled for 2026-05-29 09:53:50+02:00
+2026-05-29 09:53:30,004 DEBUG manager: 20 (point) scheduled for 2026-05-29 09:54:00+02:00
+2026-05-29 09:53:30,004 DEBUG manager: 21 (curve) scheduled for 2026-05-29 09:54:00+02:00
+2026-05-29 09:53:30,005 DEBUG manager: 5 jobs are scheduled
+2026-05-29 09:53:30,005 DEBUG manager: [17, 18, 19, 20, 21]
+2026-05-29 09:53:30,026 DEBUG bus a: job 16: (-0.000309379, 7.92448e-07), 0:00:00.026612 late
+2026-05-29 09:53:40,036 DEBUG bus a: job 18: (-0.000319345, 7.9393e-07), 0:00:00.036119 late
+2026-05-29 09:53:50,026 DEBUG bus a: job 19: (-0.000305254, 7.85079e-07), 0:00:00.026028 late
+2026-05-29 09:54:00,007 DEBUG manager: 22 (set_load_mode: mpp) scheduled for 2026-05-29 09:54:03.007581+02:00
+2026-05-29 09:54:00,008 DEBUG manager: 23 (point) scheduled for 2026-05-29 09:54:10+02:00
+2026-05-29 09:54:00,009 DEBUG manager: 24 (point) scheduled for 2026-05-29 09:54:20+02:00
+2026-05-29 09:54:00,009 DEBUG manager: 25 (point) scheduled for 2026-05-29 09:54:30+02:00
+2026-05-29 09:54:00,010 DEBUG manager: 5 jobs are scheduled
+2026-05-29 09:54:00,011 DEBUG manager: [21, 22, 23, 24, 25]
+2026-05-29 09:54:00,033 DEBUG bus a: job 20: (-0.000305254, 7.90257e-07), 0:00:00.033584 late
+2026-05-29 09:54:00,047 DEBUG bus a: job 21: curve measurement (start) 21, 0:00:00.047019 late
+2026-05-29 09:54:02,238 DEBUG bus a: job 21: curve measurement (complete) 0:00:02.238556 late
+2026-05-29 09:54:10,037 DEBUG bus a: job 23: (-0.00031144, 7.91393e-07), 0:00:00.037395 late
+2026-05-29 09:54:11,911 ERROR Keyboard interrupt, shutting down child processes
+2026-05-29 09:54:12,038 INFO bus a: serial port closed
+2026-05-29 10:58:21,616 DEBUG opet-supervisor started
+2026-05-29 10:58:21,897 DEBUG opet-supervisor started
+2026-05-29 10:58:22,006 DEBUG manager: 0 (set_load_mode: mpp) scheduled for 2026-05-29 10:58:25.006814+02:00
+2026-05-29 10:58:22,007 DEBUG manager: 1 (point) scheduled for 2026-05-29 10:58:30+02:00
+2026-05-29 10:58:22,007 DEBUG manager: 2 (point) scheduled for 2026-05-29 10:58:40+02:00
+2026-05-29 10:58:22,008 DEBUG manager: 3 (point) scheduled for 2026-05-29 10:58:50+02:00
+2026-05-29 10:58:22,008 DEBUG manager: 4 jobs are scheduled
+2026-05-29 10:58:22,008 DEBUG manager: [0, 1, 2, 3]
+2026-05-29 10:58:22,173 DEBUG opet-supervisor started
+2026-05-29 10:58:22,250 DEBUG opet-supervisor started
+2026-05-29 10:58:30,008 DEBUG manager: 4 (set_load_mode: mpp) scheduled for 2026-05-29 10:58:33.008017+02:00
+2026-05-29 10:58:30,009 DEBUG manager: 5 (point) scheduled for 2026-05-29 10:59:00+02:00
+2026-05-29 10:58:30,009 DEBUG manager: 6 (curve) scheduled for 2026-05-29 10:59:00+02:00
+2026-05-29 10:58:30,009 DEBUG manager: 5 jobs are scheduled
+2026-05-29 10:58:30,009 DEBUG manager: [2, 3, 4, 5, 6]
+2026-05-29 10:58:30,029 DEBUG bus a: job 1: (-0.000304222, 7.89643e-07), 0:00:00.029469 late
+2026-05-29 10:58:40,045 DEBUG bus a: job 2: (-0.000303534, 7.80429e-07), 0:00:00.045077 late
+2026-05-29 10:58:50,095 DEBUG bus a: job 3: (-0.000306282, 7.78846e-07), 0:00:00.095631 late
+2026-05-29 10:59:00,011 DEBUG manager: 7 (set_load_mode: mpp) scheduled for 2026-05-29 10:59:03.011825+02:00
+2026-05-29 10:59:00,011 DEBUG manager: 8 (point) scheduled for 2026-05-29 10:59:10+02:00
+2026-05-29 10:59:00,013 DEBUG manager: 9 (point) scheduled for 2026-05-29 10:59:20+02:00
+2026-05-29 10:59:00,013 DEBUG manager: 10 (point) scheduled for 2026-05-29 10:59:30+02:00
+2026-05-29 10:59:00,014 DEBUG manager: 5 jobs are scheduled
+2026-05-29 10:59:00,014 DEBUG manager: [6, 7, 8, 9, 10]
+2026-05-29 10:59:00,035 DEBUG bus a: job 5: (-0.000304222, 7.71564e-07), 0:00:00.035943 late
+2026-05-29 10:59:00,049 DEBUG bus a: job 6: curve measurement (start) 6, 0:00:00.049996 late
+2026-05-29 10:59:02,257 DEBUG bus a: job 6: curve measurement (complete) 0:00:02.257263 late
+2026-05-29 10:59:10,030 DEBUG bus a: job 8: (-0.00030319, 7.73056e-07), 0:00:00.030278 late
+2026-05-29 10:59:20,030 DEBUG bus a: job 9: (-0.000299065, 7.81486e-07), 0:00:00.030524 late
+2026-05-29 10:59:30,025 DEBUG bus a: job 10: (-0.000301469, 7.86223e-07), 0:00:00.025806 late
+3.024806+02:00
+2026-05-29 10:59:30,027 DEBUG manager: 12 (point) scheduled for 2026-05-29 10:59:40+02:00
+2026-05-29 10:59:30,027 DEBUG manager: 13 (point) scheduled for 2026-05-29 10:59:50+02:00
+2026-05-29 10:59:30,027 DEBUG manager: 14 (point) scheduled for 2026-05-29 11:00:00+02:00
+2026-05-29 10:59:30,028 DEBUG manager: 15 (curve) scheduled for 2026-05-29 11:00:00+02:00
+2026-05-29 10:59:30,028 DEBUG manager: 5 jobs are scheduled
+2026-05-29 10:59:30,029 DEBUG manager: [11, 12, 13, 14, 15]
+2026-05-29 10:59:40,030 DEBUG bus a: job 12: (-0.00029322, 7.86933e-07), 0:00:00.030173 late
+2026-05-29 10:59:50,031 DEBUG bus a: job 13: (-0.000298033, 7.92809e-07), 0:00:00.031435 late
+2026-05-29 11:00:00,009 DEBUG manager: 16 (set_load_mode: isc) scheduled for 2026-05-29 11:00:03.008187+02:00
+2026-05-29 11:00:00,009 DEBUG manager: 17 (point) scheduled for 2026-05-29 11:00:10+02:00
+2026-05-29 11:00:00,010 DEBUG manager: 18 (point) scheduled for 2026-05-29 11:00:20+02:00
+2026-05-29 11:00:00,010 DEBUG manager: 19 (point) scheduled for 2026-05-29 11:00:30+02:00
+2026-05-29 11:00:00,011 DEBUG manager: 5 jobs are scheduled
+2026-05-29 11:00:00,011 DEBUG manager: [15, 16, 17, 18, 19]
+2026-05-29 11:00:00,031 DEBUG bus a: job 14: (-0.00030491, 7.84904e-07), 0:00:00.031184 late
+2026-05-29 11:00:00,046 DEBUG bus a: job 15: curve measurement (start) 15, 0:00:00.046182 late
+2026-05-29 11:00:02,237 DEBUG bus a: job 15: curve measurement (complete) 0:00:02.237174 late
+2026-05-29 11:00:10,026 DEBUG bus a: job 17: (-0.000296317, 7.728e-07), 0:00:00.026283 late
+2026-05-29 11:00:20,026 DEBUG bus a: job 18: (-0.000295972, 7.82103e-07), 0:00:00.026709 late
+2026-05-29 11:00:30,009 DEBUG manager: 20 (set_load_mode: isc) scheduled for 2026-05-29 11:00:33.008184+02:00
+2026-05-29 11:00:30,010 DEBUG manager: 21 (point) scheduled for 2026-05-29 11:00:40+02:00
+2026-05-29 11:00:30,010 DEBUG manager: 22 (point) scheduled for 2026-05-29 11:00:50+02:00
+2026-05-29 11:00:30,010 DEBUG manager: 23 (point) scheduled for 2026-05-29 11:01:00+02:00
+2026-05-29 11:00:30,011 DEBUG manager: 24 (curve) scheduled for 2026-05-29 11:01:00+02:00
+2026-05-29 11:00:30,011 DEBUG manager: 5 jobs are scheduled
+2026-05-29 11:00:30,012 DEBUG manager: [20, 21, 22, 23, 24]
+2026-05-29 11:00:30,030 DEBUG bus a: job 19: (-0.000297345, 7.67181e-07), 0:00:00.030504 late
+2026-05-29 11:00:40,036 DEBUG bus a: job 21: (-0.000297345, 7.73325e-07), 0:00:00.036260 late
+2026-05-29 11:00:50,037 DEBUG bus a: job 22: (-0.000302502, 7.9061e-07), 0:00:00.037266 late
+2026-05-29 11:01:00,015 DEBUG manager: 25 (set_load_mode: isc) scheduled for 2026-05-29 11:01:03.015697+02:00
+2026-05-29 11:01:00,017 DEBUG manager: 26 (point) scheduled for 2026-05-29 11:01:10+02:00
+2026-05-29 11:01:00,017 DEBUG manager: 27 (point) scheduled for 2026-05-29 11:01:20+02:00
+2026-05-29 11:01:00,017 DEBUG manager: 28 (point) scheduled for 2026-05-29 11:01:30+02:00
+2026-05-29 11:01:00,018 DEBUG manager: 5 jobs are scheduled
+2026-05-29 11:01:00,018 DEBUG manager: [24, 25, 26, 27, 28]
+2026-05-29 11:01:00,038 DEBUG bus a: job 23: (-0.000299409, 7.8447e-07), 0:00:00.038228 late
+2026-05-29 11:01:00,051 DEBUG bus a: job 24: curve measurement (start) 24, 0:00:00.051744 late
+2026-05-29 11:01:02,259 DEBUG bus a: job 24: curve measurement (complete) 0:00:02.259318 late
+2026-05-29 11:01:10,032 DEBUG bus a: job 26: (-0.000305598, 7.84815e-07), 0:00:00.032765 late
+2026-05-29 11:01:20,032 DEBUG bus a: job 27: (-0.000306971, 7.83849e-07), 0:00:00.032429 late
+2026-05-29 11:01:30,001 DEBUG manager: 29 (set_load_mode: isc) scheduled for 2026-05-29 11:01:33.000485+02:00
+2026-05-29 11:01:30,001 DEBUG manager: 30 (point) scheduled for 2026-05-29 11:01:40+02:00
+2026-05-29 11:01:30,002 DEBUG manager: 31 (point) scheduled for 2026-05-29 11:01:50+02:00
+2026-05-29 11:01:30,002 DEBUG manager: 32 (point) scheduled for 2026-05-29 11:02:00+02:00
+2026-05-29 11:01:30,002 DEBUG manager: 33 (curve) scheduled for 2026-05-29 11:02:00+02:00
+2026-05-29 11:01:30,003 DEBUG manager: 5 jobs are scheduled
+2026-05-29 11:01:30,003 DEBUG manager: [29, 30, 31, 32, 33]
+2026-05-29 11:01:30,048 DEBUG bus a: job 28: (-0.000305598, 7.76214e-07), 0:00:00.047473 late
+2026-05-29 11:01:40,037 DEBUG bus a: job 30: (-0.000305254, 7.84991e-07), 0:00:00.036970 late
+2026-05-29 11:01:50,032 DEBUG bus a: job 31: (-0.000300441, 7.76219e-07), 0:00:00.032091 late
+2026-05-29 11:02:00,024 DEBUG manager: 34 (set_load_mode: voc) scheduled for 2026-05-29 11:02:03.024109+02:00
+2026-05-29 11:02:00,025 DEBUG manager: 35 (point) scheduled for 2026-05-29 11:02:10+02:00
+2026-05-29 11:02:00,026 DEBUG manager: 36 (point) scheduled for 2026-05-29 11:02:20+02:00
+2026-05-29 11:02:00,026 DEBUG manager: 37 (point) scheduled for 2026-05-29 11:02:30+02:00
+2026-05-29 11:02:00,028 DEBUG manager: 5 jobs are scheduled
+2026-05-29 11:02:00,028 DEBUG manager: [33, 34, 35, 36, 37]
+2026-05-29 11:02:00,033 DEBUG bus a: job 32: (-0.00030319, 7.84818e-07), 0:00:00.033593 late
+2026-05-29 11:02:00,049 DEBUG bus a: job 33: curve measurement (start) 33, 0:00:00.049120 late
+2026-05-29 11:02:02,255 DEBUG bus a: job 33: curve measurement (complete) 0:00:02.255389 late
+2026-05-29 11:02:10,032 DEBUG bus a: job 35: (-0.000303534, 7.86836e-07), 0:00:00.032876 late
+2026-05-29 11:02:20,037 DEBUG bus a: job 36: (-0.000307315, 7.86393e-07), 0:00:00.037555 late
+2026-05-29 11:02:30,015 DEBUG manager: 38 (set_load_mode: voc) scheduled for 2026-05-29 11:02:33.015380+02:00
+2026-05-29 11:02:30,015 DEBUG manager: 39 (point) scheduled for 2026-05-29 11:02:40+02:00
+2026-05-29 11:02:30,015 DEBUG manager: 40 (point) scheduled for 2026-05-29 11:02:50+02:00
+2026-05-29 11:02:30,017 DEBUG manager: 41 (point) scheduled for 2026-05-29 11:03:00+02:00
+2026-05-29 11:02:30,017 DEBUG manager: 42 (curve) scheduled for 2026-05-29 11:03:00+02:00
+2026-05-29 11:02:30,017 DEBUG manager: 5 jobs are scheduled
+2026-05-29 11:02:30,018 DEBUG manager: [38, 39, 40, 41, 42]
+2026-05-29 11:02:30,037 DEBUG bus a: job 37: (-0.000312472, 7.80947e-07), 0:00:00.037646 late
+2026-05-29 11:02:40,028 DEBUG bus a: job 39: (-0.000298721, 7.9711e-07), 0:00:00.028090 late
+2026-05-29 11:02:50,029 DEBUG bus a: job 40: (-0.00030491, 7.83939e-07), 0:00:00.029407 late
+2026-05-29 11:03:00,007 DEBUG manager: 43 (set_load_mode: voc) scheduled for 2026-05-29 11:03:03.007034+02:00
+2026-05-29 11:03:00,009 DEBUG manager: 44 (point) scheduled for 2026-05-29 11:03:10+02:00
+2026-05-29 11:03:00,009 DEBUG manager: 45 (point) scheduled for 2026-05-29 11:03:20+02:00
+2026-05-29 11:03:00,010 DEBUG manager: 46 (point) scheduled for 2026-05-29 11:03:30+02:00
+2026-05-29 11:03:00,011 DEBUG manager: 5 jobs are scheduled
+2026-05-29 11:03:00,011 DEBUG manager: [42, 43, 44, 45, 46]
+2026-05-29 11:03:00,029 DEBUG bus a: job 41: (-0.000298721, 7.96319e-07), 0:00:00.029559 late
+2026-05-29 11:03:00,042 DEBUG bus a: job 42: curve measurement (start) 42, 0:00:00.042558 late
+2026-05-29 11:03:02,233 DEBUG bus a: job 42: curve measurement (complete) 0:00:02.233649 late
+2026-05-29 11:03:10,033 DEBUG bus a: job 44: (-0.000314876, 7.79979e-07), 0:00:00.033314 late
+2026-05-29 11:03:20,041 DEBUG bus a: job 45: (-0.000303878, 7.66122e-07), 0:00:00.041046 late
+2026-05-29 11:03:30,012 DEBUG manager: 47 (set_load_mode: voc) scheduled for 2026-05-29 11:03:33.011681+02:00
+2026-05-29 11:03:30,013 DEBUG manager: 48 (point) scheduled for 2026-05-29 11:03:40+02:00
+2026-05-29 11:03:30,014 DEBUG manager: 49 (point) scheduled for 2026-05-29 11:03:50+02:00
+2026-05-29 11:03:30,014 DEBUG manager: 50 (point) scheduled for 2026-05-29 11:04:00+02:00
+2026-05-29 11:03:30,015 DEBUG manager: 51 (curve) scheduled for 2026-05-29 11:04:00+02:00
+2026-05-29 11:03:30,016 DEBUG manager: 5 jobs are scheduled
+2026-05-29 11:03:30,016 DEBUG manager: [47, 48, 49, 50, 51]
+2026-05-29 11:03:30,036 DEBUG bus a: job 46: (-0.000306282, 7.8578e-07), 0:00:00.036207 late
+2026-05-29 11:03:40,030 DEBUG bus a: job 48: (-0.000309379, 7.98416e-07), 0:00:00.030651 late
+2026-05-29 11:03:50,030 DEBUG bus a: job 49: (-0.000311784, 7.84634e-07), 0:00:00.030579 late
+2026-05-29 11:04:00,004 DEBUG manager: 52 (set_load_mode: voc) scheduled for 2026-05-29 11:04:03.004603+02:00
+2026-05-29 11:04:00,005 DEBUG manager: 53 (point) scheduled for 2026-05-29 11:04:10+02:00
+2026-05-29 11:04:00,006 DEBUG manager: 54 (point) scheduled for 2026-05-29 11:04:20+02:00
+2026-05-29 11:04:00,007 DEBUG manager: 55 (point) scheduled for 2026-05-29 11:04:30+02:00
+2026-05-29 11:04:00,008 DEBUG manager: 5 jobs are scheduled
+2026-05-29 11:04:00,008 DEBUG manager: [51, 52, 53, 54, 55]
+2026-05-29 11:04:00,031 DEBUG bus a: job 50: (-0.000307659, 7.79196e-07), 0:00:00.031148 late
+2026-05-29 11:04:00,044 DEBUG bus a: job 51: curve measurement (start) 51, 0:00:00.044142 late
+2026-05-29 11:04:02,266 DEBUG bus a: job 51: curve measurement (complete) 0:00:02.266983 late
+2026-05-29 11:04:10,031 DEBUG bus a: job 53: (-0.000303878, 7.81832e-07), 0:00:00.031039 late
+2026-05-29 11:04:20,041 DEBUG bus a: job 54: (-0.000300785, 7.84996e-07), 0:00:00.040575 late
+2026-05-29 11:04:30,005 DEBUG manager: 56 (set_load_mode: voc) scheduled for 2026-05-29 11:04:33.005468+02:00
+2026-05-29 11:04:30,006 DEBUG manager: 57 (point) scheduled for 2026-05-29 11:04:40+02:00
+2026-05-29 11:04:30,006 DEBUG manager: 58 (point) scheduled for 2026-05-29 11:04:50+02:00
+2026-05-29 11:04:30,007 DEBUG manager: 59 (point) scheduled for 2026-05-29 11:05:00+02:00
+2026-05-29 11:04:30,007 DEBUG manager: 60 (curve) scheduled for 2026-05-29 11:05:00+02:00
+2026-05-29 11:04:30,007 DEBUG manager: 5 jobs are scheduled
+2026-05-29 11:04:30,007 DEBUG manager: [56, 57, 58, 59, 60]
+2026-05-29 11:04:30,030 DEBUG bus a: job 55: (-0.000300441, 7.85258e-07), 0:00:00.030471 late
+2026-05-29 11:04:40,030 DEBUG bus a: job 57: (-0.00030491, 7.85694e-07), 0:00:00.030084 late
+2026-05-29 11:04:50,030 DEBUG bus a: job 58: (-0.000306282, 7.885e-07), 0:00:00.030621 late
+2026-05-29 11:05:00,007 DEBUG manager: 61 (set_load_mode: voc) scheduled for 2026-05-29 11:05:03.006784+02:00
+2026-05-29 11:05:00,007 DEBUG manager: 62 (point) scheduled for 2026-05-29 11:05:10+02:00
+2026-05-29 11:05:00,008 DEBUG manager: 63 (point) scheduled for 2026-05-29 11:05:20+02:00
+2026-05-29 11:05:00,008 DEBUG manager: 64 (point) scheduled for 2026-05-29 11:05:30+02:00
+2026-05-29 11:05:00,010 DEBUG manager: 5 jobs are scheduled
+2026-05-29 11:05:00,010 DEBUG manager: [60, 61, 62, 63, 64]
+2026-05-29 11:05:01,018 ERROR bus a: job 59: OPETTimeoutError in `sample` property on load O001; Got an empty reply on the OPET bus
+2026-05-29 11:05:02,034 ERROR bus a: job 60: OPETTimeoutError in start_iv_curve property on load O001; Got an empty reply on the OPET bus
+2026-05-29 11:05:04,024 ERROR bus a: job 61: OPETTimeoutError in `set_load_mode` on O001; Got an empty reply on the OPET bus
+2026-05-29 11:05:11,012 ERROR bus a: job 62: OPETTimeoutError in `sample` property on load O001; Got an empty reply on the OPET bus
+2026-05-29 11:05:21,011 ERROR bus a: job 63: OPETTimeoutError in `sample` property on load O001; Got an empty reply on the OPET bus
+2026-05-29 11:05:30,012 DEBUG manager: 65 (set_load_mode: voc) scheduled for 2026-05-29 11:05:33.012971+02:00
+2026-05-29 11:05:30,013 DEBUG manager: 66 (point) scheduled for 2026-05-29 11:05:40+02:00
+2026-05-29 11:05:30,013 DEBUG manager: 67 (point) scheduled for 2026-05-29 11:05:50+02:00
+2026-05-29 11:05:30,013 DEBUG manager: 68 (point) scheduled for 2026-05-29 11:06:00+02:00
+2026-05-29 11:05:30,014 DEBUG manager: 69 (curve) scheduled for 2026-05-29 11:06:00+02:00
+2026-05-29 11:05:30,014 DEBUG manager: 5 jobs are scheduled
+2026-05-29 11:05:30,014 DEBUG manager: [65, 66, 67, 68, 69]
+2026-05-29 11:05:31,026 ERROR bus a: job 64: OPETTimeoutError in `sample` property on load O001; Got an empty reply on the OPET bus
+2026-05-29 11:05:34,031 ERROR bus a: job 65: OPETTimeoutError in `set_load_mode` on O001; Got an empty reply on the OPET bus
+2026-05-29 11:05:41,019 ERROR bus a: job 66: OPETTimeoutError in `sample` property on load O001; Got an empty reply on the OPET bus
+2026-05-29 11:05:51,019 ERROR bus a: job 67: OPETTimeoutError in `sample` property on load O001; Got an empty reply on the OPET bus
+2026-05-29 11:06:00,016 DEBUG manager: 70 (set_load_mode: voc) scheduled for 2026-05-29 11:06:03.016241+02:00
+2026-05-29 11:06:00,017 DEBUG manager: 71 (point) scheduled for 2026-05-29 11:06:10+02:00
+2026-05-29 11:06:00,017 DEBUG manager: 72 (point) scheduled for 2026-05-29 11:06:20+02:00
+2026-05-29 11:06:00,018 DEBUG manager: 73 (point) scheduled for 2026-05-29 11:06:30+02:00
+2026-05-29 11:06:00,019 DEBUG manager: 5 jobs are scheduled
+2026-05-29 11:06:00,019 DEBUG manager: [69, 70, 71, 72, 73]
+2026-05-29 11:06:00,041 DEBUG bus a: job 68: (-0.000297005, 7.76748e-07), 0:00:00.041239 late
+2026-05-29 11:06:00,056 DEBUG bus a: job 69: curve measurement (start) 69, 0:00:00.056237 late
+2026-05-29 11:06:02,246 DEBUG bus a: job 69: curve measurement (complete) 0:00:02.246930 late
+2026-05-29 11:06:10,041 DEBUG bus a: job 71: (-0.000305254, 7.90433e-07), 0:00:00.041835 late
+2026-05-29 11:06:20,026 DEBUG bus a: job 72: (-0.000307315, 7.87886e-07), 0:00:00.026335 late
+2026-05-29 11:06:30,008 DEBUG manager: 74 (set_load_mode: voc) scheduled for 2026-05-29 11:06:33.008753+02:00
+2026-05-29 11:06:30,009 DEBUG manager: 75 (point) scheduled for 2026-05-29 11:06:40+02:00
+2026-05-29 11:06:30,010 DEBUG manager: 76 (point) scheduled for 2026-05-29 11:06:50+02:00
+2026-05-29 11:06:30,010 DEBUG manager: 77 (point) scheduled for 2026-05-29 11:07:00+02:00
+2026-05-29 11:06:30,010 DEBUG manager: 78 (curve) scheduled for 2026-05-29 11:07:00+02:00
+2026-05-29 11:06:30,011 DEBUG manager: 5 jobs are scheduled
+2026-05-29 11:06:30,011 DEBUG manager: [74, 75, 76, 77, 78]
+2026-05-29 11:06:30,031 DEBUG bus a: job 73: (-0.000308347, 7.74456e-07), 0:00:00.031506 late
+2026-05-29 11:06:40,031 DEBUG bus a: job 75: (-0.000311784, 7.81123e-07), 0:00:00.031601 late
+2026-05-29 11:06:50,037 DEBUG bus a: job 76: (-0.000306282, 7.92363e-07), 0:00:00.037731 late
+2026-05-29 11:06:57,231 ERROR Keyboard interrupt, shutting down child processes
+2026-05-29 11:06:57,336 INFO bus a: serial port closed
+2026-05-29 11:47:37,591 DEBUG opet-supervisor started
+2026-05-29 11:47:38,277 DEBUG opet-supervisor started
+2026-05-29 11:47:38,398 DEBUG manager: 0 (set_load_mode: voc) scheduled for 2026-05-29 11:47:41.398524+02:00
+2026-05-29 11:47:38,399 DEBUG manager: 1 (point) scheduled for 2026-05-29 11:47:50+02:00
+2026-05-29 11:47:38,399 DEBUG manager: 2 (point) scheduled for 2026-05-29 11:48:00+02:00
+2026-05-29 11:47:38,399 DEBUG manager: 3 (point) scheduled for 2026-05-29 11:48:10+02:00
+2026-05-29 11:47:38,400 DEBUG manager: 4 (curve) scheduled for 2026-05-29 11:48:00+02:00
+2026-05-29 11:47:38,400 DEBUG manager: 5 jobs are scheduled
+2026-05-29 11:47:38,400 DEBUG manager: [0, 1, 2, 3, 4]
+2026-05-29 11:47:38,556 DEBUG opet-supervisor started
+2026-05-29 11:47:38,595 DEBUG opet-supervisor started
+2026-05-29 11:47:38,597 ERROR Couldn't find the serial port for bus a
+2026-05-29 11:47:38,605 ERROR Couldn't find the serial port for bus a
+2026-05-29 11:47:43,625 ERROR Couldn't find the serial port for bus a
+2026-05-29 11:47:48,640 ERROR Couldn't find the serial port for bus a
+2026-05-29 11:47:53,653 ERROR Couldn't find the serial port for bus a
+2026-05-29 11:47:53,949 ERROR Keyboard interrupt, shutting down child processes
+2026-05-29 12:03:32,293 DEBUG opet-supervisor started
+2026-05-29 12:03:32,651 DEBUG opet-supervisor started
+2026-05-29 12:03:32,766 DEBUG manager: 0 (set_load_mode: voc) scheduled for 2026-05-29 12:03:35.766583+02:00
+2026-05-29 12:03:32,767 DEBUG manager: 1 (point) scheduled for 2026-05-29 12:03:40+02:00
+2026-05-29 12:03:32,768 DEBUG manager: 2 (point) scheduled for 2026-05-29 12:03:50+02:00
+2026-05-29 12:03:32,768 DEBUG manager: 3 (point) scheduled for 2026-05-29 12:04:00+02:00
+2026-05-29 12:03:32,769 DEBUG manager: 4 (curve) scheduled for 2026-05-29 12:04:00+02:00
+2026-05-29 12:03:32,769 DEBUG manager: 5 jobs are scheduled
+2026-05-29 12:03:32,769 DEBUG manager: [0, 1, 2, 3, 4]
+2026-05-29 12:03:33,004 DEBUG opet-supervisor started
+2026-05-29 12:03:33,010 DEBUG opet-supervisor started
+2026-05-29 12:03:33,033 ERROR Couldn't find the serial port for bus a
+2026-05-29 12:03:33,038 ERROR Couldn't find the serial port for bus a
+2026-05-29 12:03:38,060 ERROR Couldn't find the serial port for bus a
+2026-05-29 12:03:40,387 ERROR Keyboard interrupt, shutting down child processes
+2026-05-29 12:20:22,758 DEBUG opet-supervisor started
+2026-05-29 12:20:23,091 DEBUG opet-supervisor started
+2026-05-29 12:20:23,210 DEBUG manager: 0 (set_load_mode: voc) scheduled for 2026-05-29 12:20:26.210918+02:00
+2026-05-29 12:20:23,212 DEBUG manager: 1 (point) scheduled for 2026-05-29 12:20:30+02:00
+2026-05-29 12:20:23,212 DEBUG manager: 2 (point) scheduled for 2026-05-29 12:20:40+02:00
+2026-05-29 12:20:23,213 DEBUG manager: 3 (point) scheduled for 2026-05-29 12:20:50+02:00
+2026-05-29 12:20:23,213 DEBUG manager: 4 jobs are scheduled
+2026-05-29 12:20:23,214 DEBUG manager: [0, 1, 2, 3]
+2026-05-29 12:20:23,416 DEBUG opet-supervisor started
+2026-05-29 12:20:23,446 ERROR Couldn't find the serial port for bus a
+2026-05-29 12:20:23,452 ERROR Couldn't find the serial port for bus a
+2026-05-29 12:20:23,474 DEBUG opet-supervisor started
+2026-05-29 12:20:27,392 ERROR Keyboard interrupt, shutting down child processes

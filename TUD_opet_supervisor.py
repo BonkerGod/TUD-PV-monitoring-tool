@@ -1,14 +1,14 @@
 import multiprocessing
 import datetime
-from measurement_scheduling_tools import datetime_range, present, next_occurrence
+from helper_packages.measurement_scheduling_tools import datetime_range, present, next_occurrence
 import json
-from pathlib import Path
 from supervisor_tools import measurement_loop, writer_loop
-#from pyt_to_SQL import daily_loop, update_loop
+from pyt_to_SQL import daily_loop, update_loop
 import logging
-import sys
 import traceback
 from zoneinfo import ZoneInfo
+import sys
+from pathlib import Path
 
 # Constants
 # Measurements more than this far into the future will be handled on a
@@ -20,6 +20,8 @@ MINIMUM_WAIT = 0.01  # s
 SCHEDULE_HORIZON = 32  # s
 # The schedule is updated this often
 SCHEDULE_INTERVAL = 30  # s
+#Maximum time a job may exist
+MAX_JOB_TIME = MAXIMUM_JOB_AGE = datetime.timedelta(minutes=5)
 
 TZ_LOCAL = ZoneInfo("Europe/Amsterdam")
 
@@ -36,6 +38,10 @@ with open(CONFIG_PATH / 'opet_info.json') as f:
 
 with open(CONFIG_PATH / 'opet_bus_info.json') as f:
     bus_info = json.load(f)
+
+with open(CONFIG_PATH / 'measurement_config.json') as f:
+    config = json.load(f)
+
 
 # Setup logging
 LOG_PATH_BASE.mkdir(parents=True, exist_ok=True)
@@ -92,7 +98,8 @@ if __name__ == '__main__':
                     load_info, 
                     MAXIMUM_WAIT, 
                     MINIMUM_WAIT, 
-                    shutdown_event
+                    shutdown_event,
+                    MAX_JOB_TIME
                 ),
                 name=f'measurement-bus-{bus}',
             )
@@ -115,21 +122,21 @@ if __name__ == '__main__':
             )
         )
 
-#        # Process for daily loop
-#        processes.append(
-#            multiprocessing.Process(
-#                target=daily_loop,
-#                name='daily_loop'
-#            )
-#        )       
-#
-#        # Process for update loop database
-#        processes.append(
-#            multiprocessing.Process(
-#                target=update_loop,
-#                name='update_loop'
-#            )
-#        )        
+        # Process for daily loop
+        processes.append(
+            multiprocessing.Process(
+                target=daily_loop,
+                name='daily_loop'
+            )
+        )       
+
+        # Process for update loop database
+        processes.append(
+            multiprocessing.Process(
+                target=update_loop,
+                name='update_loop'
+            )
+        )        
 
         for process in processes:
             process.start()
@@ -177,7 +184,8 @@ if __name__ == '__main__':
                                 load_info,
                                 MAXIMUM_WAIT,
                                 MINIMUM_WAIT,
-                                shutdown_event
+                                shutdown_event,
+                                MAX_JOB_TIME
                             ),
                             name=old_name,
                         )
@@ -195,16 +203,16 @@ if __name__ == '__main__':
                             name='writer',
                         )
 
-#                    elif old_name == 'daily_loop':
-#                        new_process = multiprocessing.Process(
-#                            target=daily_loop,
-#                            name='daily_loop'
-#                        )
-#                    elif old_name == 'update_loop':
-#                        new_process = multiprocessing.Process(
-#                            target=update_loop,
-#                            name='update_loop'
-#                        )                       
+                    elif old_name == 'daily_loop':
+                        new_process = multiprocessing.Process(
+                            target=daily_loop,
+                            name='daily_loop'
+                        )
+                    elif old_name == 'update_loop':
+                        new_process = multiprocessing.Process(
+                            target=update_loop,
+                            name='update_loop'
+                        )                       
                     else:
                         logger.error(f'unknown child process name {old_name}; cannot restart')
                         continue
@@ -215,11 +223,14 @@ if __name__ == '__main__':
                     logger.info(f'restarted {new_process.name}')
 
                 # Reload the configuration
-                with open(CONFIG_PATH / 'measurement_config.json') as f:
-                    config = json.load(f)
+                try:
+                    with open(CONFIG_PATH / 'measurement_config.json') as f:
+                        new_config = json.load(f)
+                except Exception:
+                    logger.exception('Could not open the measurement config file')
+                    new_config = config
 
-                # OPETs are tracers that start with 'O'; these are the modules for
-                # OPETs only, ignoring other tracers
+                config = new_config
 
                 #Log errror if measurement is not setup correctly
                 for module in config['modules']:
@@ -231,10 +242,11 @@ if __name__ == '__main__':
                         logger.error(f'{module.get("module_name")} does not have an expected tracer assigned')
                         module['tracer'] = 'XXXX'
 
-                    if not mounted_on == "Egis-tracker" or not mounted_on == "Fixed-rack":
+                    if not mounted_on == "Egis-tracker" and not mounted_on == "Fixed-rack":
                         module['mounted_on'] = 'Unknown-rack'
                         logger.error(f'The mounted_on key of {module.get("module_name")} must be Fixed-rack or Egis-tracker')
-
+                
+                # OPETs are tracers that start with 'O'; these are the modules for OPETs only, ignoring other tracers
                 modules = [
                     x for x in config['modules']
                     if x['tracer'].startswith('O')
@@ -267,7 +279,7 @@ if __name__ == '__main__':
                                     'load_mode': module['load_mode'],
                                     'disabled':  module['disabled']
                                 }
-                                print(f'manager: {job_id} (set_load_mode: {module["load_mode"]}) scheduled for {scheduled_time.astimezone(TZ_LOCAL)}')
+                                logger.debug(f'manager: {job_id} (set_load_mode: {module["load_mode"]}) scheduled for {scheduled_time.astimezone(TZ_LOCAL)}')
                                 job_id += 1
                             else:
                                 logger.error(f'Could not set load_mode job due to missing key at Tracer {module.get("tracer")}')
@@ -288,7 +300,7 @@ if __name__ == '__main__':
                                 'load_mode': 'disable',
                                 'disabled':  module['disabled']
                             }
-                            print(f'manager: {job_id} (set_load_mode: disabled) scheduled for {scheduled_time.astimezone(TZ_LOCAL)}')
+                            logger.debug(f'manager: {job_id} (set_load_mode: disabled) scheduled for {scheduled_time.astimezone(TZ_LOCAL)}')
                             job_id += 1     
                     except Exception:
                         logger.exception("Exception in scheduling set_load job")                                         
@@ -359,15 +371,15 @@ if __name__ == '__main__':
                                 'job_type': 'point',
                                 'data_destination': config['data_destination']
                             }
-                            print(f'manager: {job_id} (point) scheduled for {scheduled_time.astimezone(TZ_LOCAL)}')
+                            logger.debug(f'manager: {job_id} (point) scheduled for {scheduled_time.astimezone(TZ_LOCAL)}')
                             job_id += 1
 
                     # Schedule curve measurements
                     curve_interval = module.get('interval_curve')
 
-                    if curve_interval is None or type(point_interval) is not int:
+                    if curve_interval is None or type(curve_interval) is not int:
                         logger.error(f'Could not schedule curve measurement since interval_curve is not set for module {module.get("module_name")}')
-                    
+
                     else:
                         curve_interval = datetime.timedelta(seconds=module.get('interval_curve'))
 
@@ -402,11 +414,22 @@ if __name__ == '__main__':
                                 'job_type': 'curve',
                                 'data_destination': config['data_destination']
                             }
-                            print(f'manager: {job_id} (curve) scheduled for {scheduled_time.astimezone(TZ_LOCAL)}')
+                            logger.debug(f'manager: {job_id} (curve) scheduled for {scheduled_time.astimezone(TZ_LOCAL)}')
                             job_id += 1
-                    print(f'manager: {len(jobs)} jobs are scheduled')
-                    print(f'manager: {jobs.keys()}')
-        
+
+                # Remove jobs that have been waiting too long
+                for old_job_id, old_job in list(jobs.items()):
+                    if present() - old_job["scheduled_time"] > MAX_JOB_TIME:
+                        logger.error(f'Removed job {old_job_id}: {old_job["job_type"]} for {old_job.get("opet_name")}: too old')
+                        try:
+                            jobs.pop(old_job_id)
+                        except KeyError:
+                            pass
+    
+                logger.debug(f'manager: {len(jobs)} jobs are scheduled')
+                logger.debug(f'manager: {jobs.keys()}')
+
+
         # Handle Exceptions
         except KeyboardInterrupt:
             logger.error('Keyboard interrupt, shutting down child processes')

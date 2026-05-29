@@ -3,7 +3,6 @@ Tools for determining when to take measurements. Including:
 
 datetime_range()
 '''
-
 from datetime import datetime, timedelta, timezone
 from math import ceil
 
