@@ -112,6 +112,7 @@ def update_loop():
         
         try:
             add_weather_data(download_weather_last24hours(1, mysql_conn, mysql_cur), conn, cur)
+            logger.debug("Weather data succesfully added")
         except Exception as e:
             print(f"Weather data could not be added. Error: {e}")
             logger.error(f"Weather data could not be added. Error {e}")
@@ -163,7 +164,7 @@ def past_data_upload(conn, cur, mysql_conn, mysql_cur, config, data_path_base):
         data_path_base (_type_): The base location of the files. 
     """
     start_date = datetime.date.today()-datetime.timedelta(config.get('lookback', 7))
-    print(start_date)
+    #print(start_date)
     for date in (start_date + datetime.timedelta(days=n) for n in range((datetime.date.today() - start_date + datetime.timedelta(days=1)).days)):
         try:
             add_data(str(date), conn, cur, mysql_conn, mysql_cur , config, data_path_base)
@@ -369,9 +370,7 @@ def update_weather_id(date, conn, cur):
     for time in datetimes:
         time = time[0]
         now = datetime.datetime.now(tz=zoneinfo.ZoneInfo('Europe/Amsterdam'))
-        print(now)
         if now-time>datetime.timedelta(minutes = 5):
-            print(time)
             weatherid = weather_sync(time, conn, cur)
             query2_point = "UPDATE pv_point SET weather_id = %s WHERE date_time=%s" #Use the local weatherdb for speed.
             cur.execute(query2_point, (weatherid, time))
@@ -388,9 +387,7 @@ def update_weather_id(date, conn, cur):
     for time in datetimes:
         time = time[0]
         now = datetime.datetime.now(tz=zoneinfo.ZoneInfo('Europe/Amsterdam'))
-        print(now)
         if now-time>datetime.timedelta(minutes = 5):
-            print(time)
             weatherid = weather_sync(time, conn, cur)
             query2_curve = "UPDATE pv_curve SET weather_id = %s WHERE date_time=%s" #Use the local weatherdb for speed.
             cur.execute(query2_curve, (weatherid, time))
