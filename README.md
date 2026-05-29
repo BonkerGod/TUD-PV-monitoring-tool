@@ -62,19 +62,19 @@ Here are some high-level descriptions of each document. To fully understand the 
 <details>
     <summary><b>config</b></summary> 
     <p> This folder contains all the settings that need to be set up when a new solar module is connected. An example of a config can be found in the folder <code>example_config</code>. <br>
-        In <code>measurement_config.json</code>, data about the solar module must be added. <br>
+        In <code>measurement_config.json</code>, data about the solar module must be added. Do this very carefully because a lot of data is stuck in the database table 'modules' after being set. <br>
         The following fields need to be filled in for each solar module
         <ul>
-            <li>module_name (string)(This one needs to be unique for every different module and it must be filled in otherwise the system will not work.</li>
+            <li>module_name (string)(This one needs to be unique for every different module, and it must be filled in; otherwise, the system will not work.</li>
             <li>mounted_on (string)</li>
             <li>tracer (string)</li>
             <li>interval_point (int)</li>
             <li>interval_curve (int)</li>
-            <li>username (string)</li>
-            <li>user_email (string)</li>
-            <li>area ($m^2$) (float)</li>
-            <li>technology (string)</li>
-            <li>manufacturer (string)</li>
+            <li>username (string) (can be changed later)</li>
+            <li>user_email (string) (can be changed later)</li>
+            <li>area ($m^2$) (float) (cannot be changed later)</li>
+            <li>technology (string) (cannot be changed later)</li>
+            <li>manufacturer (string) (cannot be changed later)</li>
             <li>disabled (boolean)</li>
             <li>stopdate ('yyyy-mm-dd' or Null)</li>
             <li>load_mode (string)</li>
