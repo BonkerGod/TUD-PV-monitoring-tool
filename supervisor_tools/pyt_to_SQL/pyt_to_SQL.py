@@ -133,7 +133,7 @@ def daily_loop():
     conn, cur, mysql_conn, mysql_cur= init()
     while(1):
         config, data_path_base = loadconfig()
-        if datetime.datetime.now().hour == 14: #At midnight
+        if datetime.datetime.now().hour == 0: #At midnight
             try:
                 past_data_upload(conn, cur, mysql_conn, mysql_cur, config, data_path_base)
             except Exception as e: 
@@ -147,7 +147,7 @@ def daily_loop():
                 print(f"Error detection failed with error: {e}")
                 logging.error(f"Error detection failed with error: {e}")
                 conn.rollback()
-        time.sleep(60*1) # Wait for an hour and check again.
+        time.sleep(60*60*1) # Wait for an hour and check again.
     db_close(conn)    
     
        
@@ -401,7 +401,7 @@ def weather_sync(opet_date_time, conn, cursor):
     cursor.execute("SELECT weather_id, weather_time FROM weather ORDER BY ABS(EXTRACT(EPOCH FROM (weather_time - %s))) ASC limit 1", (opet_date_time,))
     data = cursor.fetchone()
     data = np.array(data)
-    print(data)
+    #print(data)
     data[1]=data[1].replace(tzinfo=zoneinfo.ZoneInfo('Europe/Amsterdam'))
     if abs(opet_date_time-data[1])  < datetime.timedelta(minutes = 5):
         weatherid=data[0]
