@@ -31,7 +31,7 @@ Things that need to be installed on the server to run the system:
 * `pip install pyserial`
 
 When all these programs are installed, and the database has been set up using the PostgreSQL installer, the program `pyt_to_SQL.py` can be used to continue the setup. 
-The first thing that needs to be done is configure you database in `init()` in `pyt_to_SQL.py`. Here, you need to fill in the database name, the username, the user password, the IP address of the server (if the database is run on the same computer, 'localhost' will work), and the port through which it can be accessed.
+The first thing that needs to be done is to configure your database in `init()` in `pyt_to_SQL.py`. Here, you need to fill in the database name, the username, the user password, the IP address of the server (if the database is run on the same computer, 'localhost' will work), and the port through which it can be accessed. The same needs to be done for the MySQL database. The function is `mysql_init()` in `Weatherdb_to_pyth.py`.
 
 The tables for data storage can be created using the function `create_table(type, conn, cur)`. This needs to be done for the types: 'pv_point', 'pv_curve', 'weather', and 'modules'. Running the following code does that: 
 ```python
@@ -57,6 +57,8 @@ When you have completed all previous steps, you can start using the database by 
 ## Users
 In order to use the database, you first need to add your solar module to `measurement_config.json`. You must do this securely and make sure to take a look at the example. Once the data is set, it gets uploaded to the database, and once it has been uploaded, you cannot change it anymore. See in the file the description of the config for more details.
 If you want to stop a measurement, you either need to set disabled to TRUE in the `measurement_config.json` or just completely remove the module from that file.
+
+To access the database from your local computer, you need to make sure that the function `init()` contains the correct IP address of the machine. You also need to know the name of the database, your username, your password and the port through which it is accessible.  
 
 Data can be extracted using `download.py`, which can be found in the user_tools. This command either the 'pv_point' or 'pv_curve' data with the weather data. You also need to set a start and stop date, which acts as a filter for your data. Lastly, you need to select the solar modules you want to have. The data that you get is not perfectly on a single timestamp, because the OPET measurements take place at a different time compared to the weather measurements. This data gets synced based on the closest measurement within a 5-minute time difference compared to the opet data. 
 
