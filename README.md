@@ -117,8 +117,11 @@ Here are some high-level descriptions of each document. To fully understand the 
 
 <details>
     <summary><b>user_tools</b></summary>
-    <p>This folder contains programs that can be used by the users to set up or extract data. <code>plot_csv.py</code> plots a couple of measurements. </p>
-    In <code>port_finder.py</code>, you can find the code that enables you to find the port of your USB adapter.  
+    <p> This folder contains programs that can be used by the users to set up or extract data. <code>plot_csv.py</code> plots a couple of measurements. <br>
+        In <code>port_finder.py</code>, you can find the code that enables you to find the port of your USB adapter. <br>
+        The <code>download.py</code> enables users to extract the measurement data they want. They can filter by startdate, stopdate, and module_name. <br>
+        The <code>lifedata.py</code> enables users to make a plot of the most recent incoming datapoint and check whether it is what they expect.
+    </p>
 </details>
 
 ### supervisor_tools
