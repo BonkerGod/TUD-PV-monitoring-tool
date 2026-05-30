@@ -10,8 +10,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "supervisor_tools")
 from pyt_to_SQL import init, db_close
 import time
 
-def last_measurement(conn, cur):
-    cur.execute("SELECT * FROM pv_point ORDER BY date_time DESC LIMIT 1")
+def last_measurement(conn, cur , module_name):
+    cur.execute("SELECT * FROM pv_point WHERE module_name=%s ORDER BY date_time DESC LIMIT 1" , (module_name,))
     column = cur.fetchone()
     print(column)
     conn.commit()
@@ -51,7 +51,7 @@ labels = [l.get_label() for l in lines]
 ax1.legend(lines, labels, loc='upper left')
 
 def update(frame):
-    measurement = last_measurement(conn, cur)
+    measurement = last_measurement(conn, cur, 'My_solar_panel_2')
 
     times.append(measurement[0])      # datetime object
     voltages.append(measurement[4])   # voltage
