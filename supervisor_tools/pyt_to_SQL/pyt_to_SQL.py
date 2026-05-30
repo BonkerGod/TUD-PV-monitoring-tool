@@ -221,15 +221,15 @@ def add_data(date, conn, cur, mysql_conn, mysql_cur, config, data_path_base):
     df['weather_id'] = None 
     df['date_time']=pd.to_datetime(df['date_time'])
     df['scheduled_time'] = pd.to_datetime(df['scheduled_time'])    
-    try:
-        newest = weather_last(mysql_conn, mysql_cur)
-        UTC_PLUS_2 = datetime.timezone(datetime.timedelta(hours=2))
-        newest_time = pd.to_datetime(newest[1]).replace(tzinfo=UTC_PLUS_2)
-        if (df['date_time'] < newest_time + datetime.timedelta(minutes=5)).any():   #Only add data when there is a weather id from the previous 5 minutes.
-            df['weather_id']=newest[0]
-    except:
-        print('weather_id could not be linked')
-        conn.rollback()
+    # try:
+    #     newest = weather_last(mysql_conn, mysql_cur)
+    #     UTC_PLUS_2 = datetime.timezone(datetime.timedelta(hours=2))
+    #     newest_time = pd.to_datetime(newest[1]).replace(tzinfo=UTC_PLUS_2)
+    #     if (df['date_time'] < newest_time + datetime.timedelta(minutes=5)).any():   #Only add data when there is a weather id from the previous 5 minutes.
+    #         df['weather_id']=newest[0]
+    # except:
+    #     print('weather_id could not be linked')
+    #     conn.rollback()
     
     
     data = df.to_numpy()
@@ -263,16 +263,16 @@ def add_data(date, conn, cur, mysql_conn, mysql_cur, config, data_path_base):
     df['weather_id'] = None
     df['date_time']=pd.to_datetime(df['date_time'])
     df['scheduled_time'] = pd.to_datetime(df['scheduled_time'])    
-    try:
-        newest = weather_last(mysql_conn, mysql_cur)
-        #TODO Needs to change to adaptive system
-        UTC_PLUS_2 = datetime.timezone(datetime.timedelta(hours=2))
-        newest_time = pd.to_datetime(newest[1]).replace(tzinfo=UTC_PLUS_2)
-        if (df['date_time'] < newest_time + datetime.timedelta(minutes=5)).any():   
-            df['weather_id']=newest[0]
-    except:
-        print('weather_id could not be linked')
-        conn.rollback()
+    # try:
+    #     newest = weather_last(mysql_conn, mysql_cur)
+    #     #TODO Needs to change to adaptive system
+    #     UTC_PLUS_2 = datetime.timezone(datetime.timedelta(hours=2))
+    #     newest_time = pd.to_datetime(newest[1]).replace(tzinfo=UTC_PLUS_2)
+    #     if (df['date_time'] < newest_time + datetime.timedelta(minutes=5)).any():   
+    #         df['weather_id']=newest[0]
+    # except:
+    #     print('weather_id could not be linked')
+    #     conn.rollback()
     
     # Insert the curve data into the database
     data = df.to_numpy()
@@ -767,7 +767,7 @@ def error_detect(conn, cur, config):
 def data_tester(conn, cur):
     curve_insert = (
             "INSERT INTO weather (weather_id, weather_time, temperature_air, relative_humidity, dew_point, relative_pressure, wind_speed, wind_speed_std, wind_direction, wind_direction_std, irradiance) "
-            "VALUES (1, '2026-05-26T10:35:00.028240+02:00', 23, 53, 10, 4, 10, 3, 360, 35, 400) "
+            "VALUES (2, '2026-05-26T10:20:00.028240+02:00', 23, 53, 10, 4, 10, 3, 360, 35, 400) "
             "ON CONFLICT (weather_time) DO NOTHING"
             )
     cur.execute(curve_insert)
@@ -808,19 +808,19 @@ def db_close(conn, mysql_conn):
 # config, data_path_base, = loadconfig()
 # delete_table('weather', conn, cur)
 # create_table('weather', conn, cur)
-#delete_table('pv_point', conn, cur)
-#create_table('pv_point', conn, cur)
-#data_tester(conn, cur)
+# delete_table('pv_point', conn, cur)
+# create_table('pv_point', conn, cur)
+# data_tester(conn, cur)
 # download_table('test1.csv', 'pv_point', "2026-05-25 16:00:50-07:00", "2026-12-29 16:00:50-07:00", ["My_solar_panel_1"], conn, cur)
 # add_module_data(config, conn, cur)
 #add_data('2026-05-26', conn, cur, mysql_conn, mysql_cur, config, data_path_base)
 #add_weather_data(download_weather_last24hours(1000, mysql_conn, mysql_cur), conn, cur)
-#print_table('weather', conn, cur)
+# print_table('weather', conn, cur)
 # error_detect(conn, cur, config)
 # data=weather_sync(datetime.datetime(2024, 2, 28, 10, 40,50, tzinfo=zoneinfo.ZoneInfo('Europe/Amsterdam')), conn, cur)
 # print(data)
-#update_weather_id('2026-05-26', conn, cur)
-#print_table('pv_point', conn, cur)
+# update_weather_id('2026-05-26', conn, cur)
+# print_table('pv_point', conn, cur)
 # past_data_upload(conn, cur ,mysql_conn, mysql_cur, config, data_path_base)
 # print_table('pv_curve', conn, cur)
 # update_weather_id('2026-05-26', conn, cur)
