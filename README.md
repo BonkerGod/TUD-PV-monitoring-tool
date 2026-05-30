@@ -55,7 +55,7 @@ When you have completed all previous steps, you can start using the database by 
 > The entire script is made for the timezone in 'Europe/Amsterdam'. So if you are using this program in a different timezone, you need to very carefully adapt the timezones in the code.
 
 ## Users
-In order to use the database, you first need to add your solar module to `measurement_config.json`. You must do this securely and make sure to take a look at the example. Once the data is set, it gets uploaded to the database, and once it has been uploaded, you cannot change it anymore. See in the file the description of the config for more details.
+In order to use the database, you first need to add your solar module to `measurement_config.json`. This is done on the computer that runs the database! So first, you install the solar module you want to start measuring, and then you add it to the measurement config file. You must do this securely and make sure to take a look at the example. Once the data is set, it gets uploaded to the database, and once it has been uploaded, you cannot change it anymore. See in the file the description of the config for more details.
 If you want to stop a measurement, you either need to set disabled to TRUE in the `measurement_config.json` or just completely remove the module from that file.
 
 To access the database from your local computer, you need to make sure that the function `init()` contains the correct IP address of the machine. You also need to know the name of the database, your username, your password and the port through which it is accessible.  
