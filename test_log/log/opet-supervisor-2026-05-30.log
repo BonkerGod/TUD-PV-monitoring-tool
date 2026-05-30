@@ -1,0 +1,689 @@
+2026-05-30 12:10:20,168 DEBUG opet-supervisor started
+2026-05-30 12:10:21,071 DEBUG opet-supervisor started
+2026-05-30 12:10:21,099 DEBUG manager: 0 (set_load_mode: mpp) scheduled for 2026-05-30 12:10:24.098725+02:00
+2026-05-30 12:10:21,099 DEBUG manager: 1 (point) scheduled for 2026-05-30 12:10:30+02:00
+2026-05-30 12:10:21,099 DEBUG manager: 2 jobs are scheduled
+2026-05-30 12:10:21,100 DEBUG manager: [0, 1]
+2026-05-30 12:10:22,028 DEBUG opet-supervisor started
+2026-05-30 12:10:22,029 DEBUG opet-supervisor started
+2026-05-30 12:10:22,029 DEBUG opet-supervisor started
+2026-05-30 12:10:22,032 DEBUG opet-supervisor started
+2026-05-30 12:10:22,051 ERROR Couldn't find the serial port for bus a
+2026-05-30 12:10:22,056 ERROR Couldn't find the serial port for bus a
+2026-05-30 12:10:22,196 DEBUG Database connected succesfully
+2026-05-30 12:10:22,315 DEBUG Building SSL context
+2026-05-30 12:10:22,322 DEBUG Building SSL context
+2026-05-30 12:10:22,382 DEBUG Switching to SSL
+2026-05-30 12:10:22,382 DEBUG Switching to SSL
+2026-05-30 12:10:22,434 DEBUG SSL has been enabled
+2026-05-30 12:10:22,434 DEBUG SSL has been enabled
+2026-05-30 12:10:22,434 DEBUG Starting authorization phase
+2026-05-30 12:10:22,434 DEBUG Starting authorization phase
+2026-05-30 12:10:22,434 DEBUG The provided initial strategy is mysql_native_password
+2026-05-30 12:10:22,434 DEBUG The provided initial strategy is mysql_native_password
+2026-05-30 12:10:22,435 INFO package: mysql.connector.plugins
+2026-05-30 12:10:22,435 INFO package: mysql.connector.plugins
+2026-05-30 12:10:22,435 INFO plugin_name: mysql_native_password
+2026-05-30 12:10:22,435 INFO plugin_name: mysql_native_password
+2026-05-30 12:10:22,436 INFO AUTHENTICATION_PLUGIN_CLASS: MySQLNativePasswordAuthPlugin
+2026-05-30 12:10:22,436 INFO AUTHENTICATION_PLUGIN_CLASS: MySQLNativePasswordAuthPlugin
+2026-05-30 12:10:22,455 DEBUG mysql_native_password completed succesfully
+2026-05-30 12:10:22,501 DEBUG Weather database succesfully connected
+2026-05-30 12:10:22,507 DEBUG Weather database succesfully connected
+2026-05-30 12:10:22,524 DEBUG Duplicate module_name
+2026-05-30 12:10:22,526 ERROR Data could not be added, maybe the file is not yet created or there is an error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-30\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-30.csv'
+2026-05-30 12:10:22,533 DEBUG weather_id succesfully updated
+2026-05-30 12:10:22,534 DEBUG Duplicate module_name
+2026-05-30 12:10:22,534 ERROR Date could not be added on 2026-05-24. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-24\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-24.csv'
+2026-05-30 12:10:22,535 DEBUG weather_id succesfully updated
+2026-05-30 12:10:22,535 DEBUG Duplicate module_name
+2026-05-30 12:10:22,535 ERROR Date could not be added on 2026-05-25. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-25\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-25.csv'
+2026-05-30 12:10:22,535 DEBUG weather_id succesfully updated
+2026-05-30 12:10:22,536 DEBUG Duplicate module_name
+2026-05-30 12:10:27,060 ERROR Couldn't find the serial port for bus a
+2026-05-30 12:10:27,418 DEBUG Weather data succesfully added
+2026-05-30 12:10:27,422 DEBUG Succesfully updated the weather_id
+2026-05-30 12:10:29,017 DEBUG weather_id succesfully updated
+2026-05-30 12:10:29,017 DEBUG Duplicate module_name
+2026-05-30 12:10:29,017 ERROR Date could not be added on 2026-05-27. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-27\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-27.csv'
+2026-05-30 12:10:29,018 DEBUG weather_id succesfully updated
+2026-05-30 12:10:29,018 DEBUG Duplicate module_name
+2026-05-30 12:10:29,018 ERROR Date could not be added on 2026-05-28. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-28\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-28.csv'
+2026-05-30 12:10:29,019 DEBUG weather_id succesfully updated
+2026-05-30 12:10:29,019 DEBUG Duplicate module_name
+2026-05-30 12:10:30,008 DEBUG manager: 2 (set_load_mode: mpp) scheduled for 2026-05-30 12:10:33.008426+02:00
+2026-05-30 12:10:30,010 DEBUG manager: 3 (point) scheduled for 2026-05-30 12:11:00+02:00
+2026-05-30 12:10:30,010 DEBUG manager: 4 (curve) scheduled for 2026-05-30 12:11:00+02:00
+2026-05-30 12:10:30,010 DEBUG manager: 5 jobs are scheduled
+2026-05-30 12:10:30,011 DEBUG manager: [0, 1, 2, 3, 4]
+2026-05-30 12:10:32,078 ERROR Couldn't find the serial port for bus a
+2026-05-30 12:10:34,271 DEBUG weather_id succesfully updated
+2026-05-30 12:10:34,272 DEBUG Duplicate module_name
+2026-05-30 12:10:34,272 ERROR Date could not be added on 2026-05-30. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-30\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-30.csv'
+2026-05-30 12:10:34,274 DEBUG weather_id succesfully updated
+2026-05-30 12:10:34,691 ERROR Keyboard interrupt, shutting down child processes
+2026-05-30 12:10:58,054 DEBUG opet-supervisor started
+2026-05-30 12:10:58,817 DEBUG opet-supervisor started
+2026-05-30 12:10:58,841 DEBUG manager: 0 (set_load_mode: mpp) scheduled for 2026-05-30 12:11:01.841304+02:00
+2026-05-30 12:10:58,842 DEBUG manager: 1 (point) scheduled for 2026-05-30 12:11:30+02:00
+2026-05-30 12:10:58,842 DEBUG manager: 2 jobs are scheduled
+2026-05-30 12:10:58,843 DEBUG manager: [0, 1]
+2026-05-30 12:10:59,703 DEBUG opet-supervisor started
+2026-05-30 12:10:59,705 DEBUG opet-supervisor started
+2026-05-30 12:10:59,715 ERROR Couldn't find the serial port for bus a
+2026-05-30 12:10:59,719 ERROR Couldn't find the serial port for bus a
+2026-05-30 12:10:59,742 DEBUG Database connected succesfully
+2026-05-30 12:10:59,743 DEBUG Database connected succesfully
+2026-05-30 12:10:59,804 DEBUG Building SSL context
+2026-05-30 12:10:59,852 DEBUG Switching to SSL
+2026-05-30 12:10:59,853 DEBUG Switching to SSL
+2026-05-30 12:10:59,906 DEBUG SSL has been enabled
+2026-05-30 12:10:59,906 DEBUG Starting authorization phase
+2026-05-30 12:10:59,906 DEBUG The provided initial strategy is mysql_native_password
+2026-05-30 12:10:59,906 INFO package: mysql.connector.plugins
+2026-05-30 12:10:59,907 INFO plugin_name: mysql_native_password
+2026-05-30 12:10:59,907 INFO AUTHENTICATION_PLUGIN_CLASS: MySQLNativePasswordAuthPlugin
+2026-05-30 12:10:59,911 DEBUG SSL has been enabled
+2026-05-30 12:10:59,911 DEBUG Starting authorization phase
+2026-05-30 12:10:59,911 DEBUG The provided initial strategy is mysql_native_password
+2026-05-30 12:10:59,912 INFO package: mysql.connector.plugins
+2026-05-30 12:10:59,912 INFO plugin_name: mysql_native_password
+2026-05-30 12:10:59,912 INFO AUTHENTICATION_PLUGIN_CLASS: MySQLNativePasswordAuthPlugin
+2026-05-30 12:10:59,924 DEBUG mysql_native_password completed succesfully
+2026-05-30 12:10:59,928 DEBUG mysql_native_password completed succesfully
+2026-05-30 12:10:59,978 DEBUG Weather database succesfully connected
+2026-05-30 12:10:59,982 DEBUG Duplicate module_name
+2026-05-30 12:10:59,983 ERROR Data could not be added, maybe the file is not yet created or there is an error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-30\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-30.csv'
+2026-05-30 12:10:59,985 DEBUG weather_id succesfully updated
+2026-05-30 12:10:59,986 DEBUG Duplicate module_name
+2026-05-30 12:10:59,986 ERROR Date could not be added on 2026-05-01. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-01\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-01.csv'
+2026-05-30 12:10:59,987 DEBUG weather_id succesfully updated
+2026-05-30 12:10:59,988 DEBUG Duplicate module_name
+2026-05-30 12:10:59,988 ERROR Date could not be added on 2026-05-02. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-02\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-02.csv'
+2026-05-30 12:10:59,989 DEBUG weather_id succesfully updated
+2026-05-30 12:10:59,989 DEBUG Duplicate module_name
+2026-05-30 12:10:59,989 ERROR Date could not be added on 2026-05-03. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-03\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-03.csv'
+2026-05-30 12:10:59,990 DEBUG weather_id succesfully updated
+2026-05-30 12:10:59,990 DEBUG Duplicate module_name
+2026-05-30 12:10:59,990 ERROR Date could not be added on 2026-05-04. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-04\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-04.csv'
+2026-05-30 12:10:59,991 DEBUG weather_id succesfully updated
+2026-05-30 12:10:59,991 DEBUG Duplicate module_name
+2026-05-30 12:10:59,991 ERROR Date could not be added on 2026-05-05. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-05\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-05.csv'
+2026-05-30 12:10:59,992 DEBUG weather_id succesfully updated
+2026-05-30 12:10:59,992 DEBUG Duplicate module_name
+2026-05-30 12:10:59,993 ERROR Date could not be added on 2026-05-06. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-06\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-06.csv'
+2026-05-30 12:10:59,993 DEBUG weather_id succesfully updated
+2026-05-30 12:10:59,994 DEBUG Duplicate module_name
+2026-05-30 12:10:59,994 ERROR Date could not be added on 2026-05-07. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-07\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-07.csv'
+2026-05-30 12:10:59,994 DEBUG weather_id succesfully updated
+2026-05-30 12:10:59,995 DEBUG Duplicate module_name
+2026-05-30 12:11:00,002 DEBUG manager: 2 (set_load_mode: mpp) scheduled for 2026-05-30 12:11:03.002644+02:00
+2026-05-30 12:11:00,003 DEBUG manager: 3 jobs are scheduled
+2026-05-30 12:11:00,003 DEBUG manager: [0, 1, 2]
+2026-05-30 12:11:00,005 ERROR Date could not be added on 2026-05-08. Error: 'date_time'
+2026-05-30 12:11:00,006 DEBUG weather_id succesfully updated
+2026-05-30 12:11:00,006 DEBUG Duplicate module_name
+2026-05-30 12:11:00,006 ERROR Date could not be added on 2026-05-09. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-09\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-09.csv'
+2026-05-30 12:11:00,007 DEBUG weather_id succesfully updated
+2026-05-30 12:11:00,007 DEBUG Duplicate module_name
+2026-05-30 12:11:00,007 ERROR Date could not be added on 2026-05-10. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-10\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-10.csv'
+2026-05-30 12:11:00,008 DEBUG weather_id succesfully updated
+2026-05-30 12:11:00,008 DEBUG Duplicate module_name
+2026-05-30 12:11:00,016 ERROR Date could not be added on 2026-05-11. Error: 'date_time'
+2026-05-30 12:11:00,017 DEBUG weather_id succesfully updated
+2026-05-30 12:11:00,017 DEBUG Duplicate module_name
+2026-05-30 12:11:04,440 ERROR Date could not be added on 2026-05-12. Error: not all arguments converted during string formatting
+2026-05-30 12:11:04,442 DEBUG weather_id succesfully updated
+2026-05-30 12:11:04,442 DEBUG Duplicate module_name
+2026-05-30 12:11:04,443 ERROR Date could not be added on 2026-05-13. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-13\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-13.csv'
+2026-05-30 12:11:04,443 DEBUG weather_id succesfully updated
+2026-05-30 12:11:04,444 DEBUG Duplicate module_name
+2026-05-30 12:11:04,444 ERROR Date could not be added on 2026-05-14. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-14\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-14.csv'
+2026-05-30 12:11:04,444 DEBUG weather_id succesfully updated
+2026-05-30 12:11:04,445 DEBUG Duplicate module_name
+2026-05-30 12:11:04,445 ERROR Date could not be added on 2026-05-15. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-15\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-15.csv'
+2026-05-30 12:11:04,445 DEBUG weather_id succesfully updated
+2026-05-30 12:11:04,446 DEBUG Duplicate module_name
+2026-05-30 12:11:04,446 ERROR Date could not be added on 2026-05-16. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-16\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-16.csv'
+2026-05-30 12:11:04,447 DEBUG weather_id succesfully updated
+2026-05-30 12:11:04,447 DEBUG Duplicate module_name
+2026-05-30 12:11:04,447 ERROR Date could not be added on 2026-05-17. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-17\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-17.csv'
+2026-05-30 12:11:04,448 DEBUG weather_id succesfully updated
+2026-05-30 12:11:04,448 DEBUG Duplicate module_name
+2026-05-30 12:11:04,731 ERROR Couldn't find the serial port for bus a
+2026-05-30 12:11:05,563 DEBUG Weather data succesfully added
+2026-05-30 12:11:05,566 DEBUG Succesfully updated the weather_id
+2026-05-30 12:11:06,958 ERROR Date could not be added on 2026-05-18. Error: not all arguments converted during string formatting
+2026-05-30 12:11:06,959 DEBUG weather_id succesfully updated
+2026-05-30 12:11:06,959 DEBUG Duplicate module_name
+2026-05-30 12:11:09,742 ERROR Couldn't find the serial port for bus a
+2026-05-30 12:11:10,915 ERROR Date could not be added on 2026-05-19. Error: index 11 is out of bounds for axis 0 with size 11
+2026-05-30 12:11:12,350 DEBUG weather_id succesfully updated
+2026-05-30 12:11:12,351 DEBUG Duplicate module_name
+2026-05-30 12:11:14,750 ERROR Couldn't find the serial port for bus a
+2026-05-30 12:11:15,565 DEBUG Duplicate module_name
+2026-05-30 12:11:15,566 ERROR Data could not be added, maybe the file is not yet created or there is an error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-30\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-30.csv'
+2026-05-30 12:11:18,624 DEBUG weather_id succesfully updated
+2026-05-30 12:11:18,624 DEBUG Duplicate module_name
+2026-05-30 12:11:18,625 ERROR Date could not be added on 2026-05-21. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-21\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-21.csv'
+2026-05-30 12:11:18,625 DEBUG weather_id succesfully updated
+2026-05-30 12:11:18,625 DEBUG Duplicate module_name
+2026-05-30 12:11:18,626 ERROR Date could not be added on 2026-05-22. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-22\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-22.csv'
+2026-05-30 12:11:18,626 DEBUG weather_id succesfully updated
+2026-05-30 12:11:18,626 DEBUG Duplicate module_name
+2026-05-30 12:11:18,627 ERROR Date could not be added on 2026-05-23. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-23\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-23.csv'
+2026-05-30 12:11:18,627 DEBUG weather_id succesfully updated
+2026-05-30 12:11:18,627 DEBUG Duplicate module_name
+2026-05-30 12:11:18,627 ERROR Date could not be added on 2026-05-24. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-24\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-24.csv'
+2026-05-30 12:11:18,628 DEBUG weather_id succesfully updated
+2026-05-30 12:11:18,628 DEBUG Duplicate module_name
+2026-05-30 12:11:18,629 ERROR Date could not be added on 2026-05-25. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-25\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-25.csv'
+2026-05-30 12:11:18,629 DEBUG weather_id succesfully updated
+2026-05-30 12:11:18,629 DEBUG Duplicate module_name
+2026-05-30 12:11:18,909 DEBUG Weather data succesfully added
+2026-05-30 12:11:18,911 DEBUG Succesfully updated the weather_id
+2026-05-30 12:11:19,767 ERROR Couldn't find the serial port for bus a
+2026-05-30 12:11:22,777 DEBUG weather_id succesfully updated
+2026-05-30 12:11:22,778 DEBUG Duplicate module_name
+2026-05-30 12:11:22,778 ERROR Date could not be added on 2026-05-27. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-27\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-27.csv'
+2026-05-30 12:11:22,779 DEBUG weather_id succesfully updated
+2026-05-30 12:11:22,779 DEBUG Duplicate module_name
+2026-05-30 12:11:22,779 ERROR Date could not be added on 2026-05-28. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-28\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-28.csv'
+2026-05-30 12:11:22,780 DEBUG weather_id succesfully updated
+2026-05-30 12:11:22,780 DEBUG Duplicate module_name
+2026-05-30 12:11:24,777 ERROR Couldn't find the serial port for bus a
+2026-05-30 12:11:26,942 DEBUG weather_id succesfully updated
+2026-05-30 12:11:26,942 DEBUG Duplicate module_name
+2026-05-30 12:11:26,942 ERROR Date could not be added on 2026-05-30. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-30\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-30.csv'
+2026-05-30 12:11:26,943 DEBUG weather_id succesfully updated
+2026-05-30 12:11:28,912 DEBUG Duplicate module_name
+2026-05-30 12:11:28,913 ERROR Data could not be added, maybe the file is not yet created or there is an error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-30\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-30.csv'
+2026-05-30 12:11:29,789 ERROR Couldn't find the serial port for bus a
+2026-05-30 12:11:30,010 DEBUG manager: 3 (set_load_mode: mpp) scheduled for 2026-05-30 12:11:33.009873+02:00
+2026-05-30 12:11:30,010 DEBUG manager: 4 (point) scheduled for 2026-05-30 12:12:00+02:00
+2026-05-30 12:11:30,010 DEBUG manager: 5 (curve) scheduled for 2026-05-30 12:12:00+02:00
+2026-05-30 12:11:30,010 DEBUG manager: 6 jobs are scheduled
+2026-05-30 12:11:30,010 DEBUG manager: [0, 1, 2, 3, 4, 5]
+2026-05-30 12:11:30,200 DEBUG Email address is correct
+2026-05-30 12:11:32,072 DEBUG Weather data succesfully added
+2026-05-30 12:11:32,072 DEBUG Succesfully updated the weather_id
+2026-05-30 12:11:32,361 DEBUG Email has been send
+2026-05-30 12:11:34,805 ERROR Couldn't find the serial port for bus a
+2026-05-30 12:11:39,814 ERROR Couldn't find the serial port for bus a
+2026-05-30 12:11:42,073 DEBUG Duplicate module_name
+2026-05-30 12:11:42,073 ERROR Data could not be added, maybe the file is not yet created or there is an error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-30\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-30.csv'
+2026-05-30 12:11:44,723 DEBUG Weather data succesfully added
+2026-05-30 12:11:44,726 DEBUG Succesfully updated the weather_id
+2026-05-30 12:11:44,818 ERROR Couldn't find the serial port for bus a
+2026-05-30 12:11:49,825 ERROR Couldn't find the serial port for bus a
+2026-05-30 12:11:54,725 DEBUG Duplicate module_name
+2026-05-30 12:11:54,726 ERROR Data could not be added, maybe the file is not yet created or there is an error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-30\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-30.csv'
+2026-05-30 12:11:54,833 ERROR Couldn't find the serial port for bus a
+2026-05-30 12:11:55,330 ERROR Keyboard interrupt, shutting down child processes
+2026-05-30 12:12:30,194 DEBUG opet-supervisor started
+2026-05-30 12:12:31,035 DEBUG opet-supervisor started
+2026-05-30 12:12:31,059 DEBUG manager: 0 (set_load_mode: mpp) scheduled for 2026-05-30 12:12:34.059658+02:00
+2026-05-30 12:12:31,060 DEBUG manager: 1 (point) scheduled for 2026-05-30 12:13:00+02:00
+2026-05-30 12:12:31,060 DEBUG manager: 2 (curve) scheduled for 2026-05-30 12:13:00+02:00
+2026-05-30 12:12:31,061 DEBUG manager: 3 jobs are scheduled
+2026-05-30 12:12:31,061 DEBUG manager: [0, 1, 2]
+2026-05-30 12:12:31,973 DEBUG opet-supervisor started
+2026-05-30 12:12:31,975 DEBUG opet-supervisor started
+2026-05-30 12:12:31,988 DEBUG opet-supervisor started
+2026-05-30 12:12:32,000 ERROR Couldn't find the serial port for bus a
+2026-05-30 12:12:32,005 ERROR Couldn't find the serial port for bus a
+2026-05-30 12:12:32,028 DEBUG Database connected succesfully
+2026-05-30 12:12:32,086 DEBUG Building SSL context
+2026-05-30 12:12:32,091 DEBUG Building SSL context
+2026-05-30 12:12:32,133 DEBUG Switching to SSL
+2026-05-30 12:12:32,137 DEBUG Switching to SSL
+2026-05-30 12:12:32,194 DEBUG SSL has been enabled
+2026-05-30 12:12:32,194 DEBUG Starting authorization phase
+2026-05-30 12:12:32,194 DEBUG The provided initial strategy is mysql_native_password
+2026-05-30 12:12:32,194 INFO package: mysql.connector.plugins
+2026-05-30 12:12:32,194 INFO plugin_name: mysql_native_password
+2026-05-30 12:12:32,195 DEBUG SSL has been enabled
+2026-05-30 12:12:32,195 DEBUG Starting authorization phase
+2026-05-30 12:12:32,195 DEBUG The provided initial strategy is mysql_native_password
+2026-05-30 12:12:32,195 INFO package: mysql.connector.plugins
+2026-05-30 12:12:32,195 INFO plugin_name: mysql_native_password
+2026-05-30 12:12:32,195 INFO AUTHENTICATION_PLUGIN_CLASS: MySQLNativePasswordAuthPlugin
+2026-05-30 12:12:32,196 INFO AUTHENTICATION_PLUGIN_CLASS: MySQLNativePasswordAuthPlugin
+2026-05-30 12:12:32,211 DEBUG mysql_native_password completed succesfully
+2026-05-30 12:12:32,217 DEBUG mysql_native_password completed succesfully
+2026-05-30 12:12:32,271 DEBUG Weather database succesfully connected
+2026-05-30 12:12:32,274 DEBUG Duplicate module_name
+2026-05-30 12:12:32,276 ERROR Data could not be added, maybe the file is not yet created or there is an error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-30\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-30.csv'
+2026-05-30 12:12:32,276 DEBUG Weather database succesfully connected
+2026-05-30 12:12:32,279 DEBUG Duplicate module_name
+2026-05-30 12:12:32,281 ERROR Date could not be added on 2026-04-30. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-04-30\\config_2026-04-30T15-00-00\\opet_results_point_2026-04-30.csv'
+2026-05-30 12:12:32,283 DEBUG weather_id succesfully updated
+2026-05-30 12:12:32,284 DEBUG Duplicate module_name
+2026-05-30 12:12:32,284 ERROR Date could not be added on 2026-05-01. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-01\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-01.csv'
+2026-05-30 12:12:32,285 DEBUG weather_id succesfully updated
+2026-05-30 12:12:32,285 DEBUG Duplicate module_name
+2026-05-30 12:12:32,285 ERROR Date could not be added on 2026-05-02. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-02\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-02.csv'
+2026-05-30 12:12:32,286 DEBUG weather_id succesfully updated
+2026-05-30 12:12:32,286 DEBUG Duplicate module_name
+2026-05-30 12:12:32,286 ERROR Date could not be added on 2026-05-03. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-03\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-03.csv'
+2026-05-30 12:12:32,287 DEBUG weather_id succesfully updated
+2026-05-30 12:12:32,287 DEBUG Duplicate module_name
+2026-05-30 12:12:32,287 ERROR Date could not be added on 2026-05-04. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-04\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-04.csv'
+2026-05-30 12:12:32,288 DEBUG weather_id succesfully updated
+2026-05-30 12:12:32,288 DEBUG Duplicate module_name
+2026-05-30 12:12:32,288 ERROR Date could not be added on 2026-05-05. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-05\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-05.csv'
+2026-05-30 12:12:32,289 DEBUG weather_id succesfully updated
+2026-05-30 12:12:32,289 DEBUG Duplicate module_name
+2026-05-30 12:12:32,289 ERROR Date could not be added on 2026-05-06. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-06\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-06.csv'
+2026-05-30 12:12:32,290 DEBUG weather_id succesfully updated
+2026-05-30 12:12:32,290 DEBUG Duplicate module_name
+2026-05-30 12:12:32,290 ERROR Date could not be added on 2026-05-07. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-07\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-07.csv'
+2026-05-30 12:12:32,291 DEBUG weather_id succesfully updated
+2026-05-30 12:12:32,291 DEBUG Duplicate module_name
+2026-05-30 12:12:32,294 ERROR Date could not be added on 2026-05-08. Error: 'date_time'
+2026-05-30 12:12:32,294 DEBUG weather_id succesfully updated
+2026-05-30 12:12:32,295 DEBUG Duplicate module_name
+2026-05-30 12:12:32,295 ERROR Date could not be added on 2026-05-09. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-09\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-09.csv'
+2026-05-30 12:12:32,295 DEBUG weather_id succesfully updated
+2026-05-30 12:12:32,296 DEBUG Duplicate module_name
+2026-05-30 12:12:32,296 ERROR Date could not be added on 2026-05-10. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-10\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-10.csv'
+2026-05-30 12:12:32,296 DEBUG weather_id succesfully updated
+2026-05-30 12:12:32,297 DEBUG Duplicate module_name
+2026-05-30 12:12:32,298 ERROR Date could not be added on 2026-05-11. Error: 'date_time'
+2026-05-30 12:12:32,299 DEBUG weather_id succesfully updated
+2026-05-30 12:12:32,299 DEBUG Duplicate module_name
+2026-05-30 12:12:36,694 ERROR Date could not be added on 2026-05-12. Error: not all arguments converted during string formatting
+2026-05-30 12:12:36,695 DEBUG weather_id succesfully updated
+2026-05-30 12:12:36,695 DEBUG Duplicate module_name
+2026-05-30 12:12:36,696 ERROR Date could not be added on 2026-05-13. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-13\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-13.csv'
+2026-05-30 12:12:36,696 DEBUG weather_id succesfully updated
+2026-05-30 12:12:36,696 DEBUG Duplicate module_name
+2026-05-30 12:12:36,697 ERROR Date could not be added on 2026-05-14. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-14\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-14.csv'
+2026-05-30 12:12:36,697 DEBUG weather_id succesfully updated
+2026-05-30 12:12:36,697 DEBUG Duplicate module_name
+2026-05-30 12:12:36,698 ERROR Date could not be added on 2026-05-15. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-15\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-15.csv'
+2026-05-30 12:12:36,698 DEBUG weather_id succesfully updated
+2026-05-30 12:12:36,698 DEBUG Duplicate module_name
+2026-05-30 12:12:36,699 ERROR Date could not be added on 2026-05-16. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-16\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-16.csv'
+2026-05-30 12:12:36,699 DEBUG weather_id succesfully updated
+2026-05-30 12:12:36,699 DEBUG Duplicate module_name
+2026-05-30 12:12:36,699 ERROR Date could not be added on 2026-05-17. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-17\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-17.csv'
+2026-05-30 12:12:36,700 DEBUG weather_id succesfully updated
+2026-05-30 12:12:36,700 DEBUG Duplicate module_name
+2026-05-30 12:12:37,021 ERROR Couldn't find the serial port for bus a
+2026-05-30 12:12:37,663 DEBUG Weather data succesfully added
+2026-05-30 12:12:37,666 DEBUG Succesfully updated the weather_id
+2026-05-30 12:12:39,138 ERROR Date could not be added on 2026-05-18. Error: not all arguments converted during string formatting
+2026-05-30 12:12:39,139 DEBUG weather_id succesfully updated
+2026-05-30 12:12:39,139 DEBUG Duplicate module_name
+2026-05-30 12:12:42,025 ERROR Couldn't find the serial port for bus a
+2026-05-30 12:12:43,132 ERROR Date could not be added on 2026-05-19. Error: index 11 is out of bounds for axis 0 with size 11
+2026-05-30 12:12:43,134 DEBUG weather_id succesfully updated
+2026-05-30 12:12:43,134 DEBUG Duplicate module_name
+2026-05-30 12:12:47,029 ERROR Couldn't find the serial port for bus a
+2026-05-30 12:12:47,222 DEBUG weather_id succesfully updated
+2026-05-30 12:12:47,223 DEBUG Duplicate module_name
+2026-05-30 12:12:47,224 ERROR Date could not be added on 2026-05-21. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-21\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-21.csv'
+2026-05-30 12:12:47,225 DEBUG weather_id succesfully updated
+2026-05-30 12:12:47,225 DEBUG Duplicate module_name
+2026-05-30 12:12:47,225 ERROR Date could not be added on 2026-05-22. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-22\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-22.csv'
+2026-05-30 12:12:47,226 DEBUG weather_id succesfully updated
+2026-05-30 12:12:47,226 DEBUG Duplicate module_name
+2026-05-30 12:12:47,226 ERROR Date could not be added on 2026-05-23. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-23\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-23.csv'
+2026-05-30 12:12:47,227 DEBUG weather_id succesfully updated
+2026-05-30 12:12:47,227 DEBUG Duplicate module_name
+2026-05-30 12:12:47,227 ERROR Date could not be added on 2026-05-24. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-24\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-24.csv'
+2026-05-30 12:12:47,228 DEBUG weather_id succesfully updated
+2026-05-30 12:12:47,228 DEBUG Duplicate module_name
+2026-05-30 12:12:47,228 ERROR Date could not be added on 2026-05-25. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-25\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-25.csv'
+2026-05-30 12:12:47,229 DEBUG weather_id succesfully updated
+2026-05-30 12:12:47,229 DEBUG Duplicate module_name
+2026-05-30 12:12:47,666 DEBUG Duplicate module_name
+2026-05-30 12:12:47,667 ERROR Data could not be added, maybe the file is not yet created or there is an error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-30\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-30.csv'
+2026-05-30 12:12:52,033 ERROR Couldn't find the serial port for bus a
+2026-05-30 12:12:53,312 DEBUG Weather data succesfully added
+2026-05-30 12:12:53,313 DEBUG Succesfully updated the weather_id
+2026-05-30 12:12:54,060 DEBUG weather_id succesfully updated
+2026-05-30 12:12:54,061 DEBUG Duplicate module_name
+2026-05-30 12:12:54,061 ERROR Date could not be added on 2026-05-27. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-27\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-27.csv'
+2026-05-30 12:12:54,061 DEBUG weather_id succesfully updated
+2026-05-30 12:12:54,062 DEBUG Duplicate module_name
+2026-05-30 12:12:54,062 ERROR Date could not be added on 2026-05-28. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-28\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-28.csv'
+2026-05-30 12:12:54,063 DEBUG weather_id succesfully updated
+2026-05-30 12:12:54,063 DEBUG Duplicate module_name
+2026-05-30 12:12:57,037 ERROR Couldn't find the serial port for bus a
+2026-05-30 12:12:57,955 DEBUG weather_id succesfully updated
+2026-05-30 12:12:57,956 DEBUG Duplicate module_name
+2026-05-30 12:12:57,956 ERROR Date could not be added on 2026-05-30. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-30\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-30.csv'
+2026-05-30 12:12:57,956 DEBUG weather_id succesfully updated
+2026-05-30 12:13:00,009 DEBUG manager: 3 (set_load_mode: mpp) scheduled for 2026-05-30 12:13:03.009435+02:00
+2026-05-30 12:13:00,010 DEBUG manager: 4 (point) scheduled for 2026-05-30 12:13:30+02:00
+2026-05-30 12:13:00,010 DEBUG manager: 5 jobs are scheduled
+2026-05-30 12:13:00,010 DEBUG manager: [0, 1, 2, 3, 4]
+2026-05-30 12:13:00,512 DEBUG Email address is correct
+2026-05-30 12:13:02,042 ERROR Couldn't find the serial port for bus a
+2026-05-30 12:13:02,982 DEBUG Email has been send
+2026-05-30 12:13:03,313 DEBUG Duplicate module_name
+2026-05-30 12:13:03,313 ERROR Data could not be added, maybe the file is not yet created or there is an error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-30\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-30.csv'
+2026-05-30 12:13:05,858 DEBUG Weather data succesfully added
+2026-05-30 12:13:05,859 DEBUG Succesfully updated the weather_id
+2026-05-30 12:13:07,049 ERROR Couldn't find the serial port for bus a
+2026-05-30 12:13:12,055 ERROR Couldn't find the serial port for bus a
+2026-05-30 12:13:15,862 DEBUG Duplicate module_name
+2026-05-30 12:13:15,863 ERROR Data could not be added, maybe the file is not yet created or there is an error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-30\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-30.csv'
+2026-05-30 12:13:17,068 ERROR Couldn't find the serial port for bus a
+2026-05-30 12:13:18,554 DEBUG Weather data succesfully added
+2026-05-30 12:13:18,554 DEBUG Succesfully updated the weather_id
+2026-05-30 12:13:22,073 ERROR Couldn't find the serial port for bus a
+2026-05-30 12:13:27,081 ERROR Couldn't find the serial port for bus a
+2026-05-30 12:13:28,555 DEBUG Duplicate module_name
+2026-05-30 12:13:28,555 ERROR Data could not be added, maybe the file is not yet created or there is an error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-30\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-30.csv'
+2026-05-30 12:13:30,003 DEBUG manager: 5 (set_load_mode: mpp) scheduled for 2026-05-30 12:13:33.002943+02:00
+2026-05-30 12:13:30,003 DEBUG manager: 6 (point) scheduled for 2026-05-30 12:14:00+02:00
+2026-05-30 12:13:30,003 DEBUG manager: 7 (curve) scheduled for 2026-05-30 12:14:00+02:00
+2026-05-30 12:13:30,003 DEBUG manager: 8 jobs are scheduled
+2026-05-30 12:13:30,003 DEBUG manager: [0, 1, 2, 3, 4, 5, 6, 7]
+2026-05-30 12:13:31,210 DEBUG Weather data succesfully added
+2026-05-30 12:13:31,211 DEBUG Succesfully updated the weather_id
+2026-05-30 12:13:32,084 ERROR Couldn't find the serial port for bus a
+2026-05-30 12:13:37,090 ERROR Couldn't find the serial port for bus a
+2026-05-30 12:13:41,215 DEBUG Duplicate module_name
+2026-05-30 12:13:41,215 ERROR Data could not be added, maybe the file is not yet created or there is an error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-30\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-30.csv'
+2026-05-30 12:13:42,093 ERROR Couldn't find the serial port for bus a
+2026-05-30 12:13:43,942 DEBUG Weather data succesfully added
+2026-05-30 12:13:43,943 DEBUG Succesfully updated the weather_id
+2026-05-30 12:13:47,100 ERROR Couldn't find the serial port for bus a
+2026-05-30 12:13:52,115 ERROR Couldn't find the serial port for bus a
+2026-05-30 12:13:52,242 ERROR Keyboard interrupt, shutting down child processes
+2026-05-30 12:14:01,446 DEBUG opet-supervisor started
+2026-05-30 12:14:02,223 DEBUG opet-supervisor started
+2026-05-30 12:14:02,245 DEBUG manager: 0 (set_load_mode: mpp) scheduled for 2026-05-30 12:14:05.245655+02:00
+2026-05-30 12:14:02,246 DEBUG manager: 1 (point) scheduled for 2026-05-30 12:14:30+02:00
+2026-05-30 12:14:02,246 DEBUG manager: 2 jobs are scheduled
+2026-05-30 12:14:02,247 DEBUG manager: [0, 1]
+2026-05-30 12:14:03,087 DEBUG opet-supervisor started
+2026-05-30 12:14:03,088 DEBUG opet-supervisor started
+2026-05-30 12:14:03,090 DEBUG opet-supervisor started
+2026-05-30 12:14:03,100 ERROR Couldn't find the serial port for bus a
+2026-05-30 12:14:03,104 ERROR Couldn't find the serial port for bus a
+2026-05-30 12:14:03,130 DEBUG Database connected succesfully
+2026-05-30 12:14:03,182 DEBUG Building SSL context
+2026-05-30 12:14:03,229 DEBUG Switching to SSL
+2026-05-30 12:14:03,230 DEBUG Switching to SSL
+2026-05-30 12:14:03,312 DEBUG SSL has been enabled
+2026-05-30 12:14:03,313 DEBUG Starting authorization phase
+2026-05-30 12:14:03,313 DEBUG Starting authorization phase
+2026-05-30 12:14:03,313 DEBUG The provided initial strategy is mysql_native_password
+2026-05-30 12:14:03,313 INFO package: mysql.connector.plugins
+mysql_native_password
+2026-05-30 12:14:03,313 INFO plugin_name: mysql_native_password2026-05-30 12:14:03,313 INFO plugin_name: mysql_native_password
+2026-05-30 12:14:03,314 INFO AUTHENTICATION_PLUGIN_CLASS: MySQLNativePasswordAuthPlugin
+2026-05-30 12:14:03,315 INFO AUTHENTICATION_PLUGIN_CLASS: MySQLNativePasswordAuthPlugin
+2026-05-30 12:14:03,334 DEBUG mysql_native_password completed succesfully
+2026-05-30 12:14:03,382 DEBUG Weather database succesfully connected
+2026-05-30 12:14:03,386 DEBUG Duplicate module_name
+2026-05-30 12:14:03,387 DEBUG Weather database succesfully connected
+2026-05-30 12:14:03,388 ERROR Date could not be added on 2026-04-30. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-04-30\\config_2026-04-30T15-00-00\\opet_results_point_2026-04-30.csv'
+2026-05-30 12:14:03,390 DEBUG Duplicate module_name
+2026-05-30 12:14:03,391 DEBUG weather_id succesfully updated
+2026-05-30 12:14:03,391 DEBUG Duplicate module_name
+2026-05-30 12:14:03,391 ERROR Data could not be added, maybe the file is not yet created or there is an error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-30\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-30.csv'
+2026-05-30 12:14:03,391 ERROR Date could not be added on 2026-05-01. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-01\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-01.csv'
+2026-05-30 12:14:03,392 DEBUG weather_id succesfully updated
+2026-05-30 12:14:03,393 DEBUG Duplicate module_name
+2026-05-30 12:14:03,393 ERROR Date could not be added on 2026-05-02. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-02\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-02.csv'
+2026-05-30 12:14:03,393 DEBUG weather_id succesfully updated
+2026-05-30 12:14:03,394 DEBUG Duplicate module_name
+2026-05-30 12:14:03,394 ERROR Date could not be added on 2026-05-03. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-03\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-03.csv'
+2026-05-30 12:14:03,395 DEBUG weather_id succesfully updated
+2026-05-30 12:14:03,395 DEBUG Duplicate module_name
+2026-05-30 12:14:03,395 ERROR Date could not be added on 2026-05-04. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-04\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-04.csv'
+2026-05-30 12:14:03,396 DEBUG weather_id succesfully updated
+2026-05-30 12:14:03,396 DEBUG Duplicate module_name
+2026-05-30 12:14:03,396 ERROR Date could not be added on 2026-05-05. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-05\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-05.csv'
+2026-05-30 12:14:03,397 DEBUG weather_id succesfully updated
+2026-05-30 12:14:03,397 DEBUG Duplicate module_name
+2026-05-30 12:14:03,397 ERROR Date could not be added on 2026-05-06. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-06\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-06.csv'
+2026-05-30 12:14:03,398 DEBUG weather_id succesfully updated
+2026-05-30 12:14:03,398 DEBUG Duplicate module_name
+2026-05-30 12:14:03,398 ERROR Date could not be added on 2026-05-07. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-07\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-07.csv'
+2026-05-30 12:14:03,399 DEBUG weather_id succesfully updated
+2026-05-30 12:14:03,399 DEBUG Duplicate module_name
+2026-05-30 12:14:03,402 ERROR Date could not be added on 2026-05-08. Error: 'date_time'
+2026-05-30 12:14:03,402 DEBUG weather_id succesfully updated
+2026-05-30 12:14:03,403 DEBUG Duplicate module_name
+2026-05-30 12:14:03,403 ERROR Date could not be added on 2026-05-09. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-09\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-09.csv'
+2026-05-30 12:14:03,403 DEBUG weather_id succesfully updated
+2026-05-30 12:14:03,404 DEBUG Duplicate module_name
+2026-05-30 12:14:03,404 ERROR Date could not be added on 2026-05-10. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-10\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-10.csv'
+2026-05-30 12:14:03,404 DEBUG weather_id succesfully updated
+2026-05-30 12:14:03,405 DEBUG Duplicate module_name
+2026-05-30 12:14:03,406 ERROR Date could not be added on 2026-05-11. Error: 'date_time'
+2026-05-30 12:14:03,407 DEBUG weather_id succesfully updated
+2026-05-30 12:14:03,407 DEBUG Duplicate module_name
+2026-05-30 12:14:07,879 ERROR Date could not be added on 2026-05-12. Error: not all arguments converted during string formatting
+2026-05-30 12:14:07,880 DEBUG weather_id succesfully updated
+2026-05-30 12:14:07,880 DEBUG Duplicate module_name
+2026-05-30 12:14:07,881 ERROR Date could not be added on 2026-05-13. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-13\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-13.csv'
+2026-05-30 12:14:07,881 DEBUG weather_id succesfully updated
+2026-05-30 12:14:07,881 DEBUG Duplicate module_name
+2026-05-30 12:14:07,882 ERROR Date could not be added on 2026-05-14. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-14\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-14.csv'
+2026-05-30 12:14:07,882 DEBUG weather_id succesfully updated
+2026-05-30 12:14:07,882 DEBUG Duplicate module_name
+2026-05-30 12:14:07,883 ERROR Date could not be added on 2026-05-15. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-15\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-15.csv'
+2026-05-30 12:14:07,883 DEBUG weather_id succesfully updated
+2026-05-30 12:14:07,883 DEBUG Duplicate module_name
+2026-05-30 12:14:07,884 ERROR Date could not be added on 2026-05-16. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-16\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-16.csv'
+2026-05-30 12:14:07,884 DEBUG weather_id succesfully updated
+2026-05-30 12:14:07,884 DEBUG Duplicate module_name
+2026-05-30 12:14:07,885 ERROR Date could not be added on 2026-05-17. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-17\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-17.csv'
+2026-05-30 12:14:07,885 DEBUG weather_id succesfully updated
+2026-05-30 12:14:07,886 DEBUG Duplicate module_name
+2026-05-30 12:14:08,121 ERROR Couldn't find the serial port for bus a
+2026-05-30 12:14:08,776 DEBUG Weather data succesfully added
+2026-05-30 12:14:08,779 DEBUG Succesfully updated the weather_id
+2026-05-30 12:14:10,330 ERROR Date could not be added on 2026-05-18. Error: not all arguments converted during string formatting
+2026-05-30 12:14:10,330 DEBUG weather_id succesfully updated
+2026-05-30 12:14:10,331 DEBUG Duplicate module_name
+2026-05-30 12:14:13,138 ERROR Couldn't find the serial port for bus a
+2026-05-30 12:14:14,348 ERROR Date could not be added on 2026-05-19. Error: index 11 is out of bounds for axis 0 with size 11
+2026-05-30 12:14:14,350 DEBUG weather_id succesfully updated
+2026-05-30 12:14:14,351 DEBUG Duplicate module_name
+2026-05-30 12:14:18,153 ERROR Couldn't find the serial port for bus a
+2026-05-30 12:14:18,266 DEBUG weather_id succesfully updated
+2026-05-30 12:14:18,266 DEBUG Duplicate module_name
+2026-05-30 12:14:18,267 ERROR Date could not be added on 2026-05-21. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-21\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-21.csv'
+2026-05-30 12:14:18,268 DEBUG weather_id succesfully updated
+2026-05-30 12:14:18,268 DEBUG Duplicate module_name
+2026-05-30 12:14:18,269 ERROR Date could not be added on 2026-05-22. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-22\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-22.csv'
+2026-05-30 12:14:18,269 DEBUG weather_id succesfully updated
+2026-05-30 12:14:18,270 DEBUG Duplicate module_name
+2026-05-30 12:14:18,270 ERROR Date could not be added on 2026-05-23. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-23\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-23.csv'
+2026-05-30 12:14:18,271 DEBUG weather_id succesfully updated
+2026-05-30 12:14:18,271 DEBUG Duplicate module_name
+2026-05-30 12:14:18,271 ERROR Date could not be added on 2026-05-24. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-24\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-24.csv'
+2026-05-30 12:14:18,272 DEBUG weather_id succesfully updated
+2026-05-30 12:14:18,272 DEBUG Duplicate module_name
+2026-05-30 12:14:18,273 ERROR Date could not be added on 2026-05-25. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-25\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-25.csv'
+2026-05-30 12:14:18,273 DEBUG weather_id succesfully updated
+2026-05-30 12:14:18,274 DEBUG Duplicate module_name
+2026-05-30 12:14:18,782 DEBUG Duplicate module_name
+2026-05-30 12:14:18,782 ERROR Data could not be added, maybe the file is not yet created or there is an error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-30\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-30.csv'
+2026-05-30 12:14:23,160 ERROR Couldn't find the serial port for bus a
+2026-05-30 12:14:23,883 DEBUG Weather data succesfully added
+2026-05-30 12:14:23,884 DEBUG Succesfully updated the weather_id
+2026-05-30 12:14:24,648 DEBUG weather_id succesfully updated
+2026-05-30 12:14:24,648 DEBUG Duplicate module_name
+2026-05-30 12:14:24,649 ERROR Date could not be added on 2026-05-27. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-27\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-27.csv'
+2026-05-30 12:14:24,649 DEBUG weather_id succesfully updated
+2026-05-30 12:14:24,649 DEBUG Duplicate module_name
+2026-05-30 12:14:24,650 ERROR Date could not be added on 2026-05-28. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-28\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-28.csv'
+2026-05-30 12:14:24,650 DEBUG weather_id succesfully updated
+2026-05-30 12:14:24,650 DEBUG Duplicate module_name
+2026-05-30 12:14:28,172 ERROR Couldn't find the serial port for bus a
+2026-05-30 12:14:28,251 DEBUG weather_id succesfully updated
+2026-05-30 12:14:28,252 DEBUG Duplicate module_name
+2026-05-30 12:14:28,252 ERROR Date could not be added on 2026-05-30. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-30\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-30.csv'
+2026-05-30 12:14:28,252 DEBUG weather_id succesfully updated
+2026-05-30 12:14:30,007 DEBUG manager: 2 (set_load_mode: mpp) scheduled for 2026-05-30 12:14:33.006985+02:00
+2026-05-30 12:14:30,007 DEBUG manager: 3 (point) scheduled for 2026-05-30 12:15:00+02:00
+2026-05-30 12:14:30,007 DEBUG manager: 4 (curve) scheduled for 2026-05-30 12:15:00+02:00
+2026-05-30 12:14:30,007 DEBUG manager: 5 jobs are scheduled
+2026-05-30 12:14:30,007 DEBUG manager: [0, 1, 2, 3, 4]
+2026-05-30 12:14:30,742 DEBUG Email address is correct
+2026-05-30 12:14:32,543 DEBUG Email has been send
+2026-05-30 12:14:33,176 ERROR Couldn't find the serial port for bus a
+2026-05-30 12:14:33,884 DEBUG Duplicate module_name
+2026-05-30 12:14:33,885 ERROR Data could not be added, maybe the file is not yet created or there is an error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-30\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-30.csv'
+2026-05-30 12:14:36,316 DEBUG Weather data succesfully added
+2026-05-30 12:14:36,318 DEBUG Succesfully updated the weather_id
+2026-05-30 12:14:38,178 ERROR Couldn't find the serial port for bus a
+2026-05-30 12:14:43,185 ERROR Couldn't find the serial port for bus a
+2026-05-30 12:14:46,319 DEBUG Duplicate module_name
+2026-05-30 12:14:46,319 ERROR Data could not be added, maybe the file is not yet created or there is an error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-30\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-30.csv'
+2026-05-30 12:14:48,196 ERROR Couldn't find the serial port for bus a
+2026-05-30 12:14:48,857 DEBUG Weather data succesfully added
+2026-05-30 12:14:48,858 DEBUG Succesfully updated the weather_id
+2026-05-30 12:14:53,201 ERROR Couldn't find the serial port for bus a
+2026-05-30 12:14:58,207 ERROR Couldn't find the serial port for bus a
+2026-05-30 12:14:58,858 DEBUG Duplicate module_name
+2026-05-30 12:14:58,859 ERROR Data could not be added, maybe the file is not yet created or there is an error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-30\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-30.csv'
+2026-05-30 12:15:00,012 DEBUG manager: 5 (set_load_mode: mpp) scheduled for 2026-05-30 12:15:03.011952+02:00
+2026-05-30 12:15:00,012 DEBUG manager: 6 (point) scheduled for 2026-05-30 12:15:30+02:00
+2026-05-30 12:15:00,012 DEBUG manager: 7 jobs are scheduled
+2026-05-30 12:15:00,012 DEBUG manager: [0, 1, 2, 3, 4, 5, 6]
+2026-05-30 12:15:01,448 DEBUG Weather data succesfully added
+2026-05-30 12:15:01,449 DEBUG Succesfully updated the weather_id
+2026-05-30 12:15:03,216 ERROR Couldn't find the serial port for bus a
+2026-05-30 12:15:08,224 ERROR Couldn't find the serial port for bus a
+2026-05-30 12:15:11,450 DEBUG Duplicate module_name
+2026-05-30 12:15:11,451 ERROR Data could not be added, maybe the file is not yet created or there is an error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-30\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-30.csv'
+2026-05-30 12:15:13,226 ERROR Couldn't find the serial port for bus a
+2026-05-30 12:15:14,144 DEBUG Weather data succesfully added
+2026-05-30 12:15:14,145 DEBUG Succesfully updated the weather_id
+2026-05-30 12:15:18,231 ERROR Couldn't find the serial port for bus a
+2026-05-30 12:15:23,237 ERROR Couldn't find the serial port for bus a
+2026-05-30 12:15:24,145 DEBUG Duplicate module_name
+2026-05-30 12:15:24,146 ERROR Data could not be added, maybe the file is not yet created or there is an error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-30\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-30.csv'
+2026-05-30 12:15:26,751 DEBUG Weather data succesfully added
+2026-05-30 12:15:26,752 DEBUG Succesfully updated the weather_id
+2026-05-30 12:15:28,240 ERROR Couldn't find the serial port for bus a
+2026-05-30 12:15:30,008 DEBUG manager: 7 (set_load_mode: mpp) scheduled for 2026-05-30 12:15:33.008802+02:00
+2026-05-30 12:15:30,009 DEBUG manager: 8 (point) scheduled for 2026-05-30 12:16:00+02:00
+2026-05-30 12:15:30,009 DEBUG manager: 9 (curve) scheduled for 2026-05-30 12:16:00+02:00
+2026-05-30 12:15:30,009 DEBUG manager: 10 jobs are scheduled
+2026-05-30 12:15:30,009 DEBUG manager: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+2026-05-30 12:15:32,537 DEBUG Duplicate module_name
+2026-05-30 12:15:32,537 ERROR Date could not be added on 2026-04-30. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-04-30\\config_2026-04-30T15-00-00\\opet_results_point_2026-04-30.csv'
+2026-05-30 12:15:32,538 DEBUG weather_id succesfully updated
+2026-05-30 12:15:32,539 DEBUG Duplicate module_name
+2026-05-30 12:15:32,539 ERROR Date could not be added on 2026-05-01. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-01\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-01.csv'
+2026-05-30 12:15:32,540 DEBUG weather_id succesfully updated
+2026-05-30 12:15:32,540 DEBUG Duplicate module_name
+2026-05-30 12:15:32,541 ERROR Date could not be added on 2026-05-02. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-02\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-02.csv'
+2026-05-30 12:15:32,541 DEBUG weather_id succesfully updated
+2026-05-30 12:15:32,541 DEBUG Duplicate module_name
+2026-05-30 12:15:32,542 ERROR Date could not be added on 2026-05-03. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-03\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-03.csv'
+2026-05-30 12:15:32,542 DEBUG weather_id succesfully updated
+2026-05-30 12:15:32,542 DEBUG Duplicate module_name
+2026-05-30 12:15:32,543 ERROR Date could not be added on 2026-05-04. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-04\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-04.csv'
+2026-05-30 12:15:32,543 DEBUG weather_id succesfully updated
+2026-05-30 12:15:32,543 DEBUG Duplicate module_name
+2026-05-30 12:15:32,544 ERROR Date could not be added on 2026-05-05. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-05\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-05.csv'
+2026-05-30 12:15:32,544 DEBUG weather_id succesfully updated
+2026-05-30 12:15:32,544 DEBUG Duplicate module_name
+2026-05-30 12:15:32,545 ERROR Date could not be added on 2026-05-06. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-06\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-06.csv'
+2026-05-30 12:15:32,545 DEBUG weather_id succesfully updated
+2026-05-30 12:15:32,546 DEBUG Duplicate module_name
+2026-05-30 12:15:32,546 ERROR Date could not be added on 2026-05-07. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-07\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-07.csv'
+2026-05-30 12:15:32,547 DEBUG weather_id succesfully updated
+2026-05-30 12:15:32,547 DEBUG Duplicate module_name
+2026-05-30 12:15:32,549 ERROR Date could not be added on 2026-05-08. Error: 'date_time'
+2026-05-30 12:15:32,550 DEBUG weather_id succesfully updated
+2026-05-30 12:15:32,550 DEBUG Duplicate module_name
+2026-05-30 12:15:32,551 ERROR Date could not be added on 2026-05-09. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-09\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-09.csv'
+2026-05-30 12:15:32,552 DEBUG weather_id succesfully updated
+2026-05-30 12:15:32,552 DEBUG Duplicate module_name
+2026-05-30 12:15:32,552 ERROR Date could not be added on 2026-05-10. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-10\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-10.csv'
+2026-05-30 12:15:32,553 DEBUG weather_id succesfully updated
+2026-05-30 12:15:32,554 DEBUG Duplicate module_name
+2026-05-30 12:15:32,556 ERROR Date could not be added on 2026-05-11. Error: 'date_time'
+2026-05-30 12:15:32,556 DEBUG weather_id succesfully updated
+2026-05-30 12:15:32,557 DEBUG Duplicate module_name
+2026-05-30 12:15:33,246 ERROR Couldn't find the serial port for bus a
+2026-05-30 12:15:34,639 ERROR Date could not be added on 2026-05-12. Error: not all arguments converted during string formatting
+2026-05-30 12:15:34,640 DEBUG weather_id succesfully updated
+2026-05-30 12:15:34,640 DEBUG Duplicate module_name
+2026-05-30 12:15:34,641 ERROR Date could not be added on 2026-05-13. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-13\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-13.csv'
+2026-05-30 12:15:34,641 DEBUG weather_id succesfully updated
+2026-05-30 12:15:34,642 DEBUG Duplicate module_name
+2026-05-30 12:15:34,642 ERROR Date could not be added on 2026-05-14. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-14\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-14.csv'
+2026-05-30 12:15:34,643 DEBUG weather_id succesfully updated
+2026-05-30 12:15:34,644 DEBUG Duplicate module_name
+2026-05-30 12:15:34,644 ERROR Date could not be added on 2026-05-15. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-15\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-15.csv'
+2026-05-30 12:15:34,645 DEBUG weather_id succesfully updated
+2026-05-30 12:15:34,645 DEBUG Duplicate module_name
+2026-05-30 12:15:34,646 ERROR Date could not be added on 2026-05-16. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-16\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-16.csv'
+2026-05-30 12:15:34,646 DEBUG weather_id succesfully updated
+2026-05-30 12:15:34,647 DEBUG Duplicate module_name
+2026-05-30 12:15:34,647 ERROR Date could not be added on 2026-05-17. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-17\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-17.csv'
+2026-05-30 12:15:34,648 DEBUG weather_id succesfully updated
+2026-05-30 12:15:34,648 DEBUG Duplicate module_name
+2026-05-30 12:15:36,625 ERROR Date could not be added on 2026-05-18. Error: not all arguments converted during string formatting
+2026-05-30 12:15:36,627 DEBUG weather_id succesfully updated
+2026-05-30 12:15:36,627 DEBUG Duplicate module_name
+2026-05-30 12:15:36,753 DEBUG Duplicate module_name
+2026-05-30 12:15:36,754 ERROR Data could not be added, maybe the file is not yet created or there is an error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-30\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-30.csv'
+2026-05-30 12:15:38,249 ERROR Couldn't find the serial port for bus a
+2026-05-30 12:15:41,629 DEBUG Weather data succesfully added
+2026-05-30 12:15:41,630 DEBUG Succesfully updated the weather_id
+2026-05-30 12:15:42,897 ERROR Date could not be added on 2026-05-19. Error: index 11 is out of bounds for axis 0 with size 11
+2026-05-30 12:15:42,898 DEBUG weather_id succesfully updated
+2026-05-30 12:15:42,899 DEBUG Duplicate module_name
+2026-05-30 12:15:43,265 ERROR Couldn't find the serial port for bus a
+2026-05-30 12:15:46,529 DEBUG weather_id succesfully updated
+2026-05-30 12:15:46,530 DEBUG Duplicate module_name
+2026-05-30 12:15:46,530 ERROR Date could not be added on 2026-05-21. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-21\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-21.csv'
+2026-05-30 12:15:46,530 DEBUG weather_id succesfully updated
+2026-05-30 12:15:46,531 DEBUG Duplicate module_name
+2026-05-30 12:15:46,531 ERROR Date could not be added on 2026-05-22. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-22\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-22.csv'
+2026-05-30 12:15:46,532 DEBUG weather_id succesfully updated
+2026-05-30 12:15:46,532 DEBUG Duplicate module_name
+2026-05-30 12:15:46,532 ERROR Date could not be added on 2026-05-23. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-23\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-23.csv'
+2026-05-30 12:15:46,533 DEBUG weather_id succesfully updated
+2026-05-30 12:15:46,533 DEBUG Duplicate module_name
+2026-05-30 12:15:46,533 ERROR Date could not be added on 2026-05-24. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-24\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-24.csv'
+2026-05-30 12:15:46,534 DEBUG weather_id succesfully updated
+2026-05-30 12:15:46,534 DEBUG Duplicate module_name
+2026-05-30 12:15:46,534 ERROR Date could not be added on 2026-05-25. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-25\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-25.csv'
+2026-05-30 12:15:46,535 DEBUG weather_id succesfully updated
+2026-05-30 12:15:46,535 DEBUG Duplicate module_name
+2026-05-30 12:15:48,277 ERROR Couldn't find the serial port for bus a
+2026-05-30 12:15:50,147 DEBUG weather_id succesfully updated
+2026-05-30 12:15:50,147 DEBUG Duplicate module_name
+2026-05-30 12:15:50,147 ERROR Date could not be added on 2026-05-27. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-27\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-27.csv'
+2026-05-30 12:15:50,148 DEBUG weather_id succesfully updated
+2026-05-30 12:15:50,148 DEBUG Duplicate module_name
+2026-05-30 12:15:50,148 ERROR Date could not be added on 2026-05-28. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-28\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-28.csv'
+2026-05-30 12:15:50,149 DEBUG weather_id succesfully updated
+2026-05-30 12:15:50,149 DEBUG Duplicate module_name
+2026-05-30 12:15:51,630 DEBUG Duplicate module_name
+2026-05-30 12:15:51,631 ERROR Data could not be added, maybe the file is not yet created or there is an error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-30\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-30.csv'
+2026-05-30 12:15:53,290 ERROR Couldn't find the serial port for bus a
+2026-05-30 12:15:55,471 DEBUG weather_id succesfully updated
+2026-05-30 12:15:55,471 DEBUG Duplicate module_name
+2026-05-30 12:15:55,472 ERROR Date could not be added on 2026-05-30. Error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-30\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-30.csv'
+2026-05-30 12:15:55,472 DEBUG weather_id succesfully updated
+2026-05-30 12:15:55,691 DEBUG Weather data succesfully added
+2026-05-30 12:15:55,693 DEBUG Succesfully updated the weather_id
+2026-05-30 12:15:57,925 DEBUG Email address is correct
+2026-05-30 12:15:58,293 ERROR Couldn't find the serial port for bus a
+2026-05-30 12:15:58,881 DEBUG Email has been send
+2026-05-30 12:16:00,002 DEBUG manager: 10 (set_load_mode: mpp) scheduled for 2026-05-30 12:16:03.002269+02:00
+2026-05-30 12:16:00,003 DEBUG manager: 11 (point) scheduled for 2026-05-30 12:16:30+02:00
+2026-05-30 12:16:00,003 DEBUG manager: 12 jobs are scheduled
+2026-05-30 12:16:00,003 DEBUG manager: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+2026-05-30 12:16:03,305 ERROR Couldn't find the serial port for bus a
+2026-05-30 12:16:05,694 DEBUG Duplicate module_name
+2026-05-30 12:16:05,695 ERROR Data could not be added, maybe the file is not yet created or there is an error: [Errno 2] No such file or directory: 'test_log\\data\\2026-05-30\\config_2026-04-30T15-00-00\\opet_results_point_2026-05-30.csv'
+2026-05-30 12:16:05,866 ERROR Keyboard interrupt, shutting down child processes

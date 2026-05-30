@@ -161,7 +161,7 @@ def past_data_upload(conn, cur, mysql_conn, mysql_cur, config, data_path_base):
         config (dict): The measurement config.
         data_path_base (_type_): The base location of the files. 
     """
-    start_date = datetime.date.today()-datetime.timedelta(config.get('lookback', 7))
+    start_date = datetime.date.today()-datetime.timedelta(days=config.get('lookback', 7))
     #print(start_date)
     for date in (start_date + datetime.timedelta(days=n) for n in range((datetime.date.today() - start_date + datetime.timedelta(days=1)).days)):
         try:
@@ -179,6 +179,7 @@ def past_data_upload(conn, cur, mysql_conn, mysql_cur, config, data_path_base):
             conn.rollback()
     try:    
         add_weather_data(weather_all(start_date, mysql_conn, mysql_cur), conn, cur)
+        logger.debug("Weather data succesfully uploaded")
     except Exception as e:
         print('Could not add the weather data')
         logger.error(f"Weather data could not be added. Error: {e}")
