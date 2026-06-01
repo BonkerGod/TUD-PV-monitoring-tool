@@ -30,13 +30,15 @@ Things that need to be installed on the server to run the system:
 * `pip install matplotlib`
 * `pip install pyserial`
 
-For setting up the OPET library, set it up as an git submodule by 
+For downloading the dependencies, and setting up the OPET library set it up as an git submodule by running
 
 ```
 git submodule update --init --recursive
-pip install -e vendor/TUD-opet-control
+pip install -e TUD-opet-control
 pip install -e .
 ```
+
+The TUD OPET library is a forked library adapted for the use case for the TU Delft. You can find more information on that [GitHub Repo](https://github.com/Kamerplant71/TUD-opet-control).
 
 
 When all these programs are installed, and the database has been set up using the PostgreSQL installer, the program `pyt_to_SQL.py` can be used to continue the setup. 
