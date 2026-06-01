@@ -1,14 +1,8 @@
-import sys
-from pathlib import Path
-
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "TUD-opet-control"))
-
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 import ast
-import sys
-from pathlib import Path
+from OPET_control import OPETBus, OPET, OPETTimeoutError, UnexpectedReplyError
 
 #Plots all point measurements from csv file
 def plot_points(data_path_point):
@@ -91,3 +85,5 @@ plot_points(data_path_point)
 data_path_curve = "test_log/data/2026-05-20/config_2026-04-30T15-00-00/opet_results_curve_2026-05-20.csv"
 plot_curve(data_path_curve)
 
+#C Check status integer
+print(OPET.parse_system_status_integer(2))

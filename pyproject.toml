@@ -1,0 +1,23 @@
+[project]
+name = "tud-pv-monitoring"
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = [
+    "pandas",
+    "psycopg2-binary",
+    "mysql-connector-python",
+    "pgvector",
+    "pyserial",
+    "matplotlib",
+    "numpy",
+]
+
+[project.scripts]
+tud-pv-supervisor = "tud_pv_monitoring.supervisor:main"
+tud-pv-download = "tud_pv_monitoring.user.download:main"
+tud-pv-life_data = "tud_pv_monitoring.user.live_data:main"
+tud-pv-plot_csv = "tud_pv_monitoring.user.plot_csv:main"
+tud-pv-port_finder = "tud_pv_monitoring.user.port_finder:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
