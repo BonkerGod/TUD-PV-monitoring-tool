@@ -114,7 +114,7 @@ Here are some high-level descriptions of each document. To fully understand the 
 
 <details>
     <summary><b>OPET_control</b></summary>
-    <p>This folder contains the <code>OPET_control.py</code>. This piece of code acts as the translation layer between the OPETs and the <code>TUD-opet-supervisor.py</code>. This control mechanism is pulled from <a href='https://github.com/NatLabRockies/opet-control?tab=readme-ov-file'>opet-control</a>. We have made some slight changes, but it is mostly the same. The most important addition is that we also measure the solar cell temperature. To get further insight into how this translation layer works, look into <a href='https://github.com/NatLabRockies/opet-firmware'>opet-firmware</a>.
+    <p>This folder contains the <code>OPET_control.py</code>. This piece of code acts as the translation layer between the OPETs and the <code>TUD-opet-supervisor.py</code>. This control mechanism is pulled from <a href='https://github.com/NatLabRockies/opet-control?tab=readme-ov-file'>opet-control</a>. We have made some slight changes, but it is mostly the same. Here is our <a href='https://github.com/Kamerplant71/TUD-opet-control'>fork</a> The most important addition is that we also measure the solar cell temperature. To get further insight into how this translation layer works, look into <a href='https://github.com/NatLabRockies/opet-firmware'>opet-firmware</a>.
     </p>
 </details>
 
