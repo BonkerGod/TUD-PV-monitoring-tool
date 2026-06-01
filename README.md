@@ -25,7 +25,7 @@ Things that need to be installed on the server to run the system:
 * `pip install serial`
 * `pip install mysql-connector-python`
 * `pip install setuptools`
-* `pip install pip install psycopg2 pgvector`
+* `pip install psycopg2 pgvector`
 * `pip install scipy`
 * `pip install matplotlib`
 * `pip install pyserial`
