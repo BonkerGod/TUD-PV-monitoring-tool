@@ -30,6 +30,15 @@ Things that need to be installed on the server to run the system:
 * `pip install matplotlib`
 * `pip install pyserial`
 
+For setting up the OPET library, set it up as an git submodule by 
+
+```
+git submodule update --init --recursive
+pip install -e vendor/TUD-opet-control
+pip install -e .
+```
+
+
 When all these programs are installed, and the database has been set up using the PostgreSQL installer, the program `pyt_to_SQL.py` can be used to continue the setup. 
 The first thing that needs to be done is to configure your database in `init()` in `pyt_to_SQL.py`. Here, you need to fill in the database name, the username, the user password, the IP address of the server (if the database is run on the same computer, 'localhost' will work), and the port through which it can be accessed. The same needs to be done for the MySQL database. The function is `mysql_init()` in `Weatherdb_to_pyth.py`.
 

@@ -1,0 +1,54 @@
+2026-06-01 14:18:47,804 DEBUG opet-supervisor started
+2026-06-01 14:18:49,483 DEBUG opet-supervisor started
+2026-06-01 14:18:49,728 DEBUG manager: 0 (set_load_mode: mpp) scheduled for 2026-06-01 14:18:52.728407+02:00
+2026-06-01 14:18:49,729 DEBUG manager: 1 (point) scheduled for 2026-06-01 14:19:00+02:00
+2026-06-01 14:18:49,730 DEBUG manager: 2 (curve) scheduled for 2026-06-01 14:19:00+02:00
+2026-06-01 14:18:49,731 DEBUG manager: 3 jobs are scheduled
+2026-06-01 14:18:49,731 DEBUG manager: [0, 1, 2]
+2026-06-01 14:18:51,054 DEBUG opet-supervisor started
+2026-06-01 14:18:51,077 ERROR Couldn't find the serial port for bus a
+2026-06-01 14:18:51,093 ERROR Couldn't find the serial port for bus a
+2026-06-01 14:18:51,105 DEBUG opet-supervisor started
+2026-06-01 14:18:51,165 DEBUG opet-supervisor started
+2026-06-01 14:18:51,188 DEBUG opet-supervisor started
+2026-06-01 14:18:55,260 ERROR Database not connected succesfully. Error: connection to server at "localhost" (::1), port 5432 failed: Connection refused (0x0000274D/10061)
+	Is the server running on that host and accepting TCP/IP connections?
+connection to server at "localhost" (127.0.0.1), port 5432 failed: Connection refused (0x0000274D/10061)
+	Is the server running on that host and accepting TCP/IP connections?
+
+2026-06-01 14:18:55,289 ERROR Database not connected succesfully. Error: connection to server at "localhost" (::1), port 5432 failed: Connection refused (0x0000274D/10061)
+	Is the server running on that host and accepting TCP/IP connections?
+connection to server at "localhost" (127.0.0.1), port 5432 failed: Connection refused (0x0000274D/10061)
+	Is the server running on that host and accepting TCP/IP connections?
+
+2026-06-01 14:18:56,111 ERROR Couldn't find the serial port for bus a
+2026-06-01 14:18:58,977 ERROR Keyboard interrupt, shutting down child processes
+2026-06-01 14:20:44,281 DEBUG opet-supervisor started
+2026-06-01 14:20:45,726 DEBUG opet-supervisor started
+2026-06-01 14:20:45,901 DEBUG manager: 0 (set_load_mode: mpp) scheduled for 2026-06-01 14:20:48.900730+02:00
+2026-06-01 14:20:45,901 DEBUG manager: 1 (point) scheduled for 2026-06-01 14:21:00+02:00
+2026-06-01 14:20:45,902 DEBUG manager: 2 (curve) scheduled for 2026-06-01 14:21:00+02:00
+2026-06-01 14:20:45,902 DEBUG manager: 3 jobs are scheduled
+2026-06-01 14:20:45,903 DEBUG manager: [0, 1, 2]
+2026-06-01 14:20:47,453 DEBUG opet-supervisor started
+2026-06-01 14:20:47,471 ERROR Couldn't find the serial port for bus a
+2026-06-01 14:20:47,477 ERROR Couldn't find the serial port for bus a
+2026-06-01 14:20:47,517 DEBUG opet-supervisor started
+2026-06-01 14:20:47,559 DEBUG opet-supervisor started
+2026-06-01 14:20:47,566 DEBUG opet-supervisor started
+2026-06-01 14:20:51,642 ERROR Database not connected succesfully. Error: connection to server at "localhost" (::1), port 5432 failed: Connection refused (0x0000274D/10061)
+	Is the server running on that host and accepting TCP/IP connections?
+connection to server at "localhost" (127.0.0.1), port 5432 failed: Connection refused (0x0000274D/10061)
+	Is the server running on that host and accepting TCP/IP connections?
+
+2026-06-01 14:20:51,657 ERROR Database not connected succesfully. Error: connection to server at "localhost" (::1), port 5432 failed: Connection refused (0x0000274D/10061)
+	Is the server running on that host and accepting TCP/IP connections?
+connection to server at "localhost" (127.0.0.1), port 5432 failed: Connection refused (0x0000274D/10061)
+	Is the server running on that host and accepting TCP/IP connections?
+
+2026-06-01 14:20:52,496 ERROR Couldn't find the serial port for bus a
+2026-06-01 14:20:57,515 ERROR Couldn't find the serial port for bus a
+2026-06-01 14:21:00,015 ERROR Process daily_loop died: restarting
+2026-06-01 14:21:00,082 INFO restarted daily_loop
+2026-06-01 14:21:00,083 ERROR Process update_loop died: restarting
+2026-06-01 14:21:00,147 ERROR Keyboard interrupt, shutting down child processes

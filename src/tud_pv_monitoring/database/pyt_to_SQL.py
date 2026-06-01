@@ -12,7 +12,7 @@ import pgvector.psycopg2
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-from .Weatherdb_to_pyth import download_weather_last24hours, mysql_init, mysql_close, weather_last, weather_all
+from tud_pv_monitoring.database.weatherdb_to_pyth import download_weather_last24hours, mysql_init, mysql_close, weather_last, weather_all
 import logging
 
 logger = logging.getLogger(__name__)

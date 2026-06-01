@@ -1,15 +1,16 @@
-import sys
-from pathlib import Path
 from matplotlib.animation import FuncAnimation
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 import zoneinfo
 import datetime
+from tud_pv_monitoring.database import init, db_close
+import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
+from matplotlib.animation import FuncAnimation
+import zoneinfo
+import datetime
+import matplotlib
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "supervisor_tools"))
-
-from pyt_to_SQL import init, db_close
-import time
 
 def last_measurement(conn, cur , module_name):
     cur.execute("SELECT * FROM pv_point WHERE module_name=%s ORDER BY date_time DESC LIMIT 1" , (module_name,))
@@ -20,11 +21,7 @@ def last_measurement(conn, cur , module_name):
     
 conn, cur, mysql_conn, mysql_cur = init()
 
-import matplotlib.pyplot as plt
-import matplotlib.dates as mdates
-from matplotlib.animation import FuncAnimation
-import zoneinfo
-import datetime
+
 
 matplotlib.set_loglevel("warning")
 fig, ax1 = plt.subplots()
