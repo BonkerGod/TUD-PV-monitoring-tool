@@ -4,6 +4,7 @@ from matplotlib.animation import FuncAnimation
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 import zoneinfo
+import datetime
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "supervisor_tools"))
 
@@ -19,11 +20,6 @@ def last_measurement(conn, cur , module_name):
     
 conn, cur, mysql_conn, mysql_cur = init()
 
-import matplotlib.pyplot as plt
-import matplotlib.dates as mdates
-from matplotlib.animation import FuncAnimation
-import zoneinfo
-import datetime
 
 fig, ax1 = plt.subplots()
 ax2 = ax1.twinx()
@@ -51,7 +47,7 @@ labels = [l.get_label() for l in lines]
 ax1.legend(lines, labels, loc='upper left')
 
 def update(frame):
-    measurement = last_measurement(conn, cur, 'My_solar_panel_2')
+    measurement = last_measurement(conn, cur, 'My_solar_panel_1')
 
     times.append(measurement[0])      # datetime object
     voltages.append(measurement[4])   # voltage
