@@ -15,7 +15,7 @@ def mysql_init():
     """
     try:
         conn = mysql.connector.connect(
-            host="100.98.143.82",   #IP address of the MySQL server
+            host="100.65.177.87",   #IP address of the MySQL server
             user="OPET",
             password="npjust",
             database="pvmonitoring",
@@ -89,7 +89,7 @@ def mysql_close(conn):
     conn.close()
     
 # conn, cur = mysql_init()
-# data=weather_sync(datetime.datetime(2022, 5, 9, 20, 21, 10, tzinfo=ZoneInfo('Europe/Amsterdam')), conn, cur)
+# data=weather_last(conn, cur)
 # print(data)
 # mysql_close(conn)
     

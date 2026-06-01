@@ -24,7 +24,7 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 from matplotlib.animation import FuncAnimation
 import zoneinfo
-import matplotlib
+import datetime
 
 matplotlib.set_loglevel("warning")
 fig, ax1 = plt.subplots()

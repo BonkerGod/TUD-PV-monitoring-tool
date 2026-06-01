@@ -25,7 +25,7 @@ Things that need to be installed on the server to run the system:
 * `pip install serial`
 * `pip install mysql-connector-python`
 * `pip install setuptools`
-* `pip install pip install psycopg2 pgvector`
+* `pip install psycopg2 pgvector`
 * `pip install scipy`
 * `pip install matplotlib`
 * `pip install pyserial`
@@ -43,6 +43,7 @@ create_table('modules', conn, cur)
 db_close(conn)
 ```
 
+For remote access, you may want to make an additional user and grant them access to the database.
 > [!TIP]
 > These functions are stored in `pyt_to_SQL.py`; it is advised to run this code in a different file, so you do not accidentally destroy the code. Do this by adding `from pyt_to_SQL import init, create_table, db_close` at the top of your file.
 
