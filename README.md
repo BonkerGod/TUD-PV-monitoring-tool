@@ -25,7 +25,7 @@ Things that need to be installed on the server to run the system:
 * `pip install serial`
 * `pip install mysql-connector-python`
 * `pip install setuptools`
-* `pip install pip install psycopg2 pgvector`
+* `pip install psycopg2 pgvector`
 * `pip install scipy`
 * `pip install matplotlib`
 * `pip install pyserial`
@@ -43,6 +43,7 @@ create_table('modules', conn, cur)
 db_close(conn)
 ```
 
+For remote access, you may want to make an additional user and grant them access to the database.
 > [!TIP]
 > These functions are stored in `pyt_to_SQL.py`; it is advised to run this code in a different file, so you do not accidentally destroy the code. Do this by adding `from pyt_to_SQL import init, create_table, db_close` at the top of your file.
 
@@ -58,7 +59,7 @@ When you have completed all previous steps, you can start using the database by 
 In order to use the database, you first need to add your solar module to `measurement_config.json`. This is done on the computer that runs the database! So first, you install the solar module you want to start measuring, and then you add it to the measurement config file. You must do this securely and make sure to take a look at the example. Once the data is set, it gets uploaded to the database, and once it has been uploaded, you cannot change the data except for the tracer, username, and the user_email. See in the file the description of the config for more details.
 If you want to stop a measurement, you either need to set disabled to TRUE in the `measurement_config.json` or just completely remove the module from that file.
 
-To access the database from your local computer, you need to make sure that the function `init()` contains the correct IP address of the machine. You also need to know the name of the database, your username, your password and the port through which it is accessible.  
+To access the database from your local computer, you need to make sure that the function `init()` contains the correct IP address of the machine. You also need to know the name of the database, your username, your password, and the port through which it is accessible.  
 
 Data can be extracted using `download.py`, which can be found in the user_tools. This command either the 'pv_point' or 'pv_curve' data with the weather data. You also need to set a start and stop date, which acts as a filter for your data. Lastly, you need to select the solar modules you want to have. The data that you get is not perfectly on a single timestamp, because the OPET measurements take place at a different time compared to the weather measurements. This data gets synced based on the closest measurement within a 5-minute time difference compared to the opet data. 
 
@@ -120,7 +121,7 @@ Here are some high-level descriptions of each document. To fully understand the 
     <p> This folder contains programs that can be used by the users to set up or extract data. <code>plot_csv.py</code> plots a couple of measurements. <br>
         In <code>port_finder.py</code>, you can find the code that enables you to find the port of your USB adapter. <br>
         The <code>download.py</code> enables users to extract the measurement data they want. They can filter by startdate, stopdate, and module_name. <br>
-        The <code>lifedata.py</code> enables users to make a plot of the most recent incoming datapoint and check whether it is what they expect.
+        The <code>lifedata.py</code> enables users to make a plot of the most recent incoming datapoint for their PV module and check whether it is what they expect.
     </p>
 </details>
 
