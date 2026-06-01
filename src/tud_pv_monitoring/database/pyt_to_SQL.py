@@ -231,7 +231,7 @@ def add_data(date, conn, cur, mysql_conn, mysql_cur, config, data_path_base):
     #     print('weather_id could not be linked')
     #     conn.rollback()
     
-    
+    # Insert the point data into the database
     data = df.to_numpy()
     point_insert = (
         "INSERT INTO pv_point (date_time, scheduled_time, module_name, mounted_on, v, i, status_integer, temperature_cell, axis_azimuth, axis_tilt, weather_id) "
