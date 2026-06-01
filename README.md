@@ -35,7 +35,7 @@ The first thing that needs to be done is to configure your database in `init()` 
 
 The tables for data storage can be created using the function `create_table(type, conn, cur)`. This needs to be done for the types: 'pv_point', 'pv_curve', 'weather', and 'modules'. Running the following code does that: 
 ```python
-conn, cur, mysql_conn, mysql_cur, config, data_path_base = init()
+conn, cur, mysql_conn, mysql_cur= init()
 create_table('pv_point', conn, cur)
 create_table('pv_curve', conn, cur)
 create_table('weather', conn, cur)
