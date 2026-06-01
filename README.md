@@ -6,6 +6,8 @@ The system is set up as can be seen in the picture below. First, the OPET, i.e.,
 
 ![system](images/Database_setup.jpeg)
 
+The system is run via the `TUD_opet_supervisor.py`. This program schedules measurements of the OPETs and database uploads. There are 2 main functions of the system: the `update_loop()` and the `daily_loop()`. First, the `update_loop()` works as follows. It tries to insert the collected CSV files from the OPETs into the database
+
 ## Database structure
 The database contains 4 tables: 'pv_point', 'pv_curve', 'weather', and 'modules'. These tables get linked via some variables. The 'pv_point' and 'pv_curve' tables get linked to the 'modules' table via the variable 'module_name'. This means that if a module is not added to the modules list, data for that module cannot be collected. To add a module to the list, you need to add it to the `measurement_config.json`. The 'pv_point' and 'pv_curve' tables get linked to the 'weather' table via the 'weather_id'. The system looks for the closest in time weather measurement to the OPET measurement. The criteria are that the weather measurement has taken place in a timespan of 5 minutes around the 'date_time'. If the gap is larger than 5 minutes, the weather_id 0 will be assigned. If there have been measurements in the time span of 5 minutes, then the closest in time weather_id will be assigned. This system does mean that the OPET measurements must have been 5 minutes ago to assign the closest weather measurement, so there is a delay. When an OPET measurement has a 'weather_id' that says Null or None, then a 'weather_id' is yet to be assigned.
 
