@@ -34,7 +34,7 @@ def init():
     # Make connection with the PostgreSQL database.
     DB_NAME = "postgres"
     DB_USER = "postgres"
-    DB_PASS = "1234"
+    DB_PASS = "BAPPVMD01"
     DB_HOST = "localhost"
     DB_PORT = "5432"
     try:
@@ -804,27 +804,7 @@ def db_close(conn, mysql_conn):
 
 
 
-# conn, cur, mysql_conn, mysql_cur= init()
-# config, data_path_base, = loadconfig()
-# delete_table('weather', conn, cur)
-# create_table('weather', conn, cur)
-# delete_table('pv_point', conn, cur)
-# create_table('pv_point', conn, cur)
-# data_tester(conn, cur)
-# download_table('test1.csv', 'pv_point', "2026-05-25 16:00:50-07:00", "2026-12-29 16:00:50-07:00", ["My_solar_panel_1"], conn, cur)
-# add_module_data(config, conn, cur)
-#add_data('2026-05-26', conn, cur, mysql_conn, mysql_cur, config, data_path_base)
-#add_weather_data(download_weather_last24hours(1000, mysql_conn, mysql_cur), conn, cur)
-# print_table('weather', conn, cur)
-# error_detect(conn, cur, config)
-# data=weather_sync(datetime.datetime(2024, 2, 28, 10, 40,50, tzinfo=zoneinfo.ZoneInfo('Europe/Amsterdam')), conn, cur)
-# print(data)
-# update_weather_id('2026-05-26', conn, cur)
-# print_table('pv_point', conn, cur)
-# past_data_upload(conn, cur ,mysql_conn, mysql_cur, config, data_path_base)
-# print_table('pv_curve', conn, cur)
-# update_weather_id('2026-05-26', conn, cur)
-# print_table('pv_curve',conn, cur)
-# db_close(conn, mysql_conn)
+conn, cur, mysql_conn, mysql_cur= init()
+db_close(conn, mysql_conn)
 
 

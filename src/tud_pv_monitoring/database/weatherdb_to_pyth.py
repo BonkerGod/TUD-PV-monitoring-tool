@@ -88,8 +88,6 @@ def weather_all(startdate, conn, cursor):
 def mysql_close(conn):
     conn.close()
     
-# conn, cur = mysql_init()
-# data=weather_last(conn, cur)
-# print(data)
-# mysql_close(conn)
+conn, cur = mysql_init()
+mysql_close(conn)
     
