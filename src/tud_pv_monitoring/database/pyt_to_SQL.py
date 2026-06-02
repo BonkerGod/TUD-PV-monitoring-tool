@@ -804,7 +804,7 @@ def db_close(conn, mysql_conn):
 
 
 
-conn, cur, mysql_conn, mysql_cur= init()
-db_close(conn, mysql_conn)
+# conn, cur, mysql_conn, mysql_cur= init()
+# db_close(conn, mysql_conn)
 
 
